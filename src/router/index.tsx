@@ -19,7 +19,7 @@ export const rootRoute = createRootRoute({
   ),
 });
 
-const indexRoute = createRoute({
+export const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes.HOME,
   component: function Index() {

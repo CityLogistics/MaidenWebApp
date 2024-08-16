@@ -1,6 +1,8 @@
+import { useManageSession } from "@/hooks/session";
 import SiderBar from "./SiderBar";
 
 export default function Layout({ children }: any) {
+  useManageSession();
   return (
     <div className=" bg-[#F5F6FA] h-screen w-screen bg-cover flex flex-col items-center overflow-x-clip font-['Nunito Sans'] overflow-y-visible">
       <div className="flex w-full overflow-x-clip">
