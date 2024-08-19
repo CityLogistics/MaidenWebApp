@@ -9,6 +9,7 @@ import Login from "../pages/Login";
 import DashBoard from "../pages/DashBoard";
 import { routes } from "@/lib/Constants";
 import OrderList from "@/pages/OrderList";
+import NewOrderList from "@/pages/NewOrderList";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -48,7 +49,7 @@ export const newOrdersRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes.NEW_ORDERS,
   component: function Index() {
-    return <DashBoard />;
+    return <NewOrderList />;
   },
 });
 

@@ -26,7 +26,7 @@ export default function SiderBar() {
     to,
     className: twMerge(
       className,
-      path == to && "border-primary border-l-4 text-primary"
+      path.includes(to) && "border-primary border-l-4 text-primary"
     ),
   });
 

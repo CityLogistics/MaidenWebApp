@@ -1,51 +1,69 @@
-import { useState } from "react";
-import DatePicker from "react-multi-date-picker";
-import Footer from "react-multi-date-picker/plugins/range_picker_footer";
+import { useEffect, useState } from "react";
 import Button from "./Button";
-import { ArrowLeft2, ArrowRight, ArrowRight2 } from "iconsax-react";
+import arrow from "../assets/images/ic-keyboard-arrow-down-48px.png";
 
-export function CustomDatePicker() {
-  const today = new Date();
+import { Calendar } from "./ui/calendar";
+import { Popover, PopoverContent } from "./ui/popover";
+import { PopoverAnchor, PopoverPortal } from "@radix-ui/react-popover";
+
+export function CustomDatePicker({ onChange, values }: any) {
   const tomorrow = new Date();
 
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  const [values, setValues] = useState([]);
+  const [selected, setSelected] = useState(values);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setSelected(values);
+  }, [values, open]);
+
+  const onClose = () => {
+    if (onChange) onChange(selected);
+    setOpen(false);
+  };
+
+  console.info({ selected });
 
   return (
-    <DatePicker
-      headerOrder={["MONTH_YEAR", "LEFT_BUTTON", "RIGHT_BUTTON"]}
-      multiple
-      value={values}
-      render={(value, openCalendar) => (
-        <span onClick={openCalendar} className="bg-white cursor-pointer">
-          Select
-        </span>
-      )}
-      onChange={setValues}
-      plugins={[<Control position="bottom" />]}
-      renderButton={(direction, handleClick) => (
-        <button onClick={handleClick} className=" bg-slate-100 h-fit p-1 mx-2">
-          {direction === "right" ? (
-            <ArrowRight2 size={15} />
-          ) : (
-            <ArrowLeft2 size={15} />
-          )}
-        </button>
-      )}
-    />
-  );
-}
+    <>
+      <Popover open={open} onOpenChange={() => setOpen(false)}>
+        <PopoverAnchor asChild>
+          <div className="Row" onClick={() => setOpen(true)}>
+            <div
+              className="text-sm font-bold flex items-start cursor-pointer"
+              onClick={() => setOpen(true)}
+            >
+              Date
+              <img src={arrow} className=" ml-4 -mt-[3px]" />
+            </div>
+          </div>
+        </PopoverAnchor>
 
-export function Control() {
-  return (
-    <div className="flex justify-between w-full h-[8.125rem] p-4 flex-col items-center">
-      <div className=" text-[#434343] opacity-80 text-sm w-full  text-left">
-        *You can choose multiple date
-      </div>
-      <div className="w-[9.375rem] pb-3">
-        <Button text="Apply Now" className={"text-sm h-10 rounded-[0.25rem]"} />
-      </div>
-    </div>
+        <PopoverPortal>
+          <PopoverContent className="bg-white rounded-2xl w-fit  min-h-48">
+            <Calendar
+              mode="single"
+              selected={selected}
+              onSelect={(v) => setSelected((val: any) => [...val, v])}
+              // onSelect={(v) => setSelected(v)}
+              className="rounded-md border-y"
+            />
+            <div className="flex justify-between w-full h-[8.125rem] p-4 flex-col items-center">
+              <div className=" text-[#434343] opacity-80 text-sm w-full  text-left">
+                *You can choose multiple date
+              </div>
+              <div className="w-[9.375rem] pb-3">
+                <Button
+                  text="Apply Now"
+                  className={"text-sm h-10 rounded-[0.25rem]"}
+                  onClick={onClose}
+                />
+              </div>
+            </div>
+          </PopoverContent>
+        </PopoverPortal>
+      </Popover>
+    </>
   );
 }

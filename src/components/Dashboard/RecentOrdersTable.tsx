@@ -8,16 +8,20 @@ import {
   TableRow,
 } from "../ui/table";
 import { useQuery } from "@tanstack/react-query";
-import { getRecentOrders } from "@/apis/orders";
+import { getOrders } from "@/apis/orders";
 import { format } from "date-fns";
 import Loader from "../Loader";
 export default function RecentOrdersTable() {
+  const query = {
+    page: 0,
+    limit: 5,
+  };
   const { isPending, data } = useQuery({
-    queryKey: ["todos"],
-    queryFn: getRecentOrders,
+    queryKey: ["recentOrders"],
+    queryFn: () => getOrders(query),
   });
 
-  const values = data?.data ?? [];
+  const values = data?.data.data ?? [];
 
   console.info({ values });
 
@@ -113,8 +117,8 @@ export default function RecentOrdersTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {values.map((row, i): any => (
-              <TableRow>
+            {values.map((row: any, i: any): any => (
+              <TableRow key={i}>
                 {columns.map((column: ColumnType) => (
                   <TableCell className=" text-[#202224] font-semibold text-sm opacity-80">
                     {column.render?.(row) ?? row[column.id]}

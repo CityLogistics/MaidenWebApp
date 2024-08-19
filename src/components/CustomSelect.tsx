@@ -1,45 +1,91 @@
-import { useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Control } from "./CustomDatePicker";
+import { useEffect, useState } from "react";
+import { Popover, PopoverContent } from "./ui/popover";
 
-export default function CustomSelect() {
-  const [open, setopen] = useState();
+import arrow from "../assets/images/ic-keyboard-arrow-down-48px.png";
+
+import { PopoverAnchor, PopoverPortal } from "@radix-ui/react-popover";
+import { twMerge } from "tailwind-merge";
+import Button from "./Button";
+
+export default function CustomSelect({
+  label,
+  onChange,
+  items = [],
+  values = [],
+}: any) {
+  const [open, setOpen] = useState(true);
+  const [selected, setSelected] = useState<any>(values);
+
+  useEffect(() => {
+    setSelected(values);
+  }, [values, open]);
+
+  const selectedRef: any = {};
+  selected.forEach((v: any) => {
+    selectedRef[v] = 1;
+  });
+
+  const onSelected = (val: any) => {
+    const prev = [...selected];
+    const index = prev.findIndex((v) => val == v);
+    if (index > -1) prev.splice(index, 1);
+    else prev.push(val);
+    setSelected(prev);
+  };
+
+  const onClose = () => {
+    if (onChange) onChange(selected);
+    setOpen(false);
+  };
+
   return (
-    <Popover>
-      <PopoverTrigger>Open</PopoverTrigger>
-      <PopoverContent className=" bg-white rounded-2xl w-[32.6rem] min-h-48">
-        <div className=" text-[#202224] font-bold text-lg">
-          Select Order Type
+    <Popover open={open} onOpenChange={() => setOpen(false)}>
+      <PopoverAnchor asChild>
+        <div className="Row" onClick={() => setOpen(true)}>
+          <div
+            className="text-sm font-bold flex items-start cursor-pointer"
+            onClick={() => setOpen(true)}
+          >
+            {label}
+            <img src={arrow} className=" ml-4 -mt-[3px]" />
+          </div>
         </div>
-        <div className="flex mt-6 flex-wrap border-b pb-6">
-          <div className="p-[0.45rem] px-4 bg-primary rounded-[2rem] text-sm text-white mx-2">
-            Health & Medicine
-          </div>
-          <div className="p-[0.45rem] font-bold px-4 bg-white rounded-[2rem] border border-[#979797] text-sm text-[#202224] mx-2">
-            Health & Medicine
-          </div>
-          <div className="p-[0.45rem] px-4 bg-primary rounded-[2rem] text-sm text-white mx-2">
-            Health & Medicine
-          </div>
-          <div className="p-[0.45rem] mt-2 font-bold px-4 bg-white rounded-[2rem] border border-[#979797] text-sm text-[#202224] mx-2">
-            Health & Medicine
-          </div>
-          <div className="p-[0.45rem] mt-2 px-4 bg-primary rounded-[2rem] text-sm text-white mx-2">
-            Health & Medicine
-          </div>
-          <div className="p-[0.45rem] mt-2 font-bold px-4 bg-white rounded-[2rem] border border-[#979797] text-sm text-[#202224] mx-2">
-            Health & Medicine
-          </div>
+      </PopoverAnchor>
 
-          <div className="p-[0.45rem] mt-2 font-bold px-4 bg-white rounded-[2rem] border border-[#979797] text-sm text-[#202224] mx-2">
-            Health & Medicine
+      <PopoverPortal>
+        <PopoverContent className="bg-white rounded-2xl w-[32.6rem] min-h-48">
+          <div className=" text-[#202224] font-bold text-lg">
+            Select {label}
           </div>
-          <div className="p-[0.45rem] mt-2 px-4 bg-primary rounded-[2rem] text-sm text-white mx-2">
-            Health & Medicine
+          <div className="flex mt-6 flex-wrap border-b pb-6 ">
+            {items.map((v: any) => (
+              <div
+                key={v.value}
+                onClick={() => onSelected(v.value)}
+                className={twMerge(
+                  "p-[0.45rem] w-[30%] rounded-[2rem] text-sm text-[#202224] border-[#979797] border mx-2 mt-2 text-center cursor-pointer",
+                  selectedRef[v.value] &&
+                    "bg-primary text-white border-primary border "
+                )}
+              >
+                {v.label}
+              </div>
+            ))}
           </div>
-        </div>
-        <Control />
-      </PopoverContent>
+          <div className="flex justify-between w-full h-[8.125rem] p-4 flex-col items-center">
+            <div className=" text-[#434343] opacity-80 text-sm w-full  text-left">
+              *You can choose multiple {label}
+            </div>
+            <div className="w-[9.375rem] pb-3">
+              <Button
+                text="Apply Now"
+                className={"text-sm h-10 rounded-[0.25rem]"}
+                onClick={onClose}
+              />
+            </div>
+          </div>
+        </PopoverContent>
+      </PopoverPortal>
     </Popover>
   );
 }

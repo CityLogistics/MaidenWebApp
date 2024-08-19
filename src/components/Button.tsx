@@ -1,12 +1,19 @@
 import { twMerge } from "tailwind-merge";
 
-export default function Button({ text, className, onClick, loading }: any) {
+export default function Button({
+  text,
+  className,
+  onClick,
+  loading,
+  disabled,
+}: any) {
   return (
     <button
       type="button"
       className={twMerge(
         "h-12 bg-primary w-full opacity-90 rounded-[0.5rem] text-white text-xl  text-center flex items-center justify-center font-bold",
-        className
+        className,
+        disabled && "bg-slate-300"
       )}
       onClick={onClick}
     >
