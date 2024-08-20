@@ -74,13 +74,13 @@ export default function RecentOrdersTable() {
       id: "pickupDate",
       label: "Time",
       width: "200px",
-      render: (v: any) => format(v.pickupDate, "hh a"),
+      render: (v: any) => v.pickupDate && format(v.pickupDate, "hh a"),
     },
     {
       id: "date",
       label: "Date",
       width: "200px",
-      render: (v: any) => format(v.pickupDate, "dd/MM/YYY"),
+      render: (v: any) => v.pickupDate && format(v.pickupDate, "dd/MM/YYY"),
     },
     {
       id: "",

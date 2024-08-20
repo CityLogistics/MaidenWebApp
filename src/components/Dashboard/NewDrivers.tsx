@@ -1,3 +1,5 @@
+import { newDriversRoute } from "@/router";
+import { Link } from "@tanstack/react-router";
 import { ArrowRight2 } from "iconsax-react";
 import { twMerge } from "tailwind-merge";
 
@@ -6,9 +8,11 @@ export default function NewDrivers() {
     <div className=" w-[100%] bg-white h-full rounded-xl p-6 py-7 overflow-clip">
       <div className="flex justify-between items-center">
         <div className="text-[#202224] font-bold">New Driver’s Requests</div>
-        <div className="text-[#F68716] font-normal text-[0.625rem]">
-          View All
-        </div>
+        <Link to={newDriversRoute.to}>
+          <div className="text-[#F68716] font-normal text-[0.625rem]">
+            View All
+          </div>
+        </Link>
       </div>
       {[1, 1].map((v, i) => (
         <DriverCard key={v} last={i == 1} />
@@ -35,10 +39,10 @@ function DriverCard({ last }: any) {
 
       <div className="flex flex-col justify-between">
         <div className="text-[#27AE60] font-normal text-[0.625rem] flex items-center">
-          Assign to Driver <ArrowRight2 size={10} variant="Linear" />
+          Accept Request <ArrowRight2 size={10} variant="Linear" />
         </div>
         <div className="text-[#EB5757] font-normal text-[0.625rem] flex items-center">
-          Assign to Driver <ArrowRight2 size={10} variant="Linear" />
+          Reject Request <ArrowRight2 size={10} variant="Linear" />
         </div>
       </div>
     </div>

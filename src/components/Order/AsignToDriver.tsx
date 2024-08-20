@@ -17,10 +17,15 @@ export default function AsignToDriver({ orderId, open, setOpen }: any) {
   const [selectedDriver, setSelectedDriver] = useState();
   const { isPending, data } = useQuery({
     queryKey: ["newDrivers"],
-    queryFn: () => getDrivers(),
+    queryFn: () =>
+      getDrivers({
+        status: "ACCEPTED",
+        page: 0,
+        limit: 100,
+      }),
   });
 
-  const values = data?.data ?? [];
+  const values = data?.data?.data ?? [];
 
   console.info({ values });
 

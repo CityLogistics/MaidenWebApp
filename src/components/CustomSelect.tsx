@@ -12,6 +12,8 @@ export default function CustomSelect({
   onChange,
   items = [],
   values = [],
+  capsuleWidth,
+  containerWidth,
 }: any) {
   const [open, setOpen] = useState(true);
   const [selected, setSelected] = useState<any>(values);
@@ -53,7 +55,9 @@ export default function CustomSelect({
       </PopoverAnchor>
 
       <PopoverPortal>
-        <PopoverContent className="bg-white rounded-2xl w-[32.6rem] min-h-48">
+        <PopoverContent
+          className={twMerge("bg-white rounded-2xl w-[44.5rem] min-h-48")}
+        >
           <div className=" text-[#202224] font-bold text-lg">
             Select {label}
           </div>
@@ -63,9 +67,10 @@ export default function CustomSelect({
                 key={v.value}
                 onClick={() => onSelected(v.value)}
                 className={twMerge(
-                  "p-[0.45rem] w-[30%] rounded-[2rem] text-sm text-[#202224] border-[#979797] border mx-2 mt-2 text-center cursor-pointer",
+                  "p-[0.45rem] w-[13rem] rounded-[2rem] text-sm text-[#202224] border-[#979797] border mx-2 mt-2 text-center cursor-pointer",
                   selectedRef[v.value] &&
-                    "bg-primary text-white border-primary border "
+                    "bg-primary text-white border-primary border ",
+                  capsuleWidth && `w-[${capsuleWidth}]`
                 )}
               >
                 {v.label}

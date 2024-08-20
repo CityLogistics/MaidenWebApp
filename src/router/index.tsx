@@ -10,6 +10,8 @@ import DashBoard from "../pages/DashBoard";
 import { routes } from "@/lib/Constants";
 import OrderList from "@/pages/OrderList";
 import NewOrderList from "@/pages/NewOrderList";
+import NewDriverList from "@/pages/NewDriverList";
+import DriverList from "@/pages/DriverList";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -57,7 +59,7 @@ export const driversRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes.DRIVERS,
   component: function Index() {
-    return <DashBoard />;
+    return <DriverList />;
   },
 });
 
@@ -65,7 +67,7 @@ export const newDriversRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes.NEW_DRIVERS,
   component: function Index() {
-    return <DashBoard />;
+    return <NewDriverList />;
   },
 });
 
