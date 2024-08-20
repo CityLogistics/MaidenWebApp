@@ -5,6 +5,7 @@ export const routes = {
   NEW_ORDERS: "/orders/new",
   DRIVERS: "/drivers",
   NEW_DRIVERS: "/new-drivers",
+  SETTINGS: "/settings",
 };
 
 export const orderTpes = [

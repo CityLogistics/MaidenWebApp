@@ -48,7 +48,7 @@ export default function SiderBar() {
         </Link>
       </div>
       <div className="mt-auto">
-        <Link {...pathProps(routes.ORDERS)}>
+        <Link {...pathProps(routes.SETTINGS)}>
           <Setting2 variant="Bold" />
         </Link>
         <Link {...pathProps("")}>

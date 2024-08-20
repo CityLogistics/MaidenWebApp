@@ -9,13 +9,17 @@ import { useFormik } from "formik";
 import { useNavigate } from "@tanstack/react-router";
 import { dashboardRoute } from "@/router";
 import * as yup from "yup";
+import { useUserStore } from "@/store/user";
 
 export default function Login() {
   const navigate = useNavigate();
 
+  const { updateUser } = useUserStore((state) => state);
+
   const { mutate, isPending } = useMutation({
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      updateUser(data.data.user);
       navigate({ to: dashboardRoute.to });
     },
   });
@@ -35,11 +39,10 @@ export default function Login() {
     validationSchema,
     onSubmit: (data) => {
       console.info({ data });
+
       mutate(data);
     },
   });
-
-  console.info({ errors });
 
   return (
     <div

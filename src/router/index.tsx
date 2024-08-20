@@ -12,6 +12,7 @@ import OrderList from "@/pages/OrderList";
 import NewOrderList from "@/pages/NewOrderList";
 import NewDriverList from "@/pages/NewDriverList";
 import DriverList from "@/pages/DriverList";
+import Settings from "@/pages/Settings";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -71,6 +72,14 @@ export const newDriversRoute = createRoute({
   },
 });
 
+export const settingsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes.SETTINGS,
+  component: function Index() {
+    return <Settings />;
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   dashboardRoute,
@@ -78,6 +87,7 @@ const routeTree = rootRoute.addChildren([
   newOrdersRoute,
   driversRoute,
   newDriversRoute,
+  settingsRoute,
 ]);
 
 export const router = createRouter({ routeTree });
