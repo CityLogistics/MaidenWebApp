@@ -4,7 +4,7 @@ export const routes = {
   ORDERS: "/orders",
   NEW_ORDERS: "/orders/new",
   DRIVERS: "/drivers",
-  NEW_DRIVERS: "/drivers/new",
+  NEW_DRIVERS: "/new-drivers",
 };
 
 export const orderTpes = [
@@ -52,3 +52,9 @@ export const availabiltys = [
 ];
 
 export const limit = 3;
+
+export enum DriverStatus {
+  PENDING = "PENDING",
+  ACCEPTED = "ACCEPTED",
+  DECLINED = "DECLINED",
+}

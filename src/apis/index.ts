@@ -34,6 +34,7 @@ instance.interceptors.response.use(
     return config;
   },
   (error) => {
-    console.error("An error occurred");
+    throw error;
+    // return error;
   }
 );

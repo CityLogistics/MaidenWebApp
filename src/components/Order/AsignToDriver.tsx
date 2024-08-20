@@ -12,8 +12,16 @@ import { twMerge } from "tailwind-merge";
 import Loader from "../Loader";
 import { asignOrderToDriver } from "@/apis/admin";
 import { useState } from "react";
+import { toast } from "sonner";
+import { parseError } from "@/lib/utils";
+import { AxiosError } from "axios";
 
-export default function AsignToDriver({ orderId, open, setOpen }: any) {
+export default function AsignToDriver({
+  orderId,
+  open,
+  setOpen,
+  refetch,
+}: any) {
   const [selectedDriver, setSelectedDriver] = useState();
   const { isPending, data } = useQuery({
     queryKey: ["newDrivers"],
@@ -27,13 +35,16 @@ export default function AsignToDriver({ orderId, open, setOpen }: any) {
 
   const values = data?.data?.data ?? [];
 
-  console.info({ values });
-
-  const { isPending: assignIsLoading, mutate } = useMutation({
+  const { isPending: assignIsLoading, mutateAsync } = useMutation({
     mutationFn: () => asignOrderToDriver(orderId, selectedDriver),
     onSuccess: () => {
+      if (refetch) refetch();
       setOpen(false);
-      alert("");
+      toast.success("Order assigned to driver successfully");
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
+      console.info({ e });
     },
   });
 
@@ -62,7 +73,7 @@ export default function AsignToDriver({ orderId, open, setOpen }: any) {
           >
             <Button
               loading={assignIsLoading}
-              onClick={mutate}
+              onClick={mutateAsync}
               disabled={!selectedDriver}
               text="Assign Order"
               className="text-sm rounded-[0.2rem]"

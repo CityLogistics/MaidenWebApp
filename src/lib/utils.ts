@@ -1,4 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -52,4 +53,11 @@ export const shouldRefresh = () => {
     }
   }
   return false;
+};
+
+export const parseError = (error: AxiosError) => {
+  const message = error.response?.data?.message;
+  if (typeof message == "string") return message;
+  if (message instanceof Array) return message.join(",");
+  return "An error occured";
 };

@@ -12,6 +12,8 @@ import { getOrders } from "@/apis/orders";
 import { format } from "date-fns";
 import { limit, orderStatus, orderTpes } from "@/lib/Constants";
 import { useState } from "react";
+import { newOrdersRoute } from "@/router";
+import { useNavigate } from "@tanstack/react-router";
 
 export default function OrderList() {
   const getStatusLabel = (status: any) => {
@@ -94,7 +96,7 @@ export default function OrderList() {
   const [query, setQuery] = useState(initialQuery);
 
   const { isPending, data } = useQuery({
-    queryKey: ["newOrders", query],
+    queryKey: ["orders", query],
     queryFn: () => getOrders(query),
   });
 
@@ -111,6 +113,8 @@ export default function OrderList() {
     if (field == "page") setQuery((v) => ({ ...v, page: val }));
   };
 
+  const navigate = useNavigate();
+
   return (
     <Layout>
       <NavbarAlt />
@@ -123,6 +127,7 @@ export default function OrderList() {
             <Button
               text="View New Orders"
               className={"text-sm h-10 rounded-[0.25rem]"}
+              onClick={() => navigate({ to: newOrdersRoute.to })}
             />
           </div>
         </div>

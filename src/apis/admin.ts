@@ -5,3 +5,7 @@ export const asignOrderToDriver = async (orderId: any, driverId: any) => {
     `/admin/order/${orderId}/asign-driver/${driverId}`
   );
 };
+
+export const changeDriverStatus = async (driverId: any, data: any) => {
+  return await instance.patch(`/admin/driver/${driverId}`, data);
+};

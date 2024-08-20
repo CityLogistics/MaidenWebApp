@@ -13,9 +13,8 @@ export default function CustomSelect({
   items = [],
   values = [],
   capsuleWidth,
-  containerWidth,
 }: any) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<any>(values);
 
   useEffect(() => {

@@ -25,7 +25,7 @@ export default function NewDriverList() {
   };
   const [query, setQuery] = useState(initialQuery);
 
-  const { isPending, data } = useQuery({
+  const { isPending, data, refetch } = useQuery({
     queryKey: ["newdrivers", query],
     queryFn: () => getDrivers(query),
   });
@@ -107,14 +107,14 @@ export default function NewDriverList() {
         {isPending ? (
           <div className="flex flex-wrap mt-6 justify-between">
             {[1, 2, 3, 4, 5, 6, 7].map((v: any) => (
-              <DriverCardLoading key={v._id} />
+              <DriverCardLoading key={v} />
             ))}
           </div>
         ) : (
           <>
             <div className="flex flex-wrap mt-6 justify-between">
               {values.map((v: any) => (
-                <NewDriverCard data={v} key={v._id} />
+                <NewDriverCard data={v} key={v._id} refetch={refetch} />
               ))}
             </div>
 

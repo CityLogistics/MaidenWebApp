@@ -52,6 +52,7 @@ export default function CustomTable({
                 <TableRow className=" border-b-0">
                   {columns.map((column, i) => (
                     <TableHead
+                      key={i}
                       className={twMerge(
                         `w-[${column.width}] bg-[#FCFDFD] whitespace-nowrap font-bold `,
                         i == 0 && "rounded-l-2xl",
@@ -66,9 +67,12 @@ export default function CustomTable({
               </TableHeader>
               <TableBody>
                 {data.map((row, i): any => (
-                  <TableRow>
-                    {columns.map((column: ColumnType) => (
-                      <TableCell className=" text-[#202224] font-semibold text-sm opacity-80">
+                  <TableRow key={i}>
+                    {columns.map((column: ColumnType, i) => (
+                      <TableCell
+                        key={i}
+                        className=" text-[#202224] font-semibold text-sm opacity-80"
+                      >
                         {column.render?.(row) ?? row[column.id]}
                       </TableCell>
                     ))}

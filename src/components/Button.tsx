@@ -5,7 +5,7 @@ export default function Button({
   className,
   onClick,
   loading,
-  disabled,
+  disabled = false,
 }: any) {
   return (
     <button
@@ -16,6 +16,7 @@ export default function Button({
         disabled && "bg-slate-300"
       )}
       onClick={onClick}
+      disabled={disabled}
     >
       {loading && (
         <svg

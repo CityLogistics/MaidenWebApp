@@ -43,10 +43,10 @@ export function CustomDatePicker({ onChange, values }: any) {
         <PopoverPortal>
           <PopoverContent className="bg-white rounded-2xl w-fit  min-h-48">
             <Calendar
-              mode="single"
+              mode="multiple"
               selected={selected}
-              onSelect={(v) => setSelected((val: any) => [...val, v])}
-              // onSelect={(v) => setSelected(v)}
+              // onSelect={(v) => setSelected((val: any) => [...val, v])}
+              onSelect={(v) => setSelected(v)}
               className="rounded-md border-y"
             />
             <div className="flex justify-between w-full h-[8.125rem] p-4 flex-col items-center">

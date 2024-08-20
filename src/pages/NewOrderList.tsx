@@ -10,7 +10,7 @@ import { getNewOrders } from "@/apis/orders";
 import { format } from "date-fns";
 import AsignToDriver from "@/components/Order/AsignToDriver";
 import { useState } from "react";
-import { orderTpes } from "@/lib/Constants";
+import { limit, orderTpes } from "@/lib/Constants";
 
 export default function NewOrderList() {
   const [open, setOpen] = useState();
@@ -62,18 +62,32 @@ export default function NewOrderList() {
       ),
     },
   ];
-  const query = {
+
+  const initialQuery = {
     page: 0,
-    limit: 5,
+    limit,
+    orderTypes: [],
+    dates: [],
   };
-  const { isPending, data } = useQuery({
-    queryKey: ["newOrders"],
+
+  const [query, setQuery] = useState(initialQuery);
+
+  const { isPending, data, refetch } = useQuery({
+    queryKey: ["newOrders", query],
     queryFn: () => getNewOrders(query),
   });
 
   const values = data?.data.data ?? [];
+  const total = data?.data?.count ?? [];
 
-  const moreData = [...values, ...values, ...values];
+  const handleParamChange = (field: any, val: any) => {
+    console.info({ val });
+
+    if (field == "orderStatus") setQuery((v) => ({ ...v, orderStatus: val }));
+    if (field == "orderTypes") setQuery((v) => ({ ...v, orderTypes: val }));
+    if (field == "dates") setQuery((v) => ({ ...v, dates: val }));
+    if (field == "page") setQuery((v) => ({ ...v, page: val }));
+  };
 
   return (
     <Layout>
@@ -90,27 +104,52 @@ export default function NewOrderList() {
           </div>
           <div className="">Filter By</div>
           <div className="">
-            <CustomDatePicker />{" "}
+            <CustomDatePicker
+              onChange={(v: any) => handleParamChange("dates", v)}
+              values={query.dates}
+            />{" "}
           </div>
           <div className="">
-            <CustomSelect label="Order Type" items={orderTpes} />
+            <CustomSelect
+              label="Order Type"
+              items={orderTpes}
+              onChange={(v: any) => handleParamChange("orderTypes", v)}
+              values={query.orderTypes}
+            />
           </div>
           {/* <div className="">
             <CustomSelect label="Order Status" items={orderTpes} />
           </div> */}
-          <div>
+          <div
+            className=" flex cursor-pointer"
+            onClick={() => setQuery(initialQuery)}
+          >
             <img src={ReplayIcon} alt="Replay Icon " />
-            <span className="text-[#EA0234] font-bold text-sm">
+            <span className="text-[#EA0234] font-bold text-sm ml-1">
               Reset Filter
             </span>
           </div>
         </div>
 
         <div className=" mt-8">
-          <CustomTable columns={columns} data={moreData} />
+          <CustomTable
+            columns={columns}
+            data={values}
+            loading={isPending}
+            total={total}
+            page={query.page}
+            handlePageChange={(v: any) => handleParamChange("page", v)}
+          />
         </div>
       </div>
-      {open && <AsignToDriver open={open} orderId={open} setOpen={setOpen} />}
+      {open && (
+        <AsignToDriver
+          open={open}
+          orderId={open}
+          setOpen={setOpen}
+          refetch={refetch}
+        />
+      )}
     </Layout>
   );
 }

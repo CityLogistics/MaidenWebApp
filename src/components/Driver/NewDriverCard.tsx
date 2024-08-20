@@ -1,6 +1,13 @@
+import { useMutation } from "@tanstack/react-query";
 import Button from "../Button";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import { parseError } from "@/lib/utils";
+import { changeDriverStatus } from "@/apis/admin";
+import { useRef, useState } from "react";
+import { DriverStatus } from "@/lib/Constants";
 
-export default function NewDriverCard({ data }: any) {
+export default function NewDriverCard({ data, refetch }: any) {
   const {
     firstName,
     lastName,
@@ -11,7 +18,36 @@ export default function NewDriverCard({ data }: any) {
     availabiltyTime,
     image,
     hasValidVehicleInsurance,
+
+    _id,
   } = data;
+
+  const [loading, setLoading] = useState<DriverStatus | null>(null);
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: (data: any) => changeDriverStatus(_id, data),
+    onSuccess: () => {
+      if (refetch) refetch();
+
+      toast.success(
+        loading == DriverStatus.ACCEPTED
+          ? "New driver added"
+          : "Driver request declined"
+      );
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
+    },
+  });
+
+  const deside = async (status: DriverStatus) => {
+    setLoading(status);
+
+    await mutateAsync({
+      status,
+    });
+
+    setLoading(null);
+  };
 
   return (
     <div className=" w-[100%] bg-white my-3 rounded-xl overflow-clip flex flex-col lg:flex-row">
@@ -50,16 +86,14 @@ export default function NewDriverCard({ data }: any) {
       </div>
       <div className="p-6 ">
         <Button
-          // loading={assignIsLoading}
-          // onClick={mutate}
-          // disabled={!selectedDriver}
+          loading={isPending && loading == DriverStatus.ACCEPTED}
+          onClick={() => deside(DriverStatus.ACCEPTED)}
           text="Add New Driver"
           className="text-sm rounded-[0.2rem] mt-6"
         />
         <Button
-          // loading={assignIsLoading}
-          // onClick={mutate}
-          // disabled={!selectedDriver}
+          loading={isPending && loading == DriverStatus.DECLINED}
+          onClick={() => deside(DriverStatus.DECLINED)}
           text="Reject Application"
           className="text-sm text-[#F68716] bg-white hover:border-[#F68716] rounded-[0.2rem] w-full h-12"
         />
