@@ -23,11 +23,10 @@ export default function RecentOrdersTable() {
 
   const values = data?.data.data ?? [];
 
-  console.info({ values });
-
-  const getStatusLabel = (status: any) => {
+  const getStatusLabel = (data: any) => {
     const classNames =
-      "w-[102.07px] h-[27px] rounded-[13.50px] flex justify-center items-center text-white text-sm font-bold";
+      "w-[102.07px] h-[27px] rounded-[13.50px] flex justify-center items-center text-white text-sm font-bold capitalize";
+    const status = data.toLowerCase();
 
     switch (status) {
       case "Delivered":
@@ -80,7 +79,7 @@ export default function RecentOrdersTable() {
       id: "date",
       label: "Date",
       width: "200px",
-      render: (v: any) => v.pickupDate && format(v.pickupDate, "dd/MM/YYY"),
+      render: (v: any) => v.pickupDate && format(v.pickupDate, "dd/MM/yyy"),
     },
     {
       id: "",
@@ -104,6 +103,7 @@ export default function RecentOrdersTable() {
             <TableRow className=" border-b-0">
               {columns.map((column, i) => (
                 <TableHead
+                  key={i}
                   className={twMerge(
                     `w-[${column.width}] bg-[#f1f3f9] whitespace-nowrap font-bold`,
                     i == 0 && "rounded-l-xl",
@@ -119,8 +119,11 @@ export default function RecentOrdersTable() {
           <TableBody>
             {values.map((row: any, i: any): any => (
               <TableRow key={i}>
-                {columns.map((column: ColumnType) => (
-                  <TableCell className=" text-[#202224] font-semibold text-sm opacity-80">
+                {columns.map((column: ColumnType, i: number) => (
+                  <TableCell
+                    key={i}
+                    className=" text-[#202224] font-semibold text-sm opacity-80"
+                  >
                     {column.render?.(row) ?? row[column.id]}
                   </TableCell>
                 ))}

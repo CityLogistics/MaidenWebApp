@@ -59,3 +59,8 @@ export enum DriverStatus {
   ACCEPTED = "ACCEPTED",
   DECLINED = "DECLINED",
 }
+
+export enum GENDER {
+  MALE = "MALE",
+  FEMALE = "FEMALE",
+}

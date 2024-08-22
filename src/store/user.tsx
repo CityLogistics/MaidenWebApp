@@ -1,6 +1,8 @@
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 const user = {
+  image: "",
   firstName: "",
   lastName: "",
   email: "",
@@ -18,9 +20,18 @@ interface UserState {
   clearUser: () => void;
 }
 
-export const useUserStore = create<UserState>()((set) => ({
-  user,
-  setUser: (data) => set(() => ({ user: data })),
-  updateUser: (data) => set((state) => ({ user: { ...state.user, ...data } })),
-  clearUser: () => set(() => ({ user })),
-}));
+export const useUserStore = create<UserState>()(
+  persist(
+    (set) => ({
+      user,
+      setUser: (data) => set(() => ({ user: data })),
+      updateUser: (data) =>
+        set((state) => ({ user: { ...state.user, ...data } })),
+      clearUser: () => set(() => ({ user })),
+    }),
+    {
+      storage: createJSONStorage(() => localStorage),
+      name: "cityLogistics",
+    }
+  )
+);

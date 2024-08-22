@@ -15,13 +15,15 @@ type prop = {
   nolabel?: boolean;
   options: any[];
 };
-export default function SelectField({
+export default function SelectField2({
   label,
   itemRight,
   id,
   name,
+  type,
   onChange,
   value,
+  placeholder,
   error,
   helperText,
   nolabel = false,
@@ -50,8 +52,8 @@ export default function SelectField({
           Select Driver
         </option>
         {options.map((v) => (
-          <option key={v.value} value={v.value}>
-            {`${v.label} `}
+          <option key={v._id} value={v._id}>
+            {`${v.firstName} ${v.lastName}`}
           </option>
         ))}
       </select>

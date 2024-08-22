@@ -16,7 +16,7 @@ export default function Login() {
 
   const { updateUser } = useUserStore((state) => state);
 
-  const { mutate, isPending } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
       updateUser(data.data.user);
@@ -25,12 +25,12 @@ export default function Login() {
   });
 
   const validationSchema = yup.object().shape({
-    username: yup.string().email().required("this field is required"),
+    email: yup.string().email().required("this field is required"),
     password: yup.string().required("this field is required"),
   });
 
   const initialValues = {
-    username: "",
+    email: "",
     password: "",
   };
 
@@ -40,7 +40,7 @@ export default function Login() {
     onSubmit: (data) => {
       console.info({ data });
 
-      mutate(data);
+      mutateAsync(data);
     },
   });
 
@@ -63,12 +63,12 @@ export default function Login() {
         </div>
         <TextField
           label="Email address:"
-          id="username"
-          name="username"
+          id="email"
+          name="email"
           onChange={handleChange}
-          value={values.username}
-          error={touched.username && Boolean(errors.username)}
-          helperText={touched.username && errors.username}
+          value={values.email}
+          error={touched.email && Boolean(errors.email)}
+          helperText={touched.email && errors.email}
         />
         <PasswordField
           label="Password"

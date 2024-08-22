@@ -2,42 +2,61 @@ import { updateUser } from "@/apis/user";
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
 import NavbarAlt from "@/components/NavbarAlt";
+import SelectField from "@/components/SelectField";
 import TextField from "@/components/TextField";
+import { GENDER } from "@/lib/Constants";
+import { parseError } from "@/lib/utils";
 import { useUserStore } from "@/store/user";
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useFormik } from "formik";
 import { toast } from "sonner";
 import * as yup from "yup";
 
 export default function Settings() {
-  const { mutate, isPending } = useMutation({
+  const { user: initialValues, updateUser: updateUserData } = useUserStore(
+    (state) => state
+  );
+
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: updateUser,
-    onSuccess: () => {
-      toast.success("Saved");
+    onSuccess: (data) => {
+      updateUserData(data.data);
+      toast.success("Changes saved successfully");
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
     },
   });
 
   const validationSchema = yup.object().shape({
-    firstName: yup.string().email().required("this field is required"),
+    firstName: yup.string().required("this field is required"),
     lastName: yup.string().required("this field is required"),
-    email: yup.string().required("this field is required"),
+    email: yup.string().email().required("this field is required"),
     phoneNumber: yup.string().required("this field is required"),
     dateOfBirth: yup.string().required("this field is required"),
     gender: yup.string().required("this field is required"),
   });
 
-  const { user: initialValues, updateUser: updateUserData } = useUserStore(
-    (state) => state
-  );
-
   const { handleSubmit, handleChange, values, errors, touched } = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (data) => {
-      console.info({ data });
-      mutate(data);
+      const { email, ...others } = data;
+      mutateAsync(others);
     },
   });
+
+  const options = [
+    {
+      label: "male",
+      value: GENDER.MALE,
+    },
+    {
+      label: "female",
+      value: GENDER.FEMALE,
+    },
+  ];
 
   return (
     <Layout>
@@ -50,13 +69,21 @@ export default function Settings() {
         <div className="bg-white rounded-2xl min-h-[20vh] mt-12 py-16">
           <div className=" flex flex-col justify-center w-full items-center">
             <img
-              src=""
+              src={initialValues.image}
               alt=""
               className=" w-20 h-20 rounded-full bg-slate-50"
             />
-            <div className="text-[#F68716]  font-semibold text-sm mt-2">
-              Edit Photo
-            </div>
+            <input
+              id="profile"
+              type="file"
+              onChange={() => null}
+              className=" h-0 w-0"
+            />
+            <label htmlFor="profile">
+              <div className="text-[#F68716]  font-semibold text-sm mt-2 cursor-pointer">
+                Edit Photo
+              </div>
+            </label>
           </div>
           <div className="w-8/12 sm:w-10/12 lg:w-8/12 mx-auto grid  md:grid-cols-2 gap-14 mt-6">
             <div className="-mt-9">
@@ -90,6 +117,7 @@ export default function Settings() {
                 value={values.email}
                 error={touched.email && Boolean(errors.email)}
                 helperText={touched.email && errors.email}
+                disabled
               />
             </div>
             <div className="-mt-9">
@@ -115,7 +143,7 @@ export default function Settings() {
               />
             </div>
             <div className="-mt-9">
-              <TextField
+              <SelectField
                 label="Gender"
                 id="gender"
                 name="gender"
@@ -123,6 +151,7 @@ export default function Settings() {
                 value={values.gender}
                 error={touched.gender && Boolean(errors.gender)}
                 helperText={touched.gender && errors.gender}
+                options={options}
               />
             </div>
           </div>

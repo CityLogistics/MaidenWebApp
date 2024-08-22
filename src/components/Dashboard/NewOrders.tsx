@@ -38,7 +38,7 @@ export default function NewOrders() {
       ) : (
         <>
           {values.map((v: any, i: number) => (
-            <OrderCard key={i} data={v} last={i == v.length} />
+            <OrderCard key={i} data={v} last={i == values.length - 1} />
           ))}
         </>
       )}

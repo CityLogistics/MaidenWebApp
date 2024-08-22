@@ -1,6 +1,5 @@
 import { getDrivers } from "@/apis/drivers";
 import Button from "../Button";
-import SelectField from "../SelectField";
 import {
   Dialog,
   DialogClose,
@@ -15,6 +14,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { parseError } from "@/lib/utils";
 import { AxiosError } from "axios";
+import SelectField2 from "../SelectField2";
 
 export default function AsignToDriver({
   orderId,
@@ -44,7 +44,6 @@ export default function AsignToDriver({
     },
     onError: (e: AxiosError) => {
       toast.error(parseError(e));
-      console.info({ e });
     },
   });
 
@@ -54,7 +53,7 @@ export default function AsignToDriver({
       <DialogContent className=" bg-white rounded-2xl w-[32.6rem] min-h-48 p-10 ">
         <div className=" text-[#202224] font-bold">Assign Order to Driver</div>
         <div className="-mt-1">
-          <SelectField
+          <SelectField2
             nolabel={true}
             options={values}
             onChange={(e: any) => setSelectedDriver(e.target.value)}

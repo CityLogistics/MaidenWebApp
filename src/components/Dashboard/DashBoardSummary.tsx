@@ -3,8 +3,24 @@ import LoginImg from "../../assets/images/dashboard.png";
 import Suv from "../../assets/images/suv_1.png";
 
 import Navbar from "../Navbar";
+import { useUserStore } from "@/store/user";
 
 export default function DashBoardSummary() {
+  const firstName = useUserStore((state) => state.user.firstName);
+  const today = new Date();
+
+  const curHr = today.getHours();
+
+  const getTime = () => {
+    if (curHr < 12) {
+      return "morning";
+    } else if (curHr < 18) {
+      return "afternoon";
+    } else {
+      return "evening";
+    }
+  };
+
   return (
     <div
       className=" flex-1 px-[2.5rem] py-[1.5rem] pb-0 relative bg-cover"
@@ -14,8 +30,8 @@ export default function DashBoardSummary() {
 
       <div className="flex mt-[4.3rem] text-[#FFFFFF">
         <div className="w-[55%]">
-          <div className=" font-bold text-[2.5rem] ]">
-            Good Morning, Olaseni
+          <div className=" font-bold text-[2.5rem] capitalize">
+            Good {getTime()}, {firstName}
           </div>
 
           <div className="text-xl">Here’s your overview as at today</div>
