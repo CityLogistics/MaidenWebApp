@@ -12,7 +12,7 @@ import Loader from "../Loader";
 import { asignOrderToDriver } from "@/apis/admin";
 import { useState } from "react";
 import { toast } from "sonner";
-import { parseError } from "@/lib/utils";
+import { parseError, queryClient } from "@/lib/utils";
 import { AxiosError } from "axios";
 import SelectField2 from "../SelectField2";
 
@@ -39,6 +39,7 @@ export default function AsignToDriver({
     mutationFn: () => asignOrderToDriver(orderId, selectedDriver),
     onSuccess: () => {
       if (refetch) refetch();
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
       setOpen(false);
       toast.success("Order assigned to driver successfully");
     },

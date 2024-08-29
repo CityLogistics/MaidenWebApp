@@ -4,6 +4,9 @@ import Suv from "../../assets/images/suv_1.png";
 
 import Navbar from "../Navbar";
 import { useUserStore } from "@/store/user";
+import { getStats } from "@/apis/admin";
+import { useQuery } from "@tanstack/react-query";
+import { twMerge } from "tailwind-merge";
 
 export default function DashBoardSummary() {
   const firstName = useUserStore((state) => state.user.firstName);
@@ -20,6 +23,18 @@ export default function DashBoardSummary() {
       return "evening";
     }
   };
+
+  const { isPending, data } = useQuery({
+    queryKey: ["stats"],
+    queryFn: getStats,
+  });
+
+  const values = data?.data || {};
+
+  const { pendingOrders, totalDrivers, totalOrders, totalOrdersInTransit } =
+    values;
+
+  console.info({ values });
 
   return (
     <div
@@ -39,51 +54,111 @@ export default function DashBoardSummary() {
 
         <div className="pl-[2.5rem] py-[0.9rem] w-[45%]">
           <div className="flex w-full justify-between">
-            <div className=" bg-[#FFFFFF] w-[47.5%]  rounded-l-[3rem] rounded-tr-[3rem] rounded-br-[1rem] p-[0.5rem] pr-6 flex items-center">
-              <div className="rounded-full  bg-primary h-[4.3rem] w-[4.3rem] flex justify-center items-center ">
-                <ShoppingCart size="30" variant="Bold" />
-              </div>
-              <div className="text-black ml-4 flex-1 ">
-                <div className="text-base font-semibold ml-1  ">
-                  Total Orders
-                </div>
-                <div className="text-2xl font-semibold ml-1  ">500</div>
-              </div>
+            <div
+              className={twMerge(
+                " bg-[#FFFFFF] w-[47.5%]  rounded-l-[3rem] rounded-tr-[3rem] rounded-br-[1rem] p-[0.5rem] pr-6 flex items-center  overflow-clip",
+                isPending && "animate-pulse"
+              )}
+            >
+              {isPending ? (
+                <>
+                  <div className="w-full h-16 "></div>
+                </>
+              ) : (
+                <>
+                  <div className="rounded-full  bg-primary h-[4.3rem] w-[4.3rem] flex justify-center items-center ">
+                    <ShoppingCart size="30" variant="Bold" />
+                  </div>
+                  <div className="text-black ml-4 flex-1 ">
+                    <div className="text-base font-semibold ml-1  ">
+                      Total Orders
+                    </div>
+                    <div className="text-2xl font-semibold ml-1  ">
+                      {totalOrders || 0}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
-            <div className=" bg-[#FFFFFF] w-[47.5%]  rounded-r-[3rem] rounded-tl-[3rem] rounded-bl-[1rem] p-[0.5rem] pr-6 flex items-center">
-              <div className="rounded-full  bg-primary h-[4.3rem] w-[4.3rem] flex justify-center items-center ">
-                <Profile2User size="30" variant="Bold" />
-              </div>
-              <div className="text-black ml-4 flex-1">
-                <div className="text-base font-semibold ml-1  ">
-                  Total Drivers
-                </div>
-                <div className="text-2xl font-semibold ml-1  ">500</div>
-              </div>
+            <div
+              className={twMerge(
+                " bg-[#FFFFFF] w-[47.5%]  rounded-r-[3rem] rounded-tl-[3rem] rounded-bl-[1rem] p-[0.5rem] pr-6 flex items-center  overflow-clip",
+                isPending && "animate-pulse"
+              )}
+            >
+              {isPending ? (
+                <>
+                  <div className="w-full h-16 "></div>
+                </>
+              ) : (
+                <>
+                  <div className="rounded-full  bg-primary h-[4.3rem] w-[4.3rem] flex justify-center items-center ">
+                    <Profile2User size="30" variant="Bold" />
+                  </div>
+                  <div className="text-black ml-4 flex-1">
+                    <div className="text-base font-semibold ml-1  ">
+                      Total Drivers
+                    </div>
+                    <div className="text-2xl font-semibold ml-1  ">
+                      {totalDrivers || 0}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <div className="flex w-full justify-between ">
-            <div className=" bg-[#FFFFFF] w-[47.5%] rounded-l-[3rem] rounded-br-[3rem] rounded-tr-[1rem] p-[0.5rem] pr-6 flex items-center mt-4">
-              <div className="rounded-full  bg-primary h-[4.3rem] w-[4.3rem] flex justify-center items-center ">
-                <SmartCar size="30" variant="Bold" />
-              </div>
-              <div className="text-black ml-4 flex-1">
-                <div className="text-base font-semibold ml-1 ">
-                  Orders in Transit
-                </div>
-                <div className="text-2xl font-semibold ml-1  ">500</div>
-              </div>
+            <div
+              className={twMerge(
+                "bg-[#FFFFFF] w-[47.5%] rounded-l-[3rem] rounded-br-[3rem] rounded-tr-[1rem] p-[0.5rem] pr-6 flex items-center  overflow-clip mt-4",
+                isPending && "animate-pulse"
+              )}
+            >
+              {isPending ? (
+                <>
+                  <div className="w-full h-16 "></div>
+                </>
+              ) : (
+                <>
+                  <div className="rounded-full  bg-primary h-[4.3rem] w-[4.3rem] flex justify-center items-center ">
+                    <SmartCar size="30" variant="Bold" />
+                  </div>
+                  <div className="text-black ml-4 flex-1">
+                    <div className="text-base font-semibold ml-1 ">
+                      Orders in Transit
+                    </div>
+                    <div className="text-2xl font-semibold ml-1  ">
+                      {totalOrdersInTransit || 0}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
-            <div className=" bg-[#FFFFFF] w-[47.5%]  rounded-r-[3rem] rounded-bl-[3rem] rounded-tl-[1rem] p-[0.5rem] pr-6 flex items-center mt-4">
-              <div className="rounded-full  bg-primary h-[4.3rem] w-[4.3rem] flex justify-center items-center ">
-                <BagTimer size="30" variant="Bold" />
-              </div>
-              <div className="text-black ml-4 flex-1 ">
-                <div className="text-base font-semibold ml-1  ">
-                  Pending Orders
-                </div>
-                <div className="text-2xl font-semibold ml-1  ">500</div>
-              </div>
+            <div
+              className={twMerge(
+                "bg-[#FFFFFF] w-[47.5%]  rounded-r-[3rem] rounded-bl-[3rem] rounded-tl-[1rem] p-[0.5rem] pr-6 flex items-center mt-4 overflow-clip",
+                isPending && "animate-pulse"
+              )}
+            >
+              {isPending ? (
+                <>
+                  <div className="w-full h-16 "></div>
+                </>
+              ) : (
+                <>
+                  <div className="rounded-full  bg-primary h-[4.3rem] w-[4.3rem] flex justify-center items-center ">
+                    <BagTimer size="30" variant="Bold" />
+                  </div>
+                  <div className="text-black ml-4 flex-1 ">
+                    <div className="text-base font-semibold ml-1  ">
+                      Pending Orders
+                    </div>
+                    <div className="text-2xl font-semibold ml-1  ">
+                      {pendingOrders || 0}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -115,7 +190,7 @@ export default function DashBoardSummary() {
             </div>
             <div className="text-base font-bold ml-1 text-[#F68716]">Large</div>
           </div>
-          <div className=" bg-[#EFEFEF] min-w-40  h-14 mx-[1rem] rounded-[2rem] px-[0.5rem] flex items-center">
+          <div className=" z-50 bg-[#EFEFEF] min-w-40  h-14 mx-[1rem] rounded-[2rem] px-[0.5rem] flex items-center">
             <div className="rounded-full  bg-[#F5F6FA] h-12 w-12 relative">
               <img
                 src={Suv}

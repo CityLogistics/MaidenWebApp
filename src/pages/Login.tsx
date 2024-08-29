@@ -10,6 +10,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { dashboardRoute } from "@/router";
 import * as yup from "yup";
 import { useUserStore } from "@/store/user";
+import { toast, Toaster } from "sonner";
+import { AxiosError } from "axios";
+import { parseError } from "@/lib/utils";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -21,6 +24,9 @@ export default function Login() {
     onSuccess: (data) => {
       updateUser(data.data.user);
       navigate({ to: dashboardRoute.to });
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
     },
   });
 
@@ -49,6 +55,8 @@ export default function Login() {
       className=" bg-white h-screen w-screen bg-cover flex justify-center items-center"
       style={{ backgroundImage: `url(${LoginImg})` }}
     >
+      <Toaster richColors position="top-center" />
+
       <div className="bg-white  w-[38rem] rounded-2xl flex flex-col items-center p-[3.75rem]">
         <img
           src={Logo}

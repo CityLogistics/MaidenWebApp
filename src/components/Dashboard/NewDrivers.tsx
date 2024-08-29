@@ -1,9 +1,18 @@
+import { changeDriverStatus } from "@/apis/admin";
 import { getDrivers } from "@/apis/drivers";
+import { DriverStatus } from "@/lib/Constants";
+import { parseError, queryClient, timeFormNow } from "@/lib/utils";
 import { newDriversRoute } from "@/router";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight2 } from "iconsax-react";
+import { AxiosError } from "axios";
+import { ArrowRight2, Note1, NoteSquare } from "iconsax-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
+import Loader from "../Loader";
+import ConfirmDialouge from "../ConfirmDialouge";
+import DeadState from "../DeadState";
 
 export default function NewDrivers() {
   const query = {
@@ -38,15 +47,57 @@ export default function NewDrivers() {
       ) : (
         <>
           {values.map((v: any, i: any) => (
-            <DriverCard key={i} data={v} last={i == 1} />
+            <DriverCard key={i} data={v} refetch={refetch} last={i == 1} />
           ))}
+          {values.length == 0 && <DeadState />}
         </>
       )}
     </div>
   );
 }
 
-function DriverCard({ last }: any) {
+function DriverCard({ data, refetch, last }: any) {
+  const { firstName, lastName, vehicleType, updatedAt, _id } = data;
+
+  const [loading, setLoading] = useState<DriverStatus | null>(null);
+  const [open, setOpen] = useState<any>();
+
+  const { mutateAsync } = useMutation({
+    mutationFn: (data: any) => changeDriverStatus(_id, data),
+    onSuccess: () => {
+      if (refetch) refetch();
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
+
+      toast.success(
+        loading == DriverStatus.ACCEPTED
+          ? "New driver added"
+          : "Driver request declined"
+      );
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
+    },
+  });
+
+  const deside = async (status: DriverStatus) => {
+    setOpen(null);
+    setLoading(status);
+
+    await mutateAsync({
+      status,
+    });
+
+    setLoading(null);
+  };
+
+  const confirm = (status: DriverStatus) => {
+    setOpen({
+      status,
+      message: `Are you sure you want to ${DriverStatus.ACCEPTED == status ? "accept" : "reject"} driver request`,
+      callback: () => deside(status),
+    });
+  };
+
   return (
     <div
       className={twMerge(
@@ -56,20 +107,44 @@ function DriverCard({ last }: any) {
     >
       <div className=" ">
         <div className="text-[#202224] font-bold  text-xs">
-          Mr Antony Gabriel
+          Mr {`${firstName} ${lastName}`}
         </div>
-        <div className=" text-[#828282] text-[0.625rem]">Sedan/Salon</div>
-        <div className=" text-[#2F80ED] text-[0.625rem]">10 minutes ago</div>
+        <div className=" text-[#828282] text-[0.625rem]">
+          {" "}
+          {vehicleType?.toLowerCase()}
+        </div>
+        <div className=" text-[#2F80ED] text-[0.625rem]">
+          {timeFormNow(updatedAt)}
+        </div>
       </div>
 
       <div className="flex flex-col justify-between">
-        <div className="text-[#27AE60] font-normal text-[0.625rem] flex items-center">
-          Accept Request <ArrowRight2 size={10} variant="Linear" />
-        </div>
-        <div className="text-[#EB5757] font-normal text-[0.625rem] flex items-center">
-          Reject Request <ArrowRight2 size={10} variant="Linear" />
-        </div>
+        {loading ? (
+          <Loader dotClassess="w-2 h-2" />
+        ) : (
+          <>
+            <div
+              className="text-[#27AE60] font-normal text-[0.625rem] flex items-center cursor-pointer"
+              onClick={() => confirm(DriverStatus.ACCEPTED)}
+            >
+              Accept Request <ArrowRight2 size={10} variant="Linear" />
+            </div>
+            <div
+              className="text-[#EB5757] font-normal text-[0.625rem] flex items-center cursor-pointer"
+              onClick={() => confirm(DriverStatus.DECLINED)}
+            >
+              Reject Request <ArrowRight2 size={10} variant="Linear" />
+            </div>
+          </>
+        )}
       </div>
+      {open && (
+        <ConfirmDialouge
+          onCancel={() => setOpen(null)}
+          onProceed={open.callback}
+          message={open.message}
+        />
+      )}
     </div>
   );
 }

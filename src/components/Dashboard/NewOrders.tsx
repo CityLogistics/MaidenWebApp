@@ -6,6 +6,7 @@ import AsignToDriver from "../Order/AsignToDriver";
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { newOrdersRoute } from "@/router";
+import DeadState from "../DeadState";
 
 export default function NewOrders() {
   const query = {
@@ -40,6 +41,7 @@ export default function NewOrders() {
           {values.map((v: any, i: number) => (
             <OrderCard key={i} data={v} last={i == values.length - 1} />
           ))}
+          {values.length == 0 && <DeadState />}
         </>
       )}
     </div>

@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { parseError } from "@/lib/utils";
 import { changeDriverStatus } from "@/apis/admin";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { DriverStatus } from "@/lib/Constants";
 
 export default function NewDriverCard({ data, refetch }: any) {
