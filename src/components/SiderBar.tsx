@@ -7,7 +7,7 @@ import {
   ShoppingCart,
   UserCirlceAdd,
 } from "iconsax-react";
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { twMerge } from "tailwind-merge";
 import { routes } from "@/lib/Constants";
 import {
@@ -15,6 +15,7 @@ import {
   ordersRoute,
   driversRoute,
   newDriversRoute,
+  indexRoute,
 } from "@/router";
 
 export default function SiderBar() {
@@ -29,6 +30,12 @@ export default function SiderBar() {
       path.includes(to) && "border-primary border-l-4 text-primary"
     ),
   });
+
+  const navigate = useNavigate();
+  const logOut = () => {
+    localStorage.removeItem("userToken");
+    navigate({ to: indexRoute.to });
+  };
 
   return (
     <div className="w-[6.1rem] h-svh bg-white flex flex-col justify-center py-6">
@@ -51,9 +58,12 @@ export default function SiderBar() {
         <Link {...pathProps(routes.SETTINGS)}>
           <Setting2 variant="Bold" />
         </Link>
-        <Link {...pathProps("")}>
+        <div
+          className="w-full py-2 flex justify-center  my-4 hover:border-primary  hover:border-l-4 text-[#EEEEEE] hover:text-primary text-[1.875rem]  cursor-pointer"
+          onClick={logOut}
+        >
           <LogoutCurve color="grey" variant="Bold" />
-        </Link>
+        </div>
       </div>
     </div>
   );

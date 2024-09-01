@@ -105,13 +105,13 @@ export default function DriverList() {
         </div>
         {isPending ? (
           <div className="flex flex-wrap mt-6 justify-between">
-            {[1, 2, 3, 4, 5, 6, 7].map((v: any) => (
+            {[1, 2, 3, 4, 5, 6].map((v: any) => (
               <DriverCardLoading key={v._id} />
             ))}
           </div>
         ) : (
           <>
-            <div className="flex flex-wrap mt-6 justify-between">
+            <div className="flex flex-wrap mt-6 ">
               {values.map((v: any) => (
                 <DriverCard data={v} key={v._id} />
               ))}

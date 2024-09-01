@@ -52,7 +52,7 @@ export const availabiltys = [
   { label: "Night time (between 8PM and 11:59PM)", value: "NIGHT" },
 ];
 
-export const limit = 3;
+export const limit = 6;
 
 export enum DriverStatus {
   PENDING = "PENDING",

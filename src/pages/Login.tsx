@@ -12,7 +12,8 @@ import * as yup from "yup";
 import { useUserStore } from "@/store/user";
 import { toast, Toaster } from "sonner";
 import { AxiosError } from "axios";
-import { parseError } from "@/lib/utils";
+import { parseError, validateAuth } from "@/lib/utils";
+import { useEffect } from "react";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -49,6 +50,10 @@ export default function Login() {
       mutateAsync(data);
     },
   });
+
+  useEffect(() => {
+    if (validateAuth()) navigate({ to: dashboardRoute.to });
+  }, []);
 
   return (
     <div

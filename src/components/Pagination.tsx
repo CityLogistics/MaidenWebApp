@@ -10,7 +10,7 @@ export default function Pagination({
 }: any) {
   return (
     <div className="flex w-full mt-5 items-center">
-      {!loading && (
+      {!loading && total > 0 && (
         <div className=" text-[#202224] opacity-60 text-sm">
           Showing {page * limit + 1}-{Math.min((page + 1) * limit, total)} of{" "}
           {total}

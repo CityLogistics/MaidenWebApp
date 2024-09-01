@@ -11,7 +11,7 @@ export default function DriverCard({ data }: any) {
   } = data;
 
   return (
-    <div className=" w-[100%] lg:w-[49%] 2xl:w-[32%]   bg-white my-3 rounded-xl overflow-clip">
+    <div className=" w-[100%] lg:w-[49%]  2xl:w-[32%] lg:mr-[1%]  bg-white my-3 rounded-xl overflow-clip">
       <div
         className=" h-[20rem] bg-slate-50  bg-cover "
         style={{ backgroundImage: `url(${image})` }}

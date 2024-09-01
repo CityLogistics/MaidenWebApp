@@ -4,14 +4,15 @@ import filtericon from "@/assets/images/filtericon.png";
 import ReplayIcon from "@/assets/images/ic-replay-24px.png";
 import CustomSelect from "@/components/CustomSelect";
 import { useQuery } from "@tanstack/react-query";
-import { days, limit, availabiltys, carTypes } from "@/lib/Constants";
+import { days, availabiltys, carTypes } from "@/lib/Constants";
 import { useState } from "react";
 import { getDrivers } from "@/apis/drivers";
 import Pagination from "@/components/Pagination";
-import DriverCardLoading from "@/components/Driver/DriverCardLoading";
 import NewDriverCard from "@/components/Driver/NewDriverCard";
+import { NewDriverCardLoading } from "@/components/Driver/NewDriverCardLoading";
 
 export default function NewDriverList() {
+  const limit = 3;
   const initialQuery = {
     status: "PENDING",
     page: 0,
@@ -92,8 +93,8 @@ export default function NewDriverList() {
         </div>
         {isPending ? (
           <div className="flex flex-wrap mt-6 justify-between">
-            {[1, 2, 3, 4, 5, 6, 7].map((v: any) => (
-              <DriverCardLoading key={v} />
+            {[1, 2, 3].map((v: any) => (
+              <NewDriverCardLoading key={v} />
             ))}
           </div>
         ) : (

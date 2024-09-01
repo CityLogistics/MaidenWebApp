@@ -136,7 +136,7 @@ export default function OrderList() {
           <div className="w-[9.375rem]">
             <Button
               text="View New Orders"
-              className={"text-sm h-10 rounded-[0.25rem]"}
+              className={"text-sm h-10 rounded-[0.25rem] text-nowrap"}
               onClick={() => navigate({ to: newOrdersRoute.to })}
             />
           </div>
