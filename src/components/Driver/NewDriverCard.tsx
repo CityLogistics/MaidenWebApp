@@ -6,6 +6,7 @@ import { parseError } from "@/lib/utils";
 import { changeDriverStatus } from "@/apis/admin";
 import { useState } from "react";
 import { DriverStatus } from "@/lib/Constants";
+import ConfirmDialouge from "../ConfirmDialouge";
 
 export default function NewDriverCard({ data, refetch }: any) {
   const {
@@ -23,6 +24,8 @@ export default function NewDriverCard({ data, refetch }: any) {
   } = data;
 
   const [loading, setLoading] = useState<DriverStatus | null>(null);
+  const [open, setOpen] = useState<any>();
+
   const { isPending, mutateAsync } = useMutation({
     mutationFn: (data: any) => changeDriverStatus(_id, data),
     onSuccess: () => {
@@ -40,6 +43,8 @@ export default function NewDriverCard({ data, refetch }: any) {
   });
 
   const deside = async (status: DriverStatus) => {
+    setOpen(null);
+
     setLoading(status);
 
     await mutateAsync({
@@ -47,6 +52,14 @@ export default function NewDriverCard({ data, refetch }: any) {
     });
 
     setLoading(null);
+  };
+
+  const confirm = (status: DriverStatus) => {
+    setOpen({
+      status,
+      message: `Are you sure you want to ${DriverStatus.ACCEPTED == status ? "accept" : "reject"} driver request`,
+      callback: () => deside(status),
+    });
   };
 
   return (
@@ -87,17 +100,24 @@ export default function NewDriverCard({ data, refetch }: any) {
       <div className="p-6 ">
         <Button
           loading={isPending && loading == DriverStatus.ACCEPTED}
-          onClick={() => deside(DriverStatus.ACCEPTED)}
+          onClick={() => confirm(DriverStatus.ACCEPTED)}
           text="Add New Driver"
           className="text-sm rounded-[0.2rem] mt-6"
         />
         <Button
           loading={isPending && loading == DriverStatus.DECLINED}
-          onClick={() => deside(DriverStatus.DECLINED)}
+          onClick={() => confirm(DriverStatus.DECLINED)}
           text="Reject Application"
           className="text-sm text-[#F68716] bg-white hover:border-[#F68716] rounded-[0.2rem] w-full h-12"
         />
       </div>
+      {open && (
+        <ConfirmDialouge
+          onCancel={() => setOpen(null)}
+          onProceed={open.callback}
+          message={open.message}
+        />
+      )}
     </div>
   );
 }

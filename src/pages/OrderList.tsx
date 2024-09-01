@@ -16,21 +16,29 @@ import { newOrdersRoute } from "@/router";
 import { useNavigate } from "@tanstack/react-router";
 
 export default function OrderList() {
-  const getStatusLabel = (status: any) => {
+  const getStatusLabel = (data: any) => {
+    const status = data.toLowerCase();
     const classNames =
-      "w-[102.07px] h-[27px] rounded-[5px] flex justify-center items-center text-white text-sm font-bold bg-opacity-20";
+      "w-[150px] h-[27px] rounded-[5px] flex justify-center items-center text-white text-sm font-bold bg-opacity-20 capitalize";
 
-    switch (status) {
+    switch (data) {
       case "COMPLETED":
         return (
           <div className={twMerge(classNames, "bg-[#00b69b]  text-[#00b69b]")}>
             {status}
           </div>
         );
-      case "Rejected":
+      case "REJECTED":
         return (
           <div className={twMerge(classNames, "bg-[#fd5454] text-[#fd5454]")}>
             {status}
+          </div>
+        );
+
+      case "PENDING_PAYMENT":
+        return (
+          <div className={twMerge(classNames, "bg-[#fcbe2d] text-[#fcbe2d] ")}>
+            Pending Payment
           </div>
         );
 
@@ -57,11 +65,15 @@ export default function OrderList() {
       id: "pickupAddress",
       label: "Pickup Location",
       width: "200px",
+      render: (v: any) =>
+        `${v.pickupAddress.address}, ${v.pickupAddress.country}`,
     },
     {
       id: "dropOffAddress",
       label: "Dropoff Location",
       width: "200px",
+      render: (v: any) =>
+        `${v.dropOffAddress.address}, ${v.dropOffAddress.country}`,
     },
     {
       id: "pickupDate",
@@ -105,8 +117,6 @@ export default function OrderList() {
   const total = data?.data?.count;
 
   const handleParamChange = (field: any, val: any) => {
-    console.info({ val });
-
     if (field == "orderStatus") setQuery((v) => ({ ...v, orderStatus: val }));
     if (field == "orderTypes") setQuery((v) => ({ ...v, orderTypes: val }));
     if (field == "dates") setQuery((v) => ({ ...v, dates: val }));

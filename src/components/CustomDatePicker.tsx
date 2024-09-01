@@ -23,8 +23,6 @@ export function CustomDatePicker({ onChange, values }: any) {
     setOpen(false);
   };
 
-  console.info({ selected });
-
   return (
     <>
       <Popover open={open} onOpenChange={() => setOpen(false)}>

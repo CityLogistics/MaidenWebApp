@@ -1,6 +1,8 @@
 import { BagTimer, Profile2User, ShoppingCart, SmartCar } from "iconsax-react";
 import LoginImg from "../../assets/images/dashboard.png";
 import Suv from "../../assets/images/suv_1.png";
+import large from "../../assets/images/large.png";
+import xlarge from "../../assets/images/xlarge.png";
 
 import Navbar from "../Navbar";
 import { useUserStore } from "@/store/user";
@@ -34,8 +36,6 @@ export default function DashBoardSummary() {
   const { pendingOrders, totalDrivers, totalOrders, totalOrdersInTransit } =
     values;
 
-  console.info({ values });
-
   return (
     <div
       className=" flex-1 px-[2.5rem] py-[1.5rem] pb-0 relative bg-cover"
@@ -43,7 +43,7 @@ export default function DashBoardSummary() {
     >
       <Navbar />
 
-      <div className="flex mt-[4.3rem] text-[#FFFFFF">
+      <div className="flex mt-[1.3rem] text-[#FFFFFF">
         <div className="w-[55%]">
           <div className=" font-bold text-[2.5rem] capitalize">
             Good {getTime()}, {firstName}
@@ -125,7 +125,7 @@ export default function DashBoardSummary() {
                   </div>
                   <div className="text-black ml-4 flex-1">
                     <div className="text-base font-semibold ml-1 ">
-                      Orders in Transit
+                      Active Orders
                     </div>
                     <div className="text-2xl font-semibold ml-1  ">
                       {totalOrdersInTransit || 0}
@@ -165,41 +165,43 @@ export default function DashBoardSummary() {
       </div>
 
       <div className=" -bottom-[0.1rem] left-0 w-full flex absolute ">
-        <div className="bg-[#F5F6FA] w-[55%]  h-[3.1rem] rounded-tl-[2.2rem] relative flex py-2 justify-start">
-          <div className=" bg-[#F68716] h-14 ml-[2.6rem] mr-[1rem] rounded-[2rem] px-[0.5rem] pr-6 flex items-center">
-            <div className="rounded-full  bg-[#F5F6FA] h-12 w-12 relative">
+        <div className="bg-[#F5F6FA] w-[55%]  h-[3.1rem] rounded-tl-[2.2rem] relative flex py-2 justify-start ">
+          <div className=" bg-[#F68716] h-14 ml-[2.6rem] mr-[1rem] rounded-[2rem] px-[0.5rem] xl:pr-6 flex items-center">
+            <div className="rounded-full  bg-[#F5F6FA] h-12 w-12 relative ">
               <img
                 src={Suv}
                 alt="Suv"
                 width={30}
-                className="w-[8rem] h-[2.5rem] object-fill absolute left-1 "
+                className="w-[16rem] h-[2.2rem] object-cover absolute left-1"
               />
             </div>
-            <div className="text-base font-bold ml-1 text-[#FFFFFF] whitespace-nowrap">
+            <div className="text-base font-bold ml-1 text-[#FFFFFF] whitespace-nowrap  hidden xl:flex">
               Below 50kg
             </div>
           </div>
-          <div className=" bg-[#EFEFEF] min-w-40 h-14 mx-[1rem] rounded-[2rem] px-[0.5rem] flex items-center">
+          <div className=" bg-[#EFEFEF] xl:min-w-40 h-14 mx-[1rem] rounded-[2rem] px-[0.5rem] xl:pr-6 flex items-center">
             <div className="rounded-full  bg-[#F5F6FA] h-12 w-12 relative">
               <img
-                src={Suv}
+                src={large}
                 alt="Suv"
                 width={30}
-                className="w-[8rem] h-[2.5rem] object-fill absolute left-1 "
+                className="w-[18rem] h-[1.8rem] object-cover absolute left-0.5 top-2.5"
               />
             </div>
-            <div className="text-base font-bold ml-1 text-[#F68716]">Large</div>
+            <div className="text-base font-bold ml-1 text-[#F68716] hidden xl:flex">
+              Large
+            </div>
           </div>
-          <div className=" z-50 bg-[#EFEFEF] min-w-40  h-14 mx-[1rem] rounded-[2rem] px-[0.5rem] flex items-center">
+          <div className=" z-50 bg-[#EFEFEF] xl:min-w-40  h-14 mx-[1rem] rounded-[2rem] px-[0.5rem] xl:pr-6 flex items-center">
             <div className="rounded-full  bg-[#F5F6FA] h-12 w-12 relative">
               <img
-                src={Suv}
+                src={xlarge}
                 alt="Suv"
                 width={30}
-                className="w-[8rem] h-[2.5rem] object-fill absolute left-1 "
+                className="w-[18rem] h-[1.8rem] object-cover absolute left-0.5 top-2"
               />
             </div>
-            <div className="text-base font-bold ml-1 text-[#F68716]">
+            <div className="text-base font-bold ml-1 text-[#F68716] hidden xl:flex">
               Extra Large
             </div>
           </div>

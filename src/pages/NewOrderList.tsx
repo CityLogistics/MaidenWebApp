@@ -29,11 +29,15 @@ export default function NewOrderList() {
       id: "pickupAddress",
       label: "Pickup Location",
       width: "200px",
+      render: (v: any) =>
+        `${v.pickupAddress.address}, ${v.pickupAddress.country}`,
     },
     {
       id: "dropOffAddress",
       label: "Dropoff Location",
       width: "200px",
+      render: (v: any) =>
+        `${v.dropOffAddress.address}, ${v.dropOffAddress.country}`,
     },
     {
       id: "pickupDate",
@@ -49,7 +53,7 @@ export default function NewOrderList() {
     },
     {
       id: "",
-      label: "Status",
+      label: "Action",
       width: "200px",
       className: "text-center",
       render: (item: any) => (

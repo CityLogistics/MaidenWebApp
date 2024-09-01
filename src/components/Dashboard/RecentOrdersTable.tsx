@@ -25,17 +25,24 @@ export default function RecentOrdersTable() {
 
   const getStatusLabel = (data: any) => {
     const classNames =
-      "w-[102.07px] h-[27px] rounded-[13.50px] flex justify-center items-center text-white text-sm font-bold capitalize";
+      "w-[150px] h-[27px] rounded-[13.50px] flex justify-center items-center text-white text-sm font-bold capitalize";
     const status = data.toLowerCase();
 
-    switch (status) {
-      case "Delivered":
+    switch (data) {
+      case "DELIVERED":
         return (
           <div className={twMerge("bg-[#00b69b]", classNames)}>{status}</div>
         );
-      case "Rejected":
+      case "REJECTED":
         return (
           <div className={twMerge("bg-[#fd5454]", classNames)}>{status}</div>
+        );
+
+      case "PENDING_PAYMENT":
+        return (
+          <div className={twMerge(classNames, "bg-[#fcbe2d]  ")}>
+            Pending Payment
+          </div>
         );
 
       default:
@@ -68,6 +75,8 @@ export default function RecentOrdersTable() {
       id: "pickupAddress",
       label: "Pickup Location",
       width: "200px",
+      render: (v: any) =>
+        `${v.pickupAddress.address}, ${v.pickupAddress.country}`,
     },
     {
       id: "pickupDate",

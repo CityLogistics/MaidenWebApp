@@ -7,13 +7,14 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { newOrdersRoute } from "@/router";
 import DeadState from "../DeadState";
+import { timeFormNow } from "@/lib/utils";
 
 export default function NewOrders() {
   const query = {
     page: 0,
     limit: 5,
   };
-  const { isPending, data } = useQuery({
+  const { isPending, data, refetch } = useQuery({
     queryKey: ["newOrders"],
     queryFn: () => getNewOrders(query),
   });
@@ -39,7 +40,12 @@ export default function NewOrders() {
       ) : (
         <>
           {values.map((v: any, i: number) => (
-            <OrderCard key={i} data={v} last={i == values.length - 1} />
+            <OrderCard
+              key={i}
+              data={v}
+              last={i == values.length - 1}
+              refetch={refetch}
+            />
           ))}
           {values.length == 0 && <DeadState />}
         </>
@@ -48,15 +54,22 @@ export default function NewOrders() {
   );
 }
 
-function OrderCard({ data, last }: any) {
-  const { _id, pickupAddress } = data;
+function OrderCard({ data, last, refetch }: any) {
+  const { _id, pickupAddress, updatedAt } = data;
   const [open, setOpen] = useState(false);
 
   return (
     <div className={twMerge("py-5 ", !last && "border-b border-[#F2EDED]")}>
       <div className="flex justify-between items-center">
         <div className="text-[#202224] font-bold  text-xs">Order #{_id}</div>
-        {open && <AsignToDriver open={open} setOpen={setOpen} orderId={_id} />}
+        {open && (
+          <AsignToDriver
+            open={open}
+            setOpen={setOpen}
+            orderId={_id}
+            refetch={refetch}
+          />
+        )}
         <div
           onClick={() => setOpen(true)}
           className="text-[#F68716] font-normal text-[0.625rem] flex items-center bg-white cursor-pointer"
@@ -65,9 +78,12 @@ function OrderCard({ data, last }: any) {
         </div>
       </div>
       <div className=" text-[#828282] text-[0.625rem]">
-        {` Pick up at ${pickupAddress}.`}
+        {` Pick up at ${pickupAddress.address}, ${pickupAddress.province}.`}
       </div>
-      <div className=" text-[#2F80ED] text-[0.625rem]">10 minutes ago</div>
+      <div className=" text-[#2F80ED] text-[0.625rem]">
+        {" "}
+        {timeFormNow(updatedAt)} ago
+      </div>
     </div>
   );
 }

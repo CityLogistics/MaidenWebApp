@@ -114,7 +114,7 @@ function DriverCard({ data, refetch, last }: any) {
           {vehicleType?.toLowerCase()}
         </div>
         <div className=" text-[#2F80ED] text-[0.625rem]">
-          {timeFormNow(updatedAt)}
+          {timeFormNow(updatedAt)} ago
         </div>
       </div>
 
