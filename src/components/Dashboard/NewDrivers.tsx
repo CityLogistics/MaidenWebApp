@@ -6,7 +6,7 @@ import { newDriversRoute } from "@/router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { AxiosError } from "axios";
-import { ArrowRight2, Note1, NoteSquare } from "iconsax-react";
+import { ArrowRight2 } from "iconsax-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";

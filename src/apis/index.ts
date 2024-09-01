@@ -20,7 +20,7 @@ instance.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
+  (_) => {
     console.error("An error occurred");
   }
 );

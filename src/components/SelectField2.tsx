@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
 type prop = {
@@ -20,10 +20,8 @@ export default function SelectField2({
   itemRight,
   id,
   name,
-  type,
   onChange,
   value,
-  placeholder,
   error,
   helperText,
   nolabel = false,

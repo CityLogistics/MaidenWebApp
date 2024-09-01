@@ -73,7 +73,7 @@ export default function CustomTable({
                         key={i}
                         className=" text-[#202224] font-semibold text-sm opacity-80"
                       >
-                        {column.render?.(row) ?? row[column.id]}
+                        {column.render?.(row) ?? row[column.id as keyof any]}
                       </TableCell>
                     ))}
                   </TableRow>

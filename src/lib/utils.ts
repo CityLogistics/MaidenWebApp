@@ -1,5 +1,4 @@
 import { QueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -55,7 +54,7 @@ export const shouldRefresh = () => {
   return false;
 };
 
-export const parseError = (error: AxiosError) => {
+export const parseError = (error: any) => {
   const message = error.response?.data?.message;
   if (typeof message == "string") return message;
   if (message instanceof Array) return message.join(",");
@@ -67,7 +66,7 @@ export const timeFormNow = (date: any) => {
     date = new Date(date);
   }
 
-  var seconds = Math.floor((new Date() - date) / 1000);
+  var seconds = Math.floor((+new Date() - date) / 1000);
   var intervalType;
 
   var interval = Math.floor(seconds / 31536000);

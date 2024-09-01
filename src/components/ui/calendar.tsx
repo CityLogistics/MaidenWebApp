@@ -53,13 +53,13 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ ...props }) => (
+        IconLeft: () => (
           <ChevronLeft
             size={30}
             className=" bg-slate-100 p-1 text-[#121212] text-lg font-bold"
           />
         ),
-        IconRight: ({ ...props }) => (
+        IconRight: () => (
           <ChevronRight
             size={30}
             className=" bg-slate-100 p-1 text-[#121212] text-lg font-bold"
