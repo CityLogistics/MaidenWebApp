@@ -30,7 +30,7 @@ export default function DashBoard() {
           </div>
         </div>
       </div>
-      <div className=" w-full  px-[2.5rem]  pb-[2.5rem]">
+      <div className=" w-full  p-[1rem] sm:p-[2.5rem]  pb-[2.5rem]">
         <RecentOrdersTable />
       </div>
     </Layout>

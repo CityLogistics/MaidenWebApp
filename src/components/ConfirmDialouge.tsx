@@ -15,7 +15,7 @@ export default function ConfirmDialouge({
   return (
     <Dialog open onOpenChange={setOpen}>
       {/* <DialogTrigger className=" bg-white">{label}</DialogTrigger> */}
-      <DialogContent className=" bg-white rounded-2xl w-[32.6rem] min-h-48 p-10 ">
+      <DialogContent className=" bg-white rounded-2xl w-[90%] sm:w-[32.6rem] min-h-48 p-10 ">
         <div className="text-[#202224] text-[2rem] font-bold font-['Nunito Sans'] text-center">
           Are you sure?
         </div>
@@ -23,7 +23,7 @@ export default function ConfirmDialouge({
         {message && (
           <div className=" mb-2 text-[#202224] text-center">{message}</div>
         )}
-        <div className="flex justify-center">
+        <div className="flex flex-col sm:flex-row justify-center items-center">
           <div className="w-[9rem]  ">
             <DialogClose asChild>
               <button

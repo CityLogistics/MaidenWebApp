@@ -51,7 +51,7 @@ export default function AsignToDriver({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {/* <DialogTrigger className=" bg-white">{label}</DialogTrigger> */}
-      <DialogContent className=" bg-white rounded-2xl w-[32.6rem] min-h-48 p-10 ">
+      <DialogContent className=" bg-white rounded-2xl w-[90%] sm:w-[32.6rem] min-h-48 p-10 ">
         <div className=" text-[#202224] font-bold">Assign Order to Driver</div>
         <div className="-mt-1">
           <SelectField2
