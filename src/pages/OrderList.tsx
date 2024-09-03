@@ -128,7 +128,7 @@ export default function OrderList() {
   return (
     <Layout>
       <NavbarAlt />
-      <div className="p-[2.5rem]">
+      <div className="p-[1rem] sm:p-[2.5rem]">
         <div className="flex justify-between items-center">
           <div className=" text-primary font-bold text-[2.5rem]">
             Order List
@@ -141,7 +141,8 @@ export default function OrderList() {
             />
           </div>
         </div>
-        <div className="flex h-[3.5rem] w-fit bg-white rounded-xl items-center child:border-r-[0.1px] child:h-full child:px-6 child:flex child:text-sm child:font-bold child:items-center child:text-black border border-[#D5D5D5] mt-8">
+
+        <div className="flex h-[3.5rem] w-fit bg-white rounded-xl items-center child:border-r-[0.1px] child:h-full child:px-6 child:flex child:text-sm child:font-bold child:items-center child:text-black border border-[#D5D5D5] mt-8 max-w-full overflow-auto text-nowrap">
           <div className="flex">
             <img src={filtericon} alt="filter icon" />
           </div>

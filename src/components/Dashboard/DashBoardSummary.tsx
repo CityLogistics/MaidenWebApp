@@ -43,16 +43,16 @@ export default function DashBoardSummary() {
     >
       <Navbar />
 
-      <div className="flex mt-[1.3rem] text-[#FFFFFF">
-        <div className="w-[55%]">
-          <div className=" font-bold text-[2.5rem] capitalize">
+      <div className="flex flex-col md:flex-row mt-[1.3rem] text-[#FFFFFF">
+        <div className=" w-full md:w-[55%]">
+          <div className=" font-bold text-[1.5rem] sm:text-[2.5rem] capitalize">
             Good {getTime()}, {firstName}
           </div>
 
           <div className="text-xl">Here’s your overview as at today</div>
         </div>
 
-        <div className="pl-[2.5rem] py-[0.9rem] w-[45%]">
+        <div className="md:pl-[2.5rem] py-[0.9rem] w-full md:w-[45%] mb-12 md:mb-0">
           <div className="flex w-full justify-between">
             <div
               className={twMerge(
@@ -165,8 +165,8 @@ export default function DashBoardSummary() {
       </div>
 
       <div className=" -bottom-[0.1rem] left-0 w-full flex absolute ">
-        <div className="bg-[#F5F6FA] w-[55%]  h-[3.1rem] rounded-tl-[2.2rem] relative flex py-2 justify-start ">
-          <div className=" bg-[#F68716] h-14 ml-[2.6rem] mr-[1rem] rounded-[2rem] px-[0.5rem] xl:pr-6 flex items-center">
+        <div className="bg-[#F5F6FA] w-[100%] md:w-[55%]   h-[3.1rem] rounded-tl-[2.2rem] md:rounded-tr-[0rem] rounded-tr-[2.2rem] relative flex py-2 justify-start ">
+          <div className=" bg-[#F68716] h-14 ml-[1rem] md:ml-[2.6rem] mr-[1rem] rounded-[2rem] px-[0.5rem] xl:pr-6 flex items-center">
             <div className="rounded-full  bg-[#F5F6FA] h-12 w-12 relative ">
               <img
                 src={Suv}
@@ -209,7 +209,7 @@ export default function DashBoardSummary() {
 
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-[3.1rem]  -right-1 z-20 absolute left-[54.5%]"
+          className="h-[3.1rem]  -right-1 z-20 absolute left-[54.5%] hidden md:flex"
           viewBox="-0.642 -0.453 1.277 0.905"
         >
           <path

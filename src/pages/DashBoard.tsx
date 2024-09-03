@@ -10,22 +10,22 @@ export default function DashBoard() {
   return (
     <Layout>
       <DashBoardSummary />
-      <div className="bg-[#F5F6FA] p-[2.5rem] w-full rounded-2xl flex  items-center ">
-        <div className="flex w-full h-[36.25rem] overflow-x-clip">
+      <div className="bg-[#F5F6FA] p-[1rem] sm:p-[2.5rem] w-full rounded-2xl flex  items-center ">
+        <div className="flex flex-col lg:flex-row w-full  lg:h-[36.25rem] overflow-x-clip">
           <div className=" flex w-full flex-col h-full ">
             <div className="w-full  mr-4 h-1/2 mb-2 ">
               <Satisfactionchart />
             </div>
-            <div className="flex h-1/2 pt-4">
-              <div className="flex-1 mr-2 ">
+            <div className="flex flex-col md:flex-row h-1/2 pt-4">
+              <div className="flex-1 md:mr-2 ">
                 <NewDrivers />
               </div>
-              <div className="flex-1 ml-2  ">
+              <div className="flex-1 md:ml-2 mt-4 md:m-0">
                 <Deliveries />
               </div>
             </div>
           </div>
-          <div className=" w-[50%]  h-full ml-4 ">
+          <div className=" w-full lg:w-[50%] h-[30vh]  lg:h-full lg:ml-4 mt-5 lg:mt-0 ">
             <NewOrders />
           </div>
         </div>

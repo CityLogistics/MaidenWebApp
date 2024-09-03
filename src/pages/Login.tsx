@@ -62,7 +62,7 @@ export default function Login() {
     >
       <Toaster richColors position="top-center" />
 
-      <div className="bg-white  w-[38rem] rounded-2xl flex flex-col items-center p-[3.75rem]">
+      <div className="bg-white w-[95vw]  md:w-[38rem] rounded-2xl flex flex-col items-center p-[1rem] md:p-[3.75rem]">
         <img
           src={Logo}
           alt="City Logo"
@@ -101,7 +101,7 @@ export default function Login() {
           Remember Password
         </span>
 
-        <div className="w-[25rem]  mt-[4.875rem]">
+        <div className="w-[min(25rem,100%)]  mt-[4.875rem]">
           <Button loading={isPending} text="Sign In" onClick={handleSubmit} />
         </div>
       </div>
