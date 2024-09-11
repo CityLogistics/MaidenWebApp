@@ -1,6 +1,6 @@
 import { changeDriverStatus } from "@/apis/admin";
 import { getDrivers } from "@/apis/drivers";
-import { DriverStatus } from "@/lib/Constants";
+import { carTypes, DriverStatus } from "@/lib/Constants";
 import { parseError, queryClient, timeFormNow } from "@/lib/utils";
 import { newDriversRoute } from "@/router";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -111,7 +111,7 @@ function DriverCard({ data, refetch, last }: any) {
         </div>
         <div className=" text-[#828282] text-[0.625rem]">
           {" "}
-          {vehicleType?.toLowerCase()}
+          {carTypes.find((v: any) => v.value == vehicleType)?.label}
         </div>
         <div className=" text-[#2F80ED] text-[0.625rem]">
           {timeFormNow(updatedAt)} ago

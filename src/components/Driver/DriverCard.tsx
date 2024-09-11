@@ -1,3 +1,5 @@
+import { carTypes } from "@/lib/Constants";
+
 export default function DriverCard({ data }: any) {
   const {
     firstName,
@@ -20,7 +22,7 @@ export default function DriverCard({ data }: any) {
         <div className="flex justify-between font-bold">
           <div className=" text-[#202224]">{`${firstName} ${lastName}`}</div>
           <div className=" text-[#2F80ED] capitalize">
-            {vehicleType?.toLowerCase()}
+            {carTypes.find((v: any) => v.value == vehicleType)?.label}
           </div>
         </div>
 
@@ -31,13 +33,13 @@ export default function DriverCard({ data }: any) {
         <div className="flex  text-[#202224] opacity-60 text-sm mt-2">
           <div className=" font-semibold mr-1 ">Days: </div>
           <div className=" capitalize ">
-            {availabiltyDays.map((v: any) => v.toLowerCase()).join(" / ")}
+            {availabiltyDays.map((v: any) => v.toLowerCase()).join(", ")}
           </div>
         </div>
         <div className="flex  text-[#202224] opacity-60 text-sm mt-2">
           <div className=" font-semibold mr-1 ">Availability: </div>
           <div className=" ">
-            {availabiltyTime.map((v: any) => v.toLowerCase()).join(" / ")}
+            {availabiltyTime.map((v: any) => v.toLowerCase()).join(", ")}
           </div>
         </div>
       </div>

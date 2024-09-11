@@ -13,6 +13,9 @@ import DriverCard from "@/components/Driver/DriverCard";
 import DriverCardLoading from "@/components/Driver/DriverCardLoading";
 import { useNavigate } from "@tanstack/react-router";
 import { newDriversRoute } from "@/router";
+import { GridIcon, ListIcon } from "lucide-react";
+import { twMerge } from "tailwind-merge";
+import DriversTable from "@/components/Driver/DriversTable";
 
 export default function DriverList() {
   const initialQuery = {
@@ -21,6 +24,7 @@ export default function DriverList() {
     carTypes: [],
     availabiltys: [],
     days: [],
+    status: "ACCEPTED",
   };
   const [query, setQuery] = useState(initialQuery);
 
@@ -34,8 +38,6 @@ export default function DriverList() {
   const total = data?.data?.count;
 
   const handleParamChange = (field: any, val: any) => {
-    console.info({ val });
-
     if (field == "availabiltys") setQuery((v) => ({ ...v, availabiltys: val }));
     if (field == "carTypes") setQuery((v) => ({ ...v, carTypes: val }));
     if (field == "days") setQuery((v) => ({ ...v, days: val }));
@@ -43,6 +45,8 @@ export default function DriverList() {
   };
 
   const navigate = useNavigate();
+
+  const [view, setView] = useState("list");
 
   return (
     <Layout>
@@ -52,14 +56,15 @@ export default function DriverList() {
           <div className=" text-primary font-bold text-[2.5rem]">
             Driver List
           </div>
-          <div className="w-[9.375rem]">
+          <div className="w-50">
             <Button
-              text="Add New Driver"
-              className={"text-sm h-10 rounded-[0.25rem]"}
+              text="Approve Pending Driver"
+              className={"text-sm h-10 rounded-[0.25rem] text-nowrap "}
               onClick={() => navigate({ to: newDriversRoute.to })}
             />
           </div>
         </div>
+
         <div className="flex h-[3.5rem] w-fit bg-white rounded-xl items-center child:border-r-[0.1px] child:h-full child:px-6 child:flex child:text-sm child:font-bold child:items-center child:text-black border border-[#D5D5D5] mt-8 max-w-full overflow-auto text-nowrap">
           <div className="flex">
             <img src={filtericon} alt="filter icon" />
@@ -103,6 +108,26 @@ export default function DriverList() {
             </div>
           </div>
         </div>
+        <div className="flex w-full justify-end text-black">
+          <div
+            className={twMerge(
+              "w-7 h-7 cursor-pointer  rounded flex justify-center items-center",
+              view == "list" && "bg-primary text-white"
+            )}
+            onClick={() => setView("list")}
+          >
+            <ListIcon />
+          </div>
+          <div
+            className={twMerge(
+              "w-7 h-7 cursor-pointer rounded flex justify-center items-center",
+              view == "grid" && "bg-primary text-white"
+            )}
+            onClick={() => setView("grid")}
+          >
+            <GridIcon />
+          </div>
+        </div>
         {isPending ? (
           <div className="flex flex-wrap mt-6 justify-between">
             {[1, 2, 3, 4, 5, 6].map((v: any) => (
@@ -111,11 +136,17 @@ export default function DriverList() {
           </div>
         ) : (
           <>
-            <div className="flex flex-wrap mt-6 ">
-              {values.map((v: any) => (
-                <DriverCard data={v} key={v._id} />
-              ))}
-            </div>
+            {view == "list" ? (
+              <div className=" mt-8">
+                <DriversTable data={values} loading={isPending} />
+              </div>
+            ) : (
+              <div className="flex flex-wrap mt-6 ">
+                {values.map((v: any) => (
+                  <DriverCard data={v} key={v._id} />
+                ))}
+              </div>
+            )}
 
             {values?.length > 0 && (
               <Pagination

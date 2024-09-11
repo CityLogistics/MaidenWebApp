@@ -11,3 +11,7 @@ export const getNewOrders = async (query: any) => {
     params: query,
   });
 };
+
+export const updateOrderStatus = async ({ id, order }: any) => {
+  return await instance.patch(`orders/${id}`, order);
+};

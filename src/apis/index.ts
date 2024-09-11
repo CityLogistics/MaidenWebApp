@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const baseUrl = import.meta.env.VITE_BACKEND_URL;
+// const baseUrl =  import.meta.env.VITE_BACKEND_URL;
+
+const baseUrl = "http://77.243.85.5/";
 
 console.info({ baseUrl });
 

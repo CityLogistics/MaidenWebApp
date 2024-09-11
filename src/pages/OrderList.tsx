@@ -7,13 +7,18 @@ import CustomTable from "@/components/CustomTable";
 import { twMerge } from "tailwind-merge";
 import { CustomDatePicker } from "@/components/CustomDatePicker";
 import CustomSelect from "@/components/CustomSelect";
-import { useQuery } from "@tanstack/react-query";
-import { getOrders } from "@/apis/orders";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getOrders, updateOrderStatus } from "@/apis/orders";
 import { format } from "date-fns";
 import { limit, orderStatus, orderTpes } from "@/lib/Constants";
 import { useState } from "react";
 import { newOrdersRoute } from "@/router";
 import { useNavigate } from "@tanstack/react-router";
+import { CheckIcon } from "lucide-react";
+import { parseError, queryClient } from "@/lib/utils";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import ConfirmDialouge from "@/components/ConfirmDialouge";
 
 export default function OrderList() {
   const getStatusLabel = (data: any) => {
@@ -50,6 +55,13 @@ export default function OrderList() {
         );
     }
   };
+
+  const getStatusAction = (status: any, id: any) => {
+    if (status == "PROCESSING") return <MarkComplete id={id} />;
+
+    return "";
+  };
+
   const columns = [
     {
       id: "_id",
@@ -60,26 +72,41 @@ export default function OrderList() {
       id: "senderName",
       label: "Name",
       width: "200px",
+      render: (v: any) => <div className=" text-nowrap">{v.senderName}</div>,
     },
     {
       id: "pickupAddress",
       label: "Pickup Location",
       width: "200px",
-      render: (v: any) =>
-        `${v.pickupAddress.address}, ${v.pickupAddress.country}`,
+      render: (v: any) => `${v.pickupAddress.address}`,
+    },
+    {
+      id: "pickupAddress",
+      label: "Pickup Province",
+      width: "200px",
+      render: (v: any) => `${v.pickupAddress.province}`,
     },
     {
       id: "dropOffAddress",
       label: "Dropoff Location",
       width: "200px",
-      render: (v: any) =>
-        `${v.dropOffAddress.address}, ${v.dropOffAddress.country}`,
+      render: (v: any) => `${v.dropOffAddress.address}`,
+    },
+    {
+      id: "dropOffAddress",
+      label: "Dropoff Province",
+      width: "200px",
+      render: (v: any) => `${v.dropOffAddress.province}`,
     },
     {
       id: "pickupDate",
       label: "Time",
       width: "200px",
-      render: (v: any) => format(v.pickupDate, "hh a"),
+      render: (v: any) => (
+        <div className=" text-nowrap">
+          {v.pickupDate && format(v.pickupDate, "hh a")}
+        </div>
+      ),
     },
     {
       id: "date",
@@ -88,12 +115,29 @@ export default function OrderList() {
       render: (v: any) => format(v.pickupDate, "dd/MM/YYY"),
     },
     {
+      id: "pickupDate",
+      label: "Distance (KM)",
+      width: "200px",
+      render: (v: any) => v.distance,
+    },
+    {
       id: "",
       label: "Status",
       width: "200px",
       className: "text-center",
       render: (item: any) => (
         <div className="flex justify-center">{getStatusLabel(item.status)}</div>
+      ),
+    },
+    {
+      id: "",
+      label: "Action",
+      width: "200px",
+      className: "text-center",
+      render: (item: any) => (
+        <div className="flex justify-center">
+          {getStatusAction(item.status, item._id)}
+        </div>
       ),
     },
   ];
@@ -196,3 +240,47 @@ export default function OrderList() {
     </Layout>
   );
 }
+
+const MarkComplete = ({ id }: any) => {
+  const [open, setOpen] = useState(false);
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: () => updateOrderStatus({ id, order: { status: "COMPLETED" } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      toast.success("Order status changed");
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
+    },
+  });
+
+  const onProceed = () => {
+    setOpen(false);
+    mutateAsync();
+  };
+
+  return (
+    <>
+      <Button
+        loading={isPending}
+        text={
+          !isPending && (
+            <>
+              Mark Completed <CheckIcon size={20} />
+            </>
+          )
+        }
+        className={"text-sm h-7 rounded-[0.25rem] text-nowrap w-40 "}
+        onClick={() => setOpen(true)}
+      />
+      {open && (
+        <ConfirmDialouge
+          message="Mark order as completed"
+          onProceed={onProceed}
+          onCancel={() => setOpen(false)}
+          setOpen={setOpen}
+        />
+      )}
+    </>
+  );
+};

@@ -22,7 +22,7 @@ export default function NewOrders() {
   const values = data?.data.data ?? [];
 
   return (
-    <div className=" w-[100%] bg-white h-full  rounded-xl p-6 py-7">
+    <div className=" w-[100%] bg-white h-full  rounded-xl p-6 py-7 overflow-y-hidden">
       <div className="flex justify-between">
         <div className="text-[#202224] font-bold">New Orders</div>
         <Link to={newOrdersRoute.to}>

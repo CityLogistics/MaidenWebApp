@@ -5,12 +5,17 @@ import filtericon from "@/assets/images/filtericon.png";
 import ReplayIcon from "@/assets/images/ic-replay-24px.png";
 import Layout from "@/components/Layout";
 import NavbarAlt from "@/components/NavbarAlt";
-import { useQuery } from "@tanstack/react-query";
-import { getNewOrders } from "@/apis/orders";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getNewOrders, updateOrderStatus } from "@/apis/orders";
 import { format } from "date-fns";
 import AsignToDriver from "@/components/Order/AsignToDriver";
 import { useState } from "react";
 import { limit, orderTpes } from "@/lib/Constants";
+import { parseError, queryClient } from "@/lib/utils";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import Button from "@/components/Button";
+import ConfirmDialouge from "@/components/ConfirmDialouge";
 
 export default function NewOrderList() {
   const [open, setOpen] = useState();
@@ -29,15 +34,25 @@ export default function NewOrderList() {
       id: "pickupAddress",
       label: "Pickup Location",
       width: "200px",
-      render: (v: any) =>
-        `${v.pickupAddress.address}, ${v.pickupAddress.country}`,
+      render: (v: any) => `${v.pickupAddress.address}`,
+    },
+    {
+      id: "pickupAddress",
+      label: "Pickup Province",
+      width: "200px",
+      render: (v: any) => `${v.pickupAddress.province}`,
     },
     {
       id: "dropOffAddress",
       label: "Dropoff Location",
       width: "200px",
-      render: (v: any) =>
-        `${v.dropOffAddress.address}, ${v.dropOffAddress.country}`,
+      render: (v: any) => `${v.dropOffAddress.address}`,
+    },
+    {
+      id: "dropOffAddress",
+      label: "Dropoff Province",
+      width: "200px",
+      render: (v: any) => `${v.dropOffAddress.province}`,
     },
     {
       id: "pickupDate",
@@ -52,16 +67,25 @@ export default function NewOrderList() {
       render: (v: any) => format(v.pickupDate, "dd/MM/YYY"),
     },
     {
+      id: "pickupDate",
+      label: "Distance (KM)",
+      width: "200px",
+      render: (v: any) => v.distance,
+    },
+    {
       id: "",
       label: "Action",
       width: "200px",
       className: "text-center",
       render: (item: any) => (
-        <div
-          onClick={() => setOpen(item._id)}
-          className="text-[#358C9D] font-semibold text-sm flex items-center bg-white cursor-pointer text-nowrap"
-        >
-          Assign to Driver
+        <div className=" flex flex-col items-center">
+          <div
+            onClick={() => setOpen(item._id)}
+            className="text-[#358C9D] font-semibold text-sm flex items-center bg-white cursor-pointer text-nowrap"
+          >
+            Assign to Driver
+          </div>
+          <RejectOrder id={item._id} />
         </div>
       ),
     },
@@ -157,3 +181,43 @@ export default function NewOrderList() {
     </Layout>
   );
 }
+
+const RejectOrder = ({ id }: any) => {
+  const [open, setOpen] = useState(false);
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: () => updateOrderStatus({ id, order: { status: "COMPLETED" } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      toast.success("Order status changed");
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
+    },
+  });
+
+  const onProceed = () => {
+    setOpen(false);
+    mutateAsync();
+  };
+
+  return (
+    <>
+      <Button
+        loading={isPending}
+        text={!isPending && <>Reject Order Request</>}
+        className={
+          "text-sm h-7 rounded-[0.25rem] text-nowrap   bg-transparent text-[#F68716]"
+        }
+        onClick={() => setOpen(true)}
+      />
+      {open && (
+        <ConfirmDialouge
+          message="Reject order request and issue refund"
+          onProceed={onProceed}
+          onCancel={() => setOpen(false)}
+          setOpen={setOpen}
+        />
+      )}
+    </>
+  );
+};
