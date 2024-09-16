@@ -2,9 +2,11 @@ import CityLogo from "@/assets/images/city_logistics.png";
 import {
   Element4,
   LogoutCurve,
+  Note,
   Profile2User,
   Setting2,
   ShoppingCart,
+  UserAdd,
   UserCirlceAdd,
 } from "iconsax-react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
@@ -16,6 +18,8 @@ import {
   driversRoute,
   newDriversRoute,
   indexRoute,
+  transactionsRoute,
+  addUserRoute,
 } from "@/router";
 
 export default function SiderBar() {
@@ -52,6 +56,13 @@ export default function SiderBar() {
         </Link>
         <Link {...pathProps(newDriversRoute.to)}>
           <UserCirlceAdd variant="Bold" />
+        </Link>
+        <Link {...pathProps(transactionsRoute.to)}>
+          <Note variant="Bold" />
+        </Link>
+
+        <Link {...pathProps(addUserRoute.to)}>
+          <UserAdd variant="Bold" />
         </Link>
       </div>
       <div className="mt-auto">

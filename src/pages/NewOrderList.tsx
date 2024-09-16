@@ -6,7 +6,7 @@ import ReplayIcon from "@/assets/images/ic-replay-24px.png";
 import Layout from "@/components/Layout";
 import NavbarAlt from "@/components/NavbarAlt";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getNewOrders, updateOrderStatus } from "@/apis/orders";
+import { getNewOrders, rejectOrder, updateOrderStatus } from "@/apis/orders";
 import { format } from "date-fns";
 import AsignToDriver from "@/components/Order/AsignToDriver";
 import { useState } from "react";
@@ -185,7 +185,7 @@ export default function NewOrderList() {
 const RejectOrder = ({ id }: any) => {
   const [open, setOpen] = useState(false);
   const { isPending, mutateAsync } = useMutation({
-    mutationFn: () => updateOrderStatus({ id, order: { status: "COMPLETED" } }),
+    mutationFn: () => rejectOrder({ id }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
       toast.success("Order status changed");

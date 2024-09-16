@@ -1,35 +1,20 @@
-import { updateUser } from "@/apis/user";
+import { addUser } from "@/apis/user";
 import Button from "@/components/Button";
+import DateField from "@/components/DateField";
 import ImageComponent from "@/components/ImageComponent";
 import Layout from "@/components/Layout";
 import NavbarAlt from "@/components/NavbarAlt";
 import SelectField from "@/components/SelectField";
 import TextField from "@/components/TextField";
 import { GENDER } from "@/lib/Constants";
-import { parseError } from "@/lib/utils";
-import { useUserStore } from "@/store/user";
+import { formatPhoneNumber, parseError } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useFormik } from "formik";
 import { toast } from "sonner";
 import * as yup from "yup";
 
-export default function Settings() {
-  const { user: initialValues, updateUser: updateUserData } = useUserStore(
-    (state) => state
-  );
-
-  const { mutateAsync, isPending } = useMutation({
-    mutationFn: updateUser,
-    onSuccess: (data) => {
-      updateUserData(data.data);
-      toast.success("Changes saved successfully");
-    },
-    onError: (e: AxiosError) => {
-      toast.error(parseError(e));
-    },
-  });
-
+export default function AddUser() {
   const validationSchema = yup.object().shape({
     firstName: yup.string().required("this field is required"),
     lastName: yup.string().required("this field is required"),
@@ -37,26 +22,126 @@ export default function Settings() {
     phoneNumber: yup.string().required("this field is required"),
     dateOfBirth: yup.string().required("this field is required"),
     gender: yup.string().required("this field is required"),
+    province: yup.string().required("this field is required"),
+    city: yup.string().required("this field is required"),
   });
 
-  const { handleSubmit, handleChange, values, errors, touched, setFieldValue } =
-    useFormik({
-      initialValues,
-      validationSchema,
-      onSubmit: (data) => {
-        const { email, ...others } = data;
-        mutateAsync(others);
-      },
-    });
+  const {
+    handleSubmit,
+    handleChange,
+    values,
+    errors,
+    touched,
+    resetForm,
+    setFieldValue,
+  } = useFormik({
+    initialValues: {
+      image: "dd",
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      dateOfBirth: "",
+      gender: "",
+      password: "",
+      province: "",
+      city: "",
+    },
+    validationSchema,
+    onSubmit: (data) => {
+      const { phoneNumber, ...others } = data;
+      mutateAsync({
+        ...others,
+        role: "ADMIN",
+        phoneNumber: formatPhoneNumber(phoneNumber),
+      });
+    },
+  });
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: addUser,
+    onSuccess: (data) => {
+      resetForm();
+      toast.success("User saved successfully");
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
+    },
+  });
 
   const options = [
     {
-      label: "male",
+      label: "Select",
+      value: "",
+    },
+    {
+      label: "Male",
       value: GENDER.MALE,
     },
     {
-      label: "female",
+      label: "Female",
       value: GENDER.FEMALE,
+    },
+  ];
+
+  const regions = [
+    {
+      label: "Select",
+      value: "",
+    },
+    {
+      label: "Alberta",
+      value: "ALBERTA",
+    },
+    {
+      label: "British Columbia",
+      value: "BRITISH_COLUMBIA",
+    },
+    {
+      label: "Manitoba",
+      value: "MANITOBA",
+    },
+    {
+      label: "Newfound and Labrador",
+      value: "NEWFOUNDLAND_AND_LABRADOR",
+    },
+    {
+      label: "new Brunswick",
+      value: "NEW_BRUNSWICK",
+    },
+    {
+      label: "Northwest Territories",
+      value: "NORTHWEST_TERRITORIES",
+    },
+
+    {
+      label: "Nova Scotia",
+      value: "NOVA_SCOTIA",
+    },
+
+    {
+      label: "Nunavut",
+      value: "NUNAVUT",
+    },
+    {
+      label: "Ontario",
+      value: "ONTARIO",
+    },
+    {
+      label: "Prince Edward Island",
+      value: "PRINCE_EDWARD_ISLAND",
+    },
+    {
+      label: "Qubec",
+      value: "QUEBEC",
+    },
+    {
+      label: "Saskatchewan",
+      value: "SASKATCHEWAN",
+    },
+    {
+      label: "Yukon",
+      value: "YUKON",
     },
   ];
 
@@ -65,7 +150,7 @@ export default function Settings() {
       <NavbarAlt />
       <div className="p-[2.5rem]">
         <div className="flex justify-between items-center">
-          <div className=" text-primary font-bold text-[2.5rem]">Settings</div>
+          <div className=" text-primary font-bold text-[2.5rem]">Add User</div>
         </div>
 
         <div className="bg-white rounded-2xl min-h-[20vh] mt-12 py-16">
@@ -107,7 +192,6 @@ export default function Settings() {
                 value={values.email}
                 error={touched.email && Boolean(errors.email)}
                 helperText={touched.email && errors.email}
-                disabled
               />
             </div>
             <div className="-mt-9">
@@ -122,10 +206,11 @@ export default function Settings() {
               />
             </div>
             <div className="-mt-9">
-              <TextField
+              <DateField
                 label="Date Of Birth"
                 id="dateOfBirth"
                 name="dateOfBirth"
+                type="date"
                 onChange={handleChange}
                 value={values.dateOfBirth}
                 error={touched.dateOfBirth && Boolean(errors.dateOfBirth)}
@@ -142,6 +227,29 @@ export default function Settings() {
                 error={touched.gender && Boolean(errors.gender)}
                 helperText={touched.gender && errors.gender}
                 options={options}
+              />
+            </div>
+            <div className="-mt-9">
+              <SelectField
+                label="Province"
+                id="province"
+                name="province"
+                onChange={handleChange}
+                value={values.province}
+                error={touched.province && Boolean(errors.province)}
+                helperText={touched.province && errors.province}
+                options={regions}
+              />
+            </div>
+            <div className="-mt-9">
+              <TextField
+                label="City"
+                id="city"
+                name="city"
+                onChange={handleChange}
+                value={values.city}
+                error={touched.city && Boolean(errors.city)}
+                helperText={touched.city && errors.city}
               />
             </div>
           </div>

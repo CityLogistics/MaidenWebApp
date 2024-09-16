@@ -6,6 +6,8 @@ export const routes = {
   DRIVERS: "/drivers",
   NEW_DRIVERS: "/new-drivers",
   SETTINGS: "/settings",
+  TRANSACTIONS: "/transactions",
+  ADD_USER: "/add-user",
 };
 
 export const orderTpes = [
@@ -25,6 +27,17 @@ export const orderStatus = [
   { label: "Rejected", value: "REJECTED" },
   { label: "On Hold", value: "ON_HOLD" },
   { label: "In Transit", value: "IN_TRANSIT" },
+];
+
+export const transactionStatus = [
+  { label: "Pending", value: "PENDING" },
+  { label: "Successfull", value: "SUCCESSFULL" },
+  { label: "Failed", value: "FAILED" },
+];
+
+export const transactionTypes = [
+  { label: "Order", value: "ORDER" },
+  { label: "Refund", value: "REFUND" },
 ];
 
 export const days = [

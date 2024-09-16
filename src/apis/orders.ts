@@ -15,3 +15,7 @@ export const getNewOrders = async (query: any) => {
 export const updateOrderStatus = async ({ id, order }: any) => {
   return await instance.patch(`orders/${id}`, order);
 };
+
+export const rejectOrder = async ({ id }: any) => {
+  return await instance.post(`orders/reject/${id}`);
+};

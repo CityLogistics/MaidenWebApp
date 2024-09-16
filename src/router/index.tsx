@@ -13,6 +13,8 @@ import NewOrderList from "@/pages/NewOrderList";
 import NewDriverList from "@/pages/NewDriverList";
 import DriverList from "@/pages/DriverList";
 import Settings from "@/pages/Settings";
+import TransactionList from "@/pages/TransactionList";
+import AddUser from "@/pages/AddUser";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -80,6 +82,22 @@ export const settingsRoute = createRoute({
   },
 });
 
+export const transactionsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes.TRANSACTIONS,
+  component: function Index() {
+    return <TransactionList />;
+  },
+});
+
+export const addUserRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes.ADD_USER,
+  component: function Index() {
+    return <AddUser />;
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   dashboardRoute,
@@ -88,6 +106,8 @@ const routeTree = rootRoute.addChildren([
   driversRoute,
   newDriversRoute,
   settingsRoute,
+  transactionsRoute,
+  addUserRoute,
 ]);
 
 export const router = createRouter({ routeTree });

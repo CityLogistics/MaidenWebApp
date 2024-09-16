@@ -2387,6 +2387,11 @@ queue-microtask@^1.2.2:
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
+react-cloudinary-upload-widget@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-cloudinary-upload-widget/-/react-cloudinary-upload-widget-2.0.0.tgz#9f57784c844123a984e87f245e4930d535750145"
+  integrity sha512-q+0qJLUUUnAkbGjrwh2SYHCN466dYYSd9C1pR/qB/epAKD9iqs3qUZoYXVwFGPdfmlnUO9LDk9htN+lfK6xFvA==
+
 react-date-object@^2.1.8:
   version "2.1.9"
   resolved "https://registry.yarnpkg.com/react-date-object/-/react-date-object-2.1.9.tgz#9eb0f70b2b424e32bb437226fc5e435d1fd6a4f1"

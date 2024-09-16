@@ -33,6 +33,13 @@ export default function OrderList() {
             {status}
           </div>
         );
+
+      case "ASSIGNED":
+        return (
+          <div className={twMerge(classNames, "bg-[#6b88f2]  text-[#0027b6]")}>
+            {status}
+          </div>
+        );
       case "REJECTED":
         return (
           <div className={twMerge(classNames, "bg-[#fd5454] text-[#fd5454]")}>

@@ -1,5 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 import { type ClassValue, clsx } from "clsx";
+import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -102,4 +103,65 @@ export const timeFormNow = (date: any) => {
   }
 
   return interval + " " + intervalType;
+};
+
+export const formatCurrencyvalue = (val: number) =>
+  val?.toLocaleString("en-CA", {
+    style: "currency",
+    currency: "CAD",
+  }) ?? "$0";
+
+export function formatPhoneNumber(phone: any) {
+  let l = phone.length;
+  return "+1" + (l == 11 ? phone.substring(1, l) : phone);
+}
+
+export const openWidget = (setFile: any) => {
+  var myWidget =
+    window.cloudinary &&
+    window.cloudinary.createUploadWidget(
+      {
+        cloudName: "workstedi",
+        uploadPreset: "lm1ip4fw",
+        api_key: "455779734655193",
+      },
+      (error, result) => {
+        if (!error && result && result.event === "success") {
+          setFile(result.info.secure_url);
+        }
+      }
+    );
+  myWidget?.open();
+};
+
+export const useCloudinary = (setFile: any) => {
+  const [loading, setLoading] = useState(false);
+
+  const launchWidget = () => {
+    var myWidget =
+      window.cloudinary &&
+      window.cloudinary.createUploadWidget(
+        {
+          cloudName: "workstedi",
+          uploadPreset: "lm1ip4fw",
+          api_key: "455779734655193",
+        },
+        (error: any, result: any) => {
+          setLoading(false);
+
+          if (!error && result && result.event === "success") {
+            setFile(result.info.secure_url);
+          }
+        }
+      );
+    if (myWidget) {
+      setLoading(true);
+      myWidget?.open();
+    }
+  };
+
+  return {
+    loading,
+    launchWidget,
+  };
 };
