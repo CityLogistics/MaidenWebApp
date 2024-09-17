@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { login } from "@/apis/auth";
 import { useFormik } from "formik";
 import { useNavigate } from "@tanstack/react-router";
-import { dashboardRoute } from "@/router";
+import { dashboardRoute, ordersRoute } from "@/router";
 import * as yup from "yup";
 import { useUserStore } from "@/store/user";
 import { toast, Toaster } from "sonner";
@@ -18,13 +18,15 @@ import { useEffect } from "react";
 export default function Login() {
   const navigate = useNavigate();
 
-  const { updateUser } = useUserStore((state) => state);
+  const { setUser } = useUserStore((state) => state);
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
-      updateUser(data.data.user);
-      navigate({ to: dashboardRoute.to });
+      const { user } = data.data;
+      setUser(user);
+      if (user.role == "SUPER_ADMIN") navigate({ to: dashboardRoute.to });
+      else navigate({ to: ordersRoute.to });
     },
     onError: (e: AxiosError) => {
       toast.error(parseError(e));

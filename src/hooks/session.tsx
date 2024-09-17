@@ -1,6 +1,8 @@
+import { allowedPaths, routes } from "@/lib/Constants";
 import { validateAuth } from "@/lib/utils";
 import { indexRoute } from "@/router";
-import { useNavigate } from "@tanstack/react-router";
+import { useUserStore } from "@/store/user";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 export const useManageSession = () => {
@@ -48,5 +50,26 @@ export const useManageSession = () => {
     return () => {
       clearInterval(interval);
     };
+  }, []);
+};
+
+export const useManageRole = () => {
+  const { user, clearUser } = useUserStore((state) => state);
+  const { role } = user;
+  const currentPath = useLocation().pathname;
+  const navigate = useNavigate();
+
+  console.info({ role });
+
+  useEffect(() => {
+    if (!role) {
+      localStorage.removeItem("userToken");
+      clearUser();
+      navigate({ to: indexRoute.to });
+    } else if (
+      role != "SUPER_ADMIN" &&
+      !allowedPaths[role].includes(currentPath)
+    )
+      navigate({ to: allowedPaths[role][0] });
   }, []);
 };

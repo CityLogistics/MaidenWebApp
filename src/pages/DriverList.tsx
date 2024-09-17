@@ -16,8 +16,11 @@ import { newDriversRoute } from "@/router";
 import { GridIcon, ListIcon } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import DriversTable from "@/components/Driver/DriversTable";
+import { useUserStore } from "@/store/user";
 
 export default function DriverList() {
+  const role = useUserStore((state) => state.user.role);
+
   const initialQuery = {
     page: 0,
     limit,
@@ -56,13 +59,15 @@ export default function DriverList() {
           <div className=" text-primary font-bold text-[2.5rem]">
             Driver List
           </div>
-          <div className="w-50">
-            <Button
-              text="Approve Pending Driver"
-              className={"text-sm h-10 rounded-[0.25rem] text-nowrap "}
-              onClick={() => navigate({ to: newDriversRoute.to })}
-            />
-          </div>
+          {role == "SUPER_ADMIN" && (
+            <div className="w-50">
+              <Button
+                text="Approve Pending Driver"
+                className={"text-sm h-10 rounded-[0.25rem] text-nowrap "}
+                onClick={() => navigate({ to: newDriversRoute.to })}
+              />
+            </div>
+          )}
         </div>
 
         <div className="flex h-[3.5rem] w-fit bg-white rounded-xl items-center child:border-r-[0.1px] child:h-full child:px-6 child:flex child:text-sm child:font-bold child:items-center child:text-black border border-[#D5D5D5] mt-8 max-w-full overflow-auto text-nowrap">

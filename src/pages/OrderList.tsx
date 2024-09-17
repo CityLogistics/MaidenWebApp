@@ -14,13 +14,17 @@ import { limit, orderStatus, orderTpes } from "@/lib/Constants";
 import { useState } from "react";
 import { newOrdersRoute } from "@/router";
 import { useNavigate } from "@tanstack/react-router";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, X } from "lucide-react";
 import { parseError, queryClient } from "@/lib/utils";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import ConfirmDialouge from "@/components/ConfirmDialouge";
+import { useUserStore } from "@/store/user";
+import { decideOrderAssignment } from "@/apis/drivers";
 
 export default function OrderList() {
+  const role = useUserStore((state) => state.user.role);
+
   const getStatusLabel = (data: any) => {
     const status = data.toLowerCase();
     const classNames =
@@ -35,6 +39,12 @@ export default function OrderList() {
         );
 
       case "ASSIGNED":
+        return (
+          <div className={twMerge(classNames, "bg-[#f1cf90]  text-[#FFA500]")}>
+            {status}
+          </div>
+        );
+      case "DELIVERED":
         return (
           <div className={twMerge(classNames, "bg-[#6b88f2]  text-[#0027b6]")}>
             {status}
@@ -64,7 +74,20 @@ export default function OrderList() {
   };
 
   const getStatusAction = (status: any, id: any) => {
-    if (status == "PROCESSING") return <MarkComplete id={id} />;
+    if (status == "DELIVERED" && role == "ADMIN")
+      return <MarkComplete id={id} />;
+
+    if (status == "PROCESSING" && role == "DRIVER")
+      return <MarkDelivered id={id} />;
+
+    if (status == "ASSIGNED" && role == "DRIVER")
+      return (
+        <div className="">
+          <AcceptRequest id={id} />
+          <div className="h-1" />
+          <RejectRequest id={id} />
+        </div>
+      );
 
     return "";
   };
@@ -184,13 +207,16 @@ export default function OrderList() {
           <div className=" text-primary font-bold text-[2.5rem]">
             Order List
           </div>
-          <div className="w-[9.375rem]">
-            <Button
-              text="View New Orders"
-              className={"text-sm h-10 rounded-[0.25rem] text-nowrap"}
-              onClick={() => navigate({ to: newOrdersRoute.to })}
-            />
-          </div>
+          {role == "SUPER_ADMIN" ||
+            (role == "ADMIN" && (
+              <div className="w-[9.375rem]">
+                <Button
+                  text="View New Orders"
+                  className={"text-sm h-10 rounded-[0.25rem] text-nowrap"}
+                  onClick={() => navigate({ to: newOrdersRoute.to })}
+                />
+              </div>
+            ))}
         </div>
 
         <div className="flex h-[3.5rem] w-fit bg-white rounded-xl items-center child:border-r-[0.1px] child:h-full child:px-6 child:flex child:text-sm child:font-bold child:items-center child:text-black border border-[#D5D5D5] mt-8 max-w-full overflow-auto text-nowrap">
@@ -283,6 +309,139 @@ const MarkComplete = ({ id }: any) => {
       {open && (
         <ConfirmDialouge
           message="Mark order as completed"
+          onProceed={onProceed}
+          onCancel={() => setOpen(false)}
+          setOpen={setOpen}
+        />
+      )}
+    </>
+  );
+};
+
+const MarkDelivered = ({ id }: any) => {
+  const [open, setOpen] = useState(false);
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: () => updateOrderStatus({ id, order: { status: "DELIVERED" } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      toast.success("Order status changed");
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
+    },
+  });
+
+  const onProceed = () => {
+    setOpen(false);
+    mutateAsync();
+  };
+
+  return (
+    <>
+      <Button
+        loading={isPending}
+        text={
+          !isPending && (
+            <>
+              Mark Delivered <CheckIcon size={20} />
+            </>
+          )
+        }
+        className={"text-sm h-7 rounded-[0.25rem] text-nowrap w-40 "}
+        onClick={() => setOpen(true)}
+      />
+      {open && (
+        <ConfirmDialouge
+          message="Mark order as delivered"
+          onProceed={onProceed}
+          onCancel={() => setOpen(false)}
+          setOpen={setOpen}
+        />
+      )}
+    </>
+  );
+};
+
+const AcceptRequest = ({ id }: any) => {
+  const [open, setOpen] = useState(false);
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: () => decideOrderAssignment({ id, data: { action: "ACCEPT" } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      toast.success("Order status changed");
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
+    },
+  });
+
+  const onProceed = () => {
+    setOpen(false);
+    mutateAsync();
+  };
+
+  return (
+    <>
+      <Button
+        loading={isPending}
+        text={
+          !isPending && (
+            <>
+              Accept <CheckIcon size={20} />
+            </>
+          )
+        }
+        className={"text-sm h-7 rounded-[0.25rem] text-nowrap w-40 "}
+        onClick={() => setOpen(true)}
+      />
+      {open && (
+        <ConfirmDialouge
+          message="Accept order assignment"
+          onProceed={onProceed}
+          onCancel={() => setOpen(false)}
+          setOpen={setOpen}
+        />
+      )}
+    </>
+  );
+};
+
+const RejectRequest = ({ id }: any) => {
+  const [open, setOpen] = useState(false);
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: () =>
+      decideOrderAssignment({ id, data: { action: "DECLINE" } }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      toast.success("Order status changed");
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
+    },
+  });
+
+  const onProceed = () => {
+    setOpen(false);
+    mutateAsync();
+  };
+
+  return (
+    <>
+      <Button
+        loading={isPending}
+        text={
+          !isPending && (
+            <>
+              Reject <X size={20} />
+            </>
+          )
+        }
+        className={"text-sm h-7 rounded-[0.25rem] text-nowrap w-40 bg-red-300 "}
+        onClick={() => setOpen(true)}
+      />
+      {open && (
+        <ConfirmDialouge
+          message="Reject order assignment"
           onProceed={onProceed}
           onCancel={() => setOpen(false)}
           setOpen={setOpen}

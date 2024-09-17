@@ -14,7 +14,7 @@ const user = {
 type User = typeof user;
 
 interface UserState {
-  user: User;
+  user: User & { role?: "ADMIN" | "DRIVER" | "SUPER_ADMIN" };
   setUser: (data: User) => void;
   updateUser: (data: User) => void;
   clearUser: () => void;

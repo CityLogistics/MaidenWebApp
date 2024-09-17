@@ -77,3 +77,9 @@ export enum GENDER {
   MALE = "MALE",
   FEMALE = "FEMALE",
 }
+
+const { ORDERS, NEW_ORDERS, SETTINGS, DRIVERS } = routes;
+export const allowedPaths = {
+  ADMIN: [ORDERS, NEW_ORDERS, SETTINGS, DRIVERS],
+  DRIVER: [ORDERS, SETTINGS],
+};

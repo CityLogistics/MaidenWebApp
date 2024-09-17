@@ -21,8 +21,11 @@ import {
   transactionsRoute,
   addUserRoute,
 } from "@/router";
+import { useUserStore } from "@/store/user";
 
 export default function SiderBar() {
+  const role = useUserStore((state) => state.user.role);
+
   const className =
     "w-full py-2 flex justify-center  my-4 hover:border-primary  hover:border-l-4 text-[#EEEEEE] hover:text-primary text-[1.875rem] ";
   const path = useLocation().pathname;
@@ -45,25 +48,45 @@ export default function SiderBar() {
     <div className="w-[6.1rem] h-svh bg-white flex flex-col justify-center py-6">
       <img src={CityLogo} alt="City Logo" className="w-[6.0rem] h-[3.5rem]" />
       <div className="pt-6">
-        <Link {...pathProps(dashboardRoute.to)}>
-          <Element4 variant="Bold" />
-        </Link>
-        <Link {...pathProps(ordersRoute.to)}>
-          <ShoppingCart variant="Bold" />
-        </Link>
-        <Link {...pathProps(driversRoute.to)}>
-          <Profile2User variant="Bold" />
-        </Link>
-        <Link {...pathProps(newDriversRoute.to)}>
-          <UserCirlceAdd variant="Bold" />
-        </Link>
-        <Link {...pathProps(transactionsRoute.to)}>
-          <Note variant="Bold" />
-        </Link>
-
-        <Link {...pathProps(addUserRoute.to)}>
-          <UserAdd variant="Bold" />
-        </Link>
+        {role == "SUPER_ADMIN" && (
+          <>
+            <Link {...pathProps(dashboardRoute.to)}>
+              <Element4 variant="Bold" />
+            </Link>
+            <Link {...pathProps(ordersRoute.to)}>
+              <ShoppingCart variant="Bold" />
+            </Link>
+            <Link {...pathProps(driversRoute.to)}>
+              <Profile2User variant="Bold" />
+            </Link>
+            <Link {...pathProps(newDriversRoute.to)}>
+              <UserCirlceAdd variant="Bold" />
+            </Link>
+            <Link {...pathProps(transactionsRoute.to)}>
+              <Note variant="Bold" />
+            </Link>
+            <Link {...pathProps(addUserRoute.to)}>
+              <UserAdd variant="Bold" />
+            </Link>
+          </>
+        )}
+        {role == "ADMIN" && (
+          <>
+            <Link {...pathProps(ordersRoute.to)}>
+              <ShoppingCart variant="Bold" />
+            </Link>
+            <Link {...pathProps(driversRoute.to)}>
+              <Profile2User variant="Bold" />
+            </Link>
+          </>
+        )}
+        {role == "DRIVER" && (
+          <>
+            <Link {...pathProps(ordersRoute.to)}>
+              <ShoppingCart variant="Bold" />
+            </Link>
+          </>
+        )}
       </div>
       <div className="mt-auto">
         <Link {...pathProps(routes.SETTINGS)}>

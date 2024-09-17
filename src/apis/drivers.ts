@@ -5,3 +5,7 @@ export const getDrivers = async (query: any) => {
     params: query,
   });
 };
+
+export const decideOrderAssignment = async ({ id, data }: any) => {
+  return await instance.patch(`drivers/decide-order-assignment/${id}`, data);
+};
