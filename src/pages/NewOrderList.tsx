@@ -6,7 +6,7 @@ import ReplayIcon from "@/assets/images/ic-replay-24px.png";
 import Layout from "@/components/Layout";
 import NavbarAlt from "@/components/NavbarAlt";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getNewOrders, rejectOrder, updateOrderStatus } from "@/apis/orders";
+import { getNewOrders, rejectOrder } from "@/apis/orders";
 import { format } from "date-fns";
 import AsignToDriver from "@/components/Order/AsignToDriver";
 import { useState } from "react";

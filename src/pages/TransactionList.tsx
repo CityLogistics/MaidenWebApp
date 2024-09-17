@@ -8,12 +8,7 @@ import { CustomDatePicker } from "@/components/CustomDatePicker";
 import CustomSelect from "@/components/CustomSelect";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
-import {
-  limit,
-  orderTpes,
-  transactionStatus,
-  transactionTypes,
-} from "@/lib/Constants";
+import { limit, transactionStatus, transactionTypes } from "@/lib/Constants";
 import { useState } from "react";
 import { formatCurrencyvalue } from "@/lib/utils";
 import { getTransactions } from "@/apis/transactions";

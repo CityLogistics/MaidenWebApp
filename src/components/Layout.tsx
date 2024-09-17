@@ -1,7 +1,6 @@
 import { useManageRole, useManageSession } from "@/hooks/session";
 import SiderBar from "./SiderBar";
 import { Toaster } from "sonner";
-import { useUserStore } from "@/store/user";
 
 export default function Layout({ children }: any) {
   useManageSession();

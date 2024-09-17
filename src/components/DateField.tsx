@@ -19,7 +19,6 @@ export default function DateField({
   itemRight,
   id,
   name,
-  type,
   onChange,
   value,
   placeholder,

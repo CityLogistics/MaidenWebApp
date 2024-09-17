@@ -60,7 +60,7 @@ export default function AddUser() {
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: addUser,
-    onSuccess: (data) => {
+    onSuccess: (_) => {
       resetForm();
       toast.success("User saved successfully");
     },

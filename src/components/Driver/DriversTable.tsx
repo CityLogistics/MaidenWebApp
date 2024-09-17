@@ -7,39 +7,9 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { format } from "date-fns";
 import Loader from "../Loader";
 import { availabiltys, carTypes } from "@/lib/Constants";
 export default function DriversTable({ data = [], loading }: any) {
-  const getStatusLabel = (data: any) => {
-    const classNames =
-      "w-[150px] h-[27px] rounded-[13.50px] flex justify-center items-center text-white text-sm font-bold capitalize";
-    const status = data.toLowerCase();
-
-    switch (data) {
-      case "DELIVERED":
-        return (
-          <div className={twMerge("bg-[#00b69b]", classNames)}>{status}</div>
-        );
-      case "REJECTED":
-        return (
-          <div className={twMerge("bg-[#fd5454]", classNames)}>{status}</div>
-        );
-
-      case "PENDING_PAYMENT":
-        return (
-          <div className={twMerge(classNames, "bg-[#fcbe2d]  ")}>
-            Pending Payment
-          </div>
-        );
-
-      default:
-        return (
-          <div className={twMerge("bg-[#fcbe2d]", classNames)}>{status}</div>
-        );
-    }
-  };
-
   type ColumnType = {
     id: string;
     label: String;

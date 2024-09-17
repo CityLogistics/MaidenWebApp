@@ -3,6 +3,8 @@ import { type ClassValue, clsx } from "clsx";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
+declare const window: any;
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -17,7 +19,7 @@ export function parseJwt(token: string | undefined) {
     window
       .atob(base64)
       .split("")
-      .map(function (c) {
+      .map(function (c: any) {
         return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
       })
       .join("")
@@ -125,7 +127,7 @@ export const openWidget = (setFile: any) => {
         uploadPreset: "lm1ip4fw",
         api_key: "455779734655193",
       },
-      (error, result) => {
+      (error: any, result: any) => {
         if (!error && result && result.event === "success") {
           setFile(result.info.secure_url);
         }

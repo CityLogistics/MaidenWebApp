@@ -1,4 +1,4 @@
-import { allowedPaths, routes } from "@/lib/Constants";
+import { allowedPaths } from "@/lib/Constants";
 import { validateAuth } from "@/lib/utils";
 import { indexRoute } from "@/router";
 import { useUserStore } from "@/store/user";
