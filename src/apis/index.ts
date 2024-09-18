@@ -3,7 +3,7 @@ import axios from "axios";
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
 // const baseUrl = "http://localhost:3000/";
-// const baseUrl = "http://77.243.85.5/";
+// const baseUrl = "http://api.mycitylogistics.ca/";
 
 console.info({ baseUrl });
 
