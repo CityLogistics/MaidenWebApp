@@ -6,7 +6,7 @@ import Layout from "@/components/Layout";
 import NavbarAlt from "@/components/NavbarAlt";
 import SelectField from "@/components/SelectField";
 import TextField from "@/components/TextField";
-import { GENDER } from "@/lib/Constants";
+import { GENDER, ROLE } from "@/lib/Constants";
 import { formatPhoneNumber, parseError } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -24,6 +24,7 @@ export default function AddUser() {
     gender: yup.string().required("this field is required"),
     province: yup.string().required("this field is required"),
     city: yup.string().required("this field is required"),
+    role: yup.string().required("this field is required"),
   });
 
   const {
@@ -46,13 +47,14 @@ export default function AddUser() {
       password: "",
       province: "",
       city: "",
+      role: "",
     },
     validationSchema,
     onSubmit: (data) => {
       const { phoneNumber, ...others } = data;
       mutateAsync({
         ...others,
-        role: "ADMIN",
+
         phoneNumber: formatPhoneNumber(phoneNumber),
       });
     },
@@ -145,6 +147,21 @@ export default function AddUser() {
     },
   ];
 
+  const roles = [
+    {
+      label: "Select",
+      value: "",
+    },
+    {
+      label: "Super Admin",
+      value: ROLE.SUPER_ADMIN,
+    },
+    {
+      label: "Admin",
+      value: ROLE.ADMIN,
+    },
+  ];
+
   return (
     <Layout>
       <NavbarAlt />
@@ -227,6 +244,18 @@ export default function AddUser() {
                 error={touched.gender && Boolean(errors.gender)}
                 helperText={touched.gender && errors.gender}
                 options={options}
+              />
+            </div>
+            <div className="-mt-9">
+              <SelectField
+                label="Role"
+                id="role"
+                name="role"
+                onChange={handleChange}
+                value={values.role}
+                error={touched.role && Boolean(errors.role)}
+                helperText={touched.role && errors.role}
+                options={roles}
               />
             </div>
             <div className="-mt-9">

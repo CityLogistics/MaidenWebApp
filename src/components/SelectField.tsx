@@ -39,7 +39,7 @@ export default function SelectField({
       <select
         name={name}
         id={id}
-        className="block w-full h-12 rounded-md bg-[#F1F4F9] border-0 py-1.5 pl-7 pr-20 text-black ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black text-base sm:text-sm sm:leading-6
+        className="block w-full h-12 rounded-md bg-[#F1F4F9] border-0 py-1.5 px-7 pr-20 text-black ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black text-base sm:text-sm sm:leading-6
          mt-2
         "
         onChange={onChange}

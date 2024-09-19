@@ -78,6 +78,11 @@ export enum GENDER {
   FEMALE = "FEMALE",
 }
 
+export enum ROLE {
+  SUPER_ADMIN = "SUPER_ADMIN",
+  ADMIN = "ADMIN",
+}
+
 const { ORDERS, NEW_ORDERS, SETTINGS, DRIVERS } = routes;
 export const allowedPaths = {
   ADMIN: [ORDERS, NEW_ORDERS, SETTINGS, DRIVERS],
