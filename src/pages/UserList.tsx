@@ -5,35 +5,34 @@ import filtericon from "@/assets/images/filtericon.png";
 import ReplayIcon from "@/assets/images/ic-replay-24px.png";
 import CustomSelect from "@/components/CustomSelect";
 import { useQuery } from "@tanstack/react-query";
-import { days, limit, availabiltys, carTypes } from "@/lib/Constants";
+import { days, limit, availabiltys, carTypes, ROLE } from "@/lib/Constants";
 import { useState } from "react";
 import { getDrivers } from "@/apis/drivers";
 import Pagination from "@/components/Pagination";
-import DriverCard from "@/components/Driver/DriverCard";
-import DriverCardLoading from "@/components/Driver/DriverCardLoading";
 import { useNavigate } from "@tanstack/react-router";
-import { newDriversRoute } from "@/router";
+import { addUserRoute } from "@/router";
 import { GridIcon, ListIcon } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import DriversTable from "@/components/Driver/DriversTable";
 import { useUserStore } from "@/store/user";
+import UsersTable from "@/components/User/UsersTable";
+import UserCard from "@/components/User/UserCard";
+import UserCardLoading from "@/components/User/UserCardLoading";
+import { getUsers } from "@/apis/user";
+import Loader from "@/components/Loader";
 
-export default function DriverList() {
+export default function UserList() {
   const role = useUserStore((state) => state.user.role);
 
   const initialQuery = {
     page: 0,
     limit,
-    carTypes: [],
-    availabiltys: [],
-    days: [],
-    status: "ACCEPTED",
+    roles: [],
   };
   const [query, setQuery] = useState(initialQuery);
 
   const { isPending, data } = useQuery({
-    queryKey: ["drivers", query],
-    queryFn: () => getDrivers(query),
+    queryKey: ["userlists", query],
+    queryFn: () => getUsers(query),
   });
 
   const values = data?.data.data ?? [];
@@ -41,30 +40,37 @@ export default function DriverList() {
   const total = data?.data?.count;
 
   const handleParamChange = (field: any, val: any) => {
-    if (field == "availabiltys") setQuery((v) => ({ ...v, availabiltys: val }));
-    if (field == "carTypes") setQuery((v) => ({ ...v, carTypes: val }));
-    if (field == "days") setQuery((v) => ({ ...v, days: val }));
-    if (field == "page") setQuery((v) => ({ ...v, page: val }));
+    if (field == "roles") setQuery((v) => ({ ...v, roles: val }));
   };
 
   const navigate = useNavigate();
 
-  const [view, setView] = useState("list");
+  // const [view, setView] = useState("list");
+  const view = "list";
+
+  const roles = [
+    {
+      label: "Super Admin",
+      value: ROLE.SUPER_ADMIN,
+    },
+    {
+      label: "Admin",
+      value: ROLE.ADMIN,
+    },
+  ];
 
   return (
     <Layout>
       <NavbarAlt />
       <div className="p-[1rem] sm:p-[2.5rem]">
         <div className="flex justify-between items-center">
-          <div className=" text-primary font-bold text-[2.5rem]">
-            Driver List
-          </div>
+          <div className=" text-primary font-bold text-[2.5rem]">User List</div>
           {role == "SUPER_ADMIN" && (
             <div className="w-50">
               <Button
-                text="Approve Pending Driver"
+                text="Add New User "
                 className={"text-sm h-10 rounded-[0.25rem] text-nowrap "}
-                onClick={() => navigate({ to: newDriversRoute.to })}
+                onClick={() => navigate({ to: addUserRoute.to })}
               />
             </div>
           )}
@@ -77,30 +83,13 @@ export default function DriverList() {
           <div className="">Filter By</div>
           <div className="">
             <CustomSelect
-              label="Days"
-              items={days}
-              onChange={(v: any) => handleParamChange("days", v)}
-              values={query.days}
+              label="Roles"
+              items={roles}
+              onChange={(v: any) => handleParamChange("roles", v)}
+              values={query.roles}
             />
           </div>
-          <div className="">
-            <CustomSelect
-              label="Car Type"
-              items={carTypes}
-              onChange={(v: any) => handleParamChange("carTypes", v)}
-              values={query.carTypes}
-            />
-          </div>
-          <div className="">
-            <CustomSelect
-              label="Availability"
-              items={availabiltys}
-              onChange={(v: any) => handleParamChange("availabiltys", v)}
-              values={query.availabiltys}
-              capsuleWidth={"45%"}
-              containerWidth={"40"}
-            />
-          </div>
+
           <div>
             <div
               className=" flex cursor-pointer"
@@ -113,7 +102,7 @@ export default function DriverList() {
             </div>
           </div>
         </div>
-        <div className="flex w-full justify-end text-black">
+        {/* <div className="flex w-full justify-end text-black">
           <div
             className={twMerge(
               "w-7 h-7 cursor-pointer  rounded flex justify-center items-center",
@@ -132,24 +121,24 @@ export default function DriverList() {
           >
             <GridIcon />
           </div>
-        </div>
+        </div> */}
 
         <>
           {view == "list" ? (
             <div className=" mt-8">
-              <DriversTable data={values} loading={isPending} />
+              <UsersTable data={values} loading={isPending} />
             </div>
           ) : (
             <>
               {isPending ? (
                 <div className="flex flex-wrap mt-6 justify-between">
                   {[1, 2, 3, 4, 5, 6].map((v: any) => (
-                    <DriverCardLoading key={v._id} />
+                    <UserCardLoading key={v._id} />
                   ))}
                 </div>
               ) : (
                 <div className="flex flex-wrap mt-6 ">
-                  {values?.map((v: any) => <DriverCard data={v} key={v._id} />)}
+                  {values?.map((v: any) => <UserCard data={v} key={v._id} />)}
                 </div>
               )}
             </>

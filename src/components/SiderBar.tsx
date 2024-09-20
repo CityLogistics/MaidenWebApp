@@ -6,7 +6,7 @@ import {
   Profile2User,
   Setting2,
   ShoppingCart,
-  UserAdd,
+  People,
   UserCirlceAdd,
 } from "iconsax-react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
@@ -20,8 +20,10 @@ import {
   indexRoute,
   transactionsRoute,
   addUserRoute,
+  usersRoute,
 } from "@/router";
 import { useUserStore } from "@/store/user";
+import { Users } from "lucide-react";
 
 export default function SiderBar() {
   const role = useUserStore((state) => state.user.role);
@@ -65,8 +67,8 @@ export default function SiderBar() {
             <Link {...pathProps(transactionsRoute.to)}>
               <Note variant="Bold" />
             </Link>
-            <Link {...pathProps(addUserRoute.to)}>
-              <UserAdd variant="Bold" />
+            <Link {...pathProps(usersRoute.to)}>
+              <People variant="Bold" />
             </Link>
           </>
         )}

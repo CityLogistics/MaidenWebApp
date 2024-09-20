@@ -7,8 +7,10 @@ import SelectField from "@/components/SelectField";
 import TextField from "@/components/TextField";
 import { GENDER } from "@/lib/Constants";
 import { parseError } from "@/lib/utils";
+import { passwordRoute } from "@/router";
 import { useUserStore } from "@/store/user";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { AxiosError } from "axios";
 import { useFormik } from "formik";
 import { toast } from "sonner";
@@ -18,6 +20,8 @@ export default function Settings() {
   const { user: initialValues, updateUser: updateUserData } = useUserStore(
     (state) => state
   );
+
+  const navigate = useNavigate();
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: updateUser,
@@ -66,6 +70,13 @@ export default function Settings() {
       <div className="p-[2.5rem]">
         <div className="flex justify-between items-center">
           <div className=" text-primary font-bold text-[2.5rem]">Settings</div>
+          <div className="w-50">
+            <Button
+              text="Change Password"
+              className={"text-sm h-10 rounded-[0.25rem] text-nowrap "}
+              onClick={() => navigate({ to: passwordRoute.to })}
+            />
+          </div>
         </div>
 
         <div className="bg-white rounded-2xl min-h-[20vh] mt-12 py-16">

@@ -8,8 +8,20 @@ import {
   TableRow,
 } from "../ui/table";
 import Loader from "../Loader";
-import { availabiltys, carTypes } from "@/lib/Constants";
-export default function DriversTable({ data = [], loading }: any) {
+import { ROLE } from "@/lib/Constants";
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import { parseError, queryClient } from "@/lib/utils";
+import { deleteUser } from "@/apis/user";
+import Button from "../Button";
+import ConfirmDialouge from "../ConfirmDialouge";
+import { useUserStore } from "@/store/user";
+import { Trash } from "iconsax-react";
+export default function UsersTable({ data = [], loading }: any) {
+  const role = useUserStore((state) => state.user.role);
+
   type ColumnType = {
     id: string;
     label: String;
@@ -50,46 +62,34 @@ export default function DriversTable({ data = [], loading }: any) {
       render: (v: any) => `${v.phoneNumber}`,
     },
     {
-      id: "date",
-      label: "Days",
+      id: "province",
+      label: "Province",
       width: "200px",
+      className: "text-center",
+    },
+    {
+      id: "role",
+      label: "Province",
+      width: "200px",
+      className: "text-center",
       render: (v: any) => (
-        <div className=" capitalize">
-          {v.availabiltyDays.map((v: any) => (
-            <div> {v.toLowerCase()}</div>
-          ))}
-        </div>
-      ),
-    },
-    {
-      id: "",
-      label: "Availability",
-      width: "200px",
-      className: "text-center",
-      render: (val: any) => (
-        <div className="flex justify-center capitalize text-nowrap">
-          {val.availabiltyTime.map((time: any) => (
-            <div> {availabiltys.find((v: any) => v.value == time)?.label}</div>
-          ))}
-        </div>
-      ),
-    },
-    {
-      id: "",
-      label: "Car Type",
-      width: "200px",
-      className: "text-center",
-      render: (val: any) => (
-        <div className="flex justify-center capitalize text-nowrap">
-          {carTypes.find((v: any) => v.value == val.vehicleType)?.label}
-        </div>
+        <span className=" whitespace-nowrap">{`${v.role?.replace("_", " ")}`}</span>
       ),
     },
   ];
 
+  if (role == ROLE.SUPER_ADMIN)
+    columns.push({
+      id: "province",
+      label: "Action",
+      width: "200px",
+      className: "text-center",
+      render: (v: any) => <DeleteUser id={v._id} />,
+    });
+
   return (
     <div className="bg-white p-9 rounded-2xl">
-      <div className=" font-bold text-[#202224] pb-5">Drivers</div>
+      <div className=" font-bold text-[#202224] pb-5">Users</div>
       {loading ? (
         <Loader />
       ) : (
@@ -130,3 +130,47 @@ export default function DriversTable({ data = [], loading }: any) {
     </div>
   );
 }
+
+const DeleteUser = ({ id }: any) => {
+  const [open, setOpen] = useState(false);
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: () => deleteUser(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userlists"] });
+      toast.success("User deleted");
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
+    },
+  });
+
+  const onProceed = () => {
+    setOpen(false);
+    mutateAsync();
+  };
+
+  return (
+    <>
+      <Button
+        loading={isPending}
+        text={
+          !isPending && (
+            <>
+              Delete <Trash size={20} />
+            </>
+          )
+        }
+        className={"text-sm h-7 rounded-[0.25rem] text-nowrap w-40 bg-red-300 "}
+        onClick={() => setOpen(true)}
+      />
+      {open && (
+        <ConfirmDialouge
+          message="Delete user"
+          onProceed={onProceed}
+          onCancel={() => setOpen(false)}
+          setOpen={setOpen}
+        />
+      )}
+    </>
+  );
+};

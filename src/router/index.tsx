@@ -15,6 +15,8 @@ import DriverList from "@/pages/DriverList";
 import Settings from "@/pages/Settings";
 import TransactionList from "@/pages/TransactionList";
 import AddUser from "@/pages/AddUser";
+import UserList from "@/pages/UserList";
+import ChangePassword from "@/pages/ChangePassword";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -82,11 +84,27 @@ export const settingsRoute = createRoute({
   },
 });
 
+export const passwordRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes.PASSWORD,
+  component: function Index() {
+    return <ChangePassword />;
+  },
+});
+
 export const transactionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: routes.TRANSACTIONS,
   component: function Index() {
     return <TransactionList />;
+  },
+});
+
+export const usersRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes.USERS,
+  component: function Index() {
+    return <UserList />;
   },
 });
 
@@ -106,8 +124,10 @@ const routeTree = rootRoute.addChildren([
   driversRoute,
   newDriversRoute,
   settingsRoute,
+  passwordRoute,
   transactionsRoute,
   addUserRoute,
+  usersRoute,
 ]);
 
 export const router = createRouter({ routeTree });

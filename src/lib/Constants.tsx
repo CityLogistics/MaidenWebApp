@@ -6,8 +6,10 @@ export const routes = {
   DRIVERS: "/drivers",
   NEW_DRIVERS: "/new-drivers",
   SETTINGS: "/settings",
+  PASSWORD: "/settings/password",
   TRANSACTIONS: "/transactions",
-  ADD_USER: "/add-user",
+  ADD_USER: "/users/add-user",
+  USERS: "/users",
 };
 
 export const orderTpes = [

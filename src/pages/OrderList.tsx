@@ -10,7 +10,7 @@ import CustomSelect from "@/components/CustomSelect";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getOrders, updateOrderStatus } from "@/apis/orders";
 import { format } from "date-fns";
-import { limit, orderStatus, orderTpes } from "@/lib/Constants";
+import { limit, orderStatus, orderTpes, ROLE } from "@/lib/Constants";
 import { useState } from "react";
 import { newOrdersRoute } from "@/router";
 import { useNavigate } from "@tanstack/react-router";
@@ -20,7 +20,7 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 import ConfirmDialouge from "@/components/ConfirmDialouge";
 import { useUserStore } from "@/store/user";
-import { decideOrderAssignment } from "@/apis/drivers";
+import { decideOrderAssignment, updateDriverOrderStatus } from "@/apis/drivers";
 
 export default function OrderList() {
   const role = useUserStore((state) => state.user.role);
@@ -74,7 +74,10 @@ export default function OrderList() {
   };
 
   const getStatusAction = (status: any, id: any) => {
-    if (status == "DELIVERED" && role == "ADMIN")
+    if (
+      status == "DELIVERED" &&
+      (role == ROLE.ADMIN || role == ROLE.SUPER_ADMIN)
+    )
       return <MarkComplete id={id} />;
 
     if (status == "PROCESSING" && role == "DRIVER")
@@ -321,7 +324,8 @@ const MarkComplete = ({ id }: any) => {
 const MarkDelivered = ({ id }: any) => {
   const [open, setOpen] = useState(false);
   const { isPending, mutateAsync } = useMutation({
-    mutationFn: () => updateOrderStatus({ id, order: { status: "DELIVERED" } }),
+    mutationFn: () =>
+      updateDriverOrderStatus({ id, order: { status: "DELIVERED" } }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
       toast.success("Order status changed");
