@@ -19,11 +19,9 @@ import {
   newDriversRoute,
   indexRoute,
   transactionsRoute,
-  addUserRoute,
   usersRoute,
 } from "@/router";
 import { useUserStore } from "@/store/user";
-import { Users } from "lucide-react";
 
 export default function SiderBar() {
   const role = useUserStore((state) => state.user.role);

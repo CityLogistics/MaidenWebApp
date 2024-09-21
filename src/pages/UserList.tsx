@@ -5,20 +5,16 @@ import filtericon from "@/assets/images/filtericon.png";
 import ReplayIcon from "@/assets/images/ic-replay-24px.png";
 import CustomSelect from "@/components/CustomSelect";
 import { useQuery } from "@tanstack/react-query";
-import { days, limit, availabiltys, carTypes, ROLE } from "@/lib/Constants";
+import { limit, ROLE } from "@/lib/Constants";
 import { useState } from "react";
-import { getDrivers } from "@/apis/drivers";
 import Pagination from "@/components/Pagination";
 import { useNavigate } from "@tanstack/react-router";
 import { addUserRoute } from "@/router";
-import { GridIcon, ListIcon } from "lucide-react";
-import { twMerge } from "tailwind-merge";
 import { useUserStore } from "@/store/user";
 import UsersTable from "@/components/User/UsersTable";
 import UserCard from "@/components/User/UserCard";
 import UserCardLoading from "@/components/User/UserCardLoading";
 import { getUsers } from "@/apis/user";
-import Loader from "@/components/Loader";
 
 export default function UserList() {
   const role = useUserStore((state) => state.user.role);
