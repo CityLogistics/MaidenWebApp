@@ -73,10 +73,6 @@ export default function AddUser() {
 
   const options = [
     {
-      label: "Select",
-      value: "",
-    },
-    {
       label: "Male",
       value: GENDER.MALE,
     },
@@ -87,10 +83,6 @@ export default function AddUser() {
   ];
 
   const regions = [
-    {
-      label: "Select",
-      value: "",
-    },
     {
       label: "Alberta",
       value: "ALBERTA",
@@ -148,10 +140,6 @@ export default function AddUser() {
   ];
 
   const roles = [
-    {
-      label: "Select",
-      value: "",
-    },
     {
       label: "Super Admin",
       value: ROLE.SUPER_ADMIN,

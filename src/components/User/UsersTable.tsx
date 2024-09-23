@@ -19,6 +19,7 @@ import Button from "../Button";
 import ConfirmDialouge from "../ConfirmDialouge";
 import { useUserStore } from "@/store/user";
 import { Trash } from "iconsax-react";
+import DeadState from "../DeadState";
 export default function UsersTable({ data = [], loading }: any) {
   const role = useUserStore((state) => state.user.role);
 
@@ -93,39 +94,46 @@ export default function UsersTable({ data = [], loading }: any) {
       {loading ? (
         <Loader />
       ) : (
-        <Table className=" text-black rounded-2xl">
-          <TableHeader className="[&_tr]:border-b-0  ">
-            <TableRow className=" border-b-0">
-              {columns.map((column, i) => (
-                <TableHead
-                  key={i}
-                  className={twMerge(
-                    `w-[${column.width}] bg-[#f1f3f9] whitespace-nowrap font-bold`,
-                    i == 0 && "rounded-l-xl",
-                    i == columns.length - 1 && "rounded-r-xl",
-                    column.className ?? ""
-                  )}
-                >
-                  {column.label}
-                </TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.map((row: any, i: any): any => (
-              <TableRow key={i}>
-                {columns.map((column: ColumnType, i: number) => (
-                  <TableCell
-                    key={i}
-                    className=" text-[#202224] font-semibold text-sm opacity-80"
-                  >
-                    {column.render?.(row) ?? row[column.id]}
-                  </TableCell>
+        <>
+          {data?.length == 0 ? (
+            <DeadState />
+          ) : (
+            <Table className=" text-black rounded-2xl">
+              <TableHeader className="[&_tr]:border-b-0  ">
+                <TableRow className=" border-b-0">
+                  {columns.map((column, i) => (
+                    <TableHead
+                      key={i}
+                      className={twMerge(
+                        `w-[${column.width}] bg-[#f1f3f9] whitespace-nowrap font-bold`,
+                        i == 0 && "rounded-l-xl",
+                        i == columns.length - 1 && "rounded-r-xl",
+                        column.className ?? ""
+                      )}
+                    >
+                      {column.label}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+
+              <TableBody>
+                {data.map((row: any, i: any): any => (
+                  <TableRow key={i}>
+                    {columns.map((column: ColumnType, i: number) => (
+                      <TableCell
+                        key={i}
+                        className=" text-[#202224] font-semibold text-sm opacity-80"
+                      >
+                        {column.render?.(row) ?? row[column.id]}
+                      </TableCell>
+                    ))}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+              </TableBody>
+            </Table>
+          )}
+        </>
       )}
     </div>
   );
@@ -160,12 +168,12 @@ const DeleteUser = ({ id }: any) => {
             </>
           )
         }
-        className={"text-sm h-7 rounded-[0.25rem] text-nowrap w-40 bg-red-300 "}
+        className={"text-sm h-7 rounded-[0.25rem] text-nowrap w-40 bg-red-600 "}
         onClick={() => setOpen(true)}
       />
       {open && (
         <ConfirmDialouge
-          message="Delete user"
+          message="Are you sure you want to delete this user?"
           onProceed={onProceed}
           onCancel={() => setOpen(false)}
           setOpen={setOpen}

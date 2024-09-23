@@ -154,6 +154,12 @@ export default function OrderList() {
       render: (v: any) => v.distance,
     },
     {
+      id: "totalPrice",
+      label: "Total Price ($)",
+      width: "200px",
+      render: (v: any) => v.totalPrice / 100,
+    },
+    {
       id: "",
       label: "Status",
       width: "200px",
@@ -210,16 +216,15 @@ export default function OrderList() {
           <div className=" text-primary font-bold text-[2.5rem]">
             Order List
           </div>
-          {role == "SUPER_ADMIN" ||
-            (role == "ADMIN" && (
-              <div className="w-[9.375rem]">
-                <Button
-                  text="View New Orders"
-                  className={"text-sm h-10 rounded-[0.25rem] text-nowrap"}
-                  onClick={() => navigate({ to: newOrdersRoute.to })}
-                />
-              </div>
-            ))}
+          {(role == "SUPER_ADMIN" || role == "ADMIN") && (
+            <div className="w-[9.375rem]">
+              <Button
+                text="View New Orders"
+                className={"text-sm h-10 rounded-[0.25rem] text-nowrap"}
+                onClick={() => navigate({ to: newOrdersRoute.to })}
+              />
+            </div>
+          )}
         </div>
 
         <div className="flex h-[3.5rem] w-fit bg-white rounded-xl items-center child:border-r-[0.1px] child:h-full child:px-6 child:flex child:text-sm child:font-bold child:items-center child:text-black border border-[#D5D5D5] mt-8 max-w-full overflow-auto text-nowrap">
@@ -311,7 +316,7 @@ const MarkComplete = ({ id }: any) => {
       />
       {open && (
         <ConfirmDialouge
-          message="Mark order as completed"
+          message="Are you sure you want to mark this order as completed?"
           onProceed={onProceed}
           onCancel={() => setOpen(false)}
           setOpen={setOpen}
@@ -356,7 +361,7 @@ const MarkDelivered = ({ id }: any) => {
       />
       {open && (
         <ConfirmDialouge
-          message="Mark order as delivered"
+          message="Are you sure you want to mark this order as delivered?"
           onProceed={onProceed}
           onCancel={() => setOpen(false)}
           setOpen={setOpen}
@@ -400,7 +405,7 @@ const AcceptRequest = ({ id }: any) => {
       />
       {open && (
         <ConfirmDialouge
-          message="Accept order assignment"
+          message="Are you sure you want to accept this order assignment?"
           onProceed={onProceed}
           onCancel={() => setOpen(false)}
           setOpen={setOpen}
@@ -445,7 +450,7 @@ const RejectRequest = ({ id }: any) => {
       />
       {open && (
         <ConfirmDialouge
-          message="Reject order assignment"
+          message="Are you sure you want to reject this order assignment?"
           onProceed={onProceed}
           onCancel={() => setOpen(false)}
           setOpen={setOpen}

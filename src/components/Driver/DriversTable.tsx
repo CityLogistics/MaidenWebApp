@@ -9,6 +9,7 @@ import {
 } from "../ui/table";
 import Loader from "../Loader";
 import { availabiltys, carTypes } from "@/lib/Constants";
+import DeadState from "../DeadState";
 export default function DriversTable({ data = [], loading }: any) {
   type ColumnType = {
     id: string;
@@ -93,39 +94,45 @@ export default function DriversTable({ data = [], loading }: any) {
       {loading ? (
         <Loader />
       ) : (
-        <Table className=" text-black rounded-2xl">
-          <TableHeader className="[&_tr]:border-b-0  ">
-            <TableRow className=" border-b-0">
-              {columns.map((column, i) => (
-                <TableHead
-                  key={i}
-                  className={twMerge(
-                    `w-[${column.width}] bg-[#f1f3f9] whitespace-nowrap font-bold`,
-                    i == 0 && "rounded-l-xl",
-                    i == columns.length - 1 && "rounded-r-xl",
-                    column.className ?? ""
-                  )}
-                >
-                  {column.label}
-                </TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.map((row: any, i: any): any => (
-              <TableRow key={i}>
-                {columns.map((column: ColumnType, i: number) => (
-                  <TableCell
-                    key={i}
-                    className=" text-[#202224] font-semibold text-sm opacity-80"
-                  >
-                    {column.render?.(row) ?? row[column.id]}
-                  </TableCell>
+        <>
+          {data?.length == 0 ? (
+            <DeadState />
+          ) : (
+            <Table className=" text-black rounded-2xl">
+              <TableHeader className="[&_tr]:border-b-0  ">
+                <TableRow className=" border-b-0">
+                  {columns.map((column, i) => (
+                    <TableHead
+                      key={i}
+                      className={twMerge(
+                        `w-[${column.width}] bg-[#f1f3f9] whitespace-nowrap font-bold`,
+                        i == 0 && "rounded-l-xl",
+                        i == columns.length - 1 && "rounded-r-xl",
+                        column.className ?? ""
+                      )}
+                    >
+                      {column.label}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.map((row: any, i: any): any => (
+                  <TableRow key={i}>
+                    {columns.map((column: ColumnType, i: number) => (
+                      <TableCell
+                        key={i}
+                        className=" text-[#202224] font-semibold text-sm opacity-80"
+                      >
+                        {column.render?.(row) ?? row[column.id]}
+                      </TableCell>
+                    ))}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+              </TableBody>
+            </Table>
+          )}
+        </>
       )}
     </div>
   );

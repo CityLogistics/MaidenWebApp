@@ -2,6 +2,7 @@ import { changePassword } from "@/apis/auth";
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
 import NavbarAlt from "@/components/NavbarAlt";
+import PasswordField from "@/components/PasswordField";
 import TextField from "@/components/TextField";
 import { parseError } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
@@ -62,7 +63,7 @@ export default function ChangePassword() {
           <div className="w-8/12 sm:w-[25rem]  mt-[4.875rem] mx-auto">
             <div className=" mb-12">
               <div className="-mt-9">
-                <TextField
+                <PasswordField
                   label="Old Password"
                   id="password"
                   name="password"
@@ -73,7 +74,7 @@ export default function ChangePassword() {
                 />
               </div>
               <div className="">
-                <TextField
+                <PasswordField
                   label="New Password"
                   id="newPassword"
                   name="newPassword"
@@ -81,11 +82,10 @@ export default function ChangePassword() {
                   value={values.newPassword}
                   error={touched.newPassword && Boolean(errors.newPassword)}
                   helperText={touched.newPassword && errors.newPassword}
-                  type="password"
                 />
               </div>
               <div className="">
-                <TextField
+                <PasswordField
                   label="Confirm New Password"
                   id="confirmNewPassword"
                   name="confirmNewPassword"
@@ -98,7 +98,6 @@ export default function ChangePassword() {
                   helperText={
                     touched.confirmNewPassword && errors.confirmNewPassword
                   }
-                  type="password"
                 />
               </div>
             </div>

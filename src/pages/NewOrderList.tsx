@@ -73,6 +73,18 @@ export default function NewOrderList() {
       render: (v: any) => v.distance,
     },
     {
+      id: "pickupDate",
+      label: "Distance (KM)",
+      width: "200px",
+      render: (v: any) => v.distance,
+    },
+    {
+      id: "totalPrice",
+      label: "Total Price ($)",
+      width: "200px",
+      render: (v: any) => v.totalPrice / 100,
+    },
+    {
       id: "",
       label: "Action",
       width: "200px",
@@ -212,7 +224,7 @@ const RejectOrder = ({ id }: any) => {
       />
       {open && (
         <ConfirmDialouge
-          message="Reject order request and issue refund"
+          message="Are you sure you want to reject this order request and issue a refund?"
           onProceed={onProceed}
           onCancel={() => setOpen(false)}
           setOpen={setOpen}

@@ -10,6 +10,7 @@ import {
 import Loader from "./Loader";
 import Pagination from "./Pagination";
 import { limit } from "@/lib/Constants";
+import DeadState from "./DeadState";
 
 type ColumnType = {
   id: String;
@@ -47,39 +48,43 @@ export default function CustomTable({
           </div>
         ) : (
           <>
-            <Table className=" text-black rounded-2xl">
-              <TableHeader className="[&_tr]:border-b-0 rounded-2xl  ">
-                <TableRow className=" border-b-0">
-                  {columns.map((column, i) => (
-                    <TableHead
-                      key={i}
-                      className={twMerge(
-                        `w-[${column.width}] bg-[#FCFDFD] whitespace-nowrap font-bold `,
-                        i == 0 && "rounded-l-2xl",
-                        i == columns.length - 1 && "rounded-r-2xl",
-                        column.className ?? ""
-                      )}
-                    >
-                      {column.label}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data.map((row, i): any => (
-                  <TableRow key={i}>
-                    {columns.map((column: ColumnType, i) => (
-                      <TableCell
+            {data?.length == 0 ? (
+              <DeadState />
+            ) : (
+              <Table className=" text-black rounded-2xl">
+                <TableHeader className="[&_tr]:border-b-0 rounded-2xl  ">
+                  <TableRow className=" border-b-0">
+                    {columns.map((column, i) => (
+                      <TableHead
                         key={i}
-                        className=" text-[#202224] font-semibold text-sm opacity-80"
+                        className={twMerge(
+                          `w-[${column.width}] bg-[#FCFDFD] whitespace-nowrap font-bold `,
+                          i == 0 && "rounded-l-2xl",
+                          i == columns.length - 1 && "rounded-r-2xl",
+                          column.className ?? ""
+                        )}
                       >
-                        {column.render?.(row) ?? row[column.id as keyof any]}
-                      </TableCell>
+                        {column.label}
+                      </TableHead>
                     ))}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {data.map((row, i): any => (
+                    <TableRow key={i}>
+                      {columns.map((column: ColumnType, i) => (
+                        <TableCell
+                          key={i}
+                          className=" text-[#202224] font-semibold text-sm opacity-80"
+                        >
+                          {column.render?.(row) ?? row[column.id as keyof any]}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </>
         )}
       </div>

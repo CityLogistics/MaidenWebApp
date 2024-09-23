@@ -93,15 +93,15 @@ export default function Login() {
           value={values.password}
           error={touched.password && Boolean(errors.password)}
           helperText={touched.password && errors.password}
-          itemRight={
-            <span className="text-[#202224] text-lg opacity-60">
-              Forget Password?
-            </span>
-          }
+          // itemRight={
+          //   <span className="text-[#202224] text-lg opacity-60">
+          //     Forgot Password?
+          //   </span>
+          // }
         />
-        <span className=" text-[#202224] text-lg opacity-60 mt-6 text-left w-full">
+        {/* <span className=" text-[#202224] text-lg opacity-60 mt-6 text-left w-full">
           Remember Password
-        </span>
+        </span> */}
 
         <div className="w-[min(25rem,100%)]  mt-[4.875rem]">
           <Button loading={isPending} text="Sign In" onClick={handleSubmit} />

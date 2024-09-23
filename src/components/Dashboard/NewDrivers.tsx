@@ -93,7 +93,7 @@ function DriverCard({ data, refetch, last }: any) {
   const confirm = (status: DriverStatus) => {
     setOpen({
       status,
-      message: `Are you sure you want to ${DriverStatus.ACCEPTED == status ? "accept" : "reject"} driver request`,
+      message: `Are you sure you want to ${DriverStatus.ACCEPTED == status ? "accept" : "reject"} driver request?`,
       callback: () => deside(status),
     });
   };
