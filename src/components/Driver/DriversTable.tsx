@@ -55,9 +55,9 @@ export default function DriversTable({ data = [], loading }: any) {
       label: "Days",
       width: "200px",
       render: (v: any) => (
-        <div className=" capitalize">
-          {v.availabiltyDays.map((v: any) => (
-            <div> {v.toLowerCase()}</div>
+        <div className=" capitalize ">
+          {v.availabiltyDays.map((v: any, i: any) => (
+            <div key={i}> {v.toLowerCase()}</div>
           ))}
         </div>
       ),
@@ -68,7 +68,7 @@ export default function DriversTable({ data = [], loading }: any) {
       width: "200px",
       className: "text-center",
       render: (val: any) => (
-        <div className="flex justify-center capitalize text-nowrap">
+        <div className=" justify-center capitalize text-nowrap">
           {val.availabiltyTime.map((time: any) => (
             <div> {availabiltys.find((v: any) => v.value == time)?.label}</div>
           ))}
