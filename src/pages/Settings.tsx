@@ -1,5 +1,6 @@
 import { updateUser } from "@/apis/user";
 import Button from "@/components/Button";
+import DateField from "@/components/DateField";
 import ImageComponent from "@/components/ImageComponent";
 import Layout from "@/components/Layout";
 import NavbarAlt from "@/components/NavbarAlt";
@@ -133,7 +134,7 @@ export default function Settings() {
               />
             </div>
             <div className="-mt-9">
-              <TextField
+              <DateField
                 label="Date Of Birth"
                 id="dateOfBirth"
                 name="dateOfBirth"
@@ -141,6 +142,7 @@ export default function Settings() {
                 value={values.dateOfBirth}
                 error={touched.dateOfBirth && Boolean(errors.dateOfBirth)}
                 helperText={touched.dateOfBirth && errors.dateOfBirth}
+                type="date"
               />
             </div>
             <div className="-mt-9">

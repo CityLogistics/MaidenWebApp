@@ -49,7 +49,9 @@ export default function CustomTable({
         ) : (
           <>
             {data?.length == 0 ? (
-              <DeadState />
+              <div className="h-full flex justify-center items-center py-10">
+                <DeadState />
+              </div>
             ) : (
               <Table className=" text-black rounded-2xl">
                 <TableHeader className="[&_tr]:border-b-0 rounded-2xl  ">

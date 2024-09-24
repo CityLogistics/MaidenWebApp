@@ -2,6 +2,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { type ClassValue, clsx } from "clsx";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
+import { carTypes } from "./Constants";
 
 declare const window: any;
 
@@ -126,6 +127,8 @@ export const openWidget = (setFile: any) => {
         cloudName: "workstedi",
         uploadPreset: "lm1ip4fw",
         api_key: "455779734655193",
+        multiple: false,
+        maxFileSize: 1048576,
       },
       (error: any, result: any) => {
         if (!error && result && result.event === "success") {
@@ -147,6 +150,8 @@ export const useCloudinary = (setFile: any) => {
           cloudName: "workstedi",
           uploadPreset: "lm1ip4fw",
           api_key: "455779734655193",
+          multiple: false,
+          maxFileSize: 1048576,
         },
         (error: any, result: any) => {
           setLoading(false);
@@ -167,3 +172,6 @@ export const useCloudinary = (setFile: any) => {
     launchWidget,
   };
 };
+
+export const getVehicleLabel = (vehicleType: any) =>
+  carTypes.find((v: any) => v.value == vehicleType)?.label;

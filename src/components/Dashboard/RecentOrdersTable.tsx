@@ -95,7 +95,13 @@ export default function RecentOrdersTable() {
       id: "date",
       label: "Date",
       width: "200px",
-      render: (v: any) => v.pickupDate && format(v.pickupDate, "dd/MM/yyy"),
+
+      render: (v: any) => (
+        <span className=" text-nowrap">
+          {" "}
+          {format(v.pickupDate, "dd MMMM YYY")}
+        </span>
+      ),
     },
     {
       id: "pickupDate",

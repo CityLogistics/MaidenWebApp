@@ -7,24 +7,21 @@ import CustomTable from "@/components/CustomTable";
 import { twMerge } from "tailwind-merge";
 import { CustomDatePicker } from "@/components/CustomDatePicker";
 import CustomSelect from "@/components/CustomSelect";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { getOrders, updateOrderStatus } from "@/apis/orders";
+import { useQuery } from "@tanstack/react-query";
+import { getOrders } from "@/apis/orders";
 import { format } from "date-fns";
-import { limit, orderStatus, orderTpes, ROLE } from "@/lib/Constants";
+import { limit, orderStatus, orderTpes } from "@/lib/Constants";
 import { useState } from "react";
 import { newOrdersRoute } from "@/router";
 import { useNavigate } from "@tanstack/react-router";
-import { CheckIcon, X } from "lucide-react";
-import { parseError, queryClient } from "@/lib/utils";
-import { toast } from "sonner";
-import { AxiosError } from "axios";
-import ConfirmDialouge from "@/components/ConfirmDialouge";
+import { MoreHorizontal } from "lucide-react";
 import { useUserStore } from "@/store/user";
-import { decideOrderAssignment, updateDriverOrderStatus } from "@/apis/drivers";
+import OrderDialogue from "@/components/OrderDialogue";
 
 export default function OrderList() {
   const role = useUserStore((state) => state.user.role);
 
+  const [moreOpen, setMoreOpen] = useState<any>();
   const getStatusLabel = (data: any) => {
     const status = data.toLowerCase();
     const classNames =
@@ -73,37 +70,15 @@ export default function OrderList() {
     }
   };
 
-  const getStatusAction = (status: any, id: any) => {
-    if (
-      status == "DELIVERED" &&
-      (role == ROLE.ADMIN || role == ROLE.SUPER_ADMIN)
-    )
-      return <MarkComplete id={id} />;
-
-    if (status == "PROCESSING" && role == "DRIVER")
-      return <MarkDelivered id={id} />;
-
-    if (status == "ASSIGNED" && role == "DRIVER")
-      return (
-        <div className="">
-          <AcceptRequest id={id} />
-          <div className="h-1" />
-          <RejectRequest id={id} />
-        </div>
-      );
-
-    return "";
-  };
-
   const columns = [
     {
-      id: "_id",
-      label: "Package ID",
+      id: "orderNo",
+      label: "Order ",
       width: "200px",
     },
     {
       id: "senderName",
-      label: "Name",
+      label: "Customer’s Name",
       width: "200px",
       render: (v: any) => <div className=" text-nowrap">{v.senderName}</div>,
     },
@@ -113,46 +88,51 @@ export default function OrderList() {
       width: "200px",
       render: (v: any) => `${v.pickupAddress.address}`,
     },
-    {
-      id: "pickupAddress",
-      label: "Pickup Province",
-      width: "200px",
-      render: (v: any) => `${v.pickupAddress.province}`,
-    },
-    {
-      id: "dropOffAddress",
-      label: "Dropoff Location",
-      width: "200px",
-      render: (v: any) => `${v.dropOffAddress.address}`,
-    },
-    {
-      id: "dropOffAddress",
-      label: "Dropoff Province",
-      width: "200px",
-      render: (v: any) => `${v.dropOffAddress.province}`,
-    },
-    {
-      id: "pickupDate",
-      label: "Time",
-      width: "200px",
-      render: (v: any) => (
-        <div className=" text-nowrap">
-          {v.pickupDate && format(v.pickupDate, "hh a")}
-        </div>
-      ),
-    },
+    // {
+    //   id: "pickupAddress",
+    //   label: "Pickup Province",
+    //   width: "200px",
+    //   render: (v: any) => `${v.pickupAddress.province}`,
+    // },
+    // {
+    //   id: "dropOffAddress",
+    //   label: "Dropoff Location",
+    //   width: "200px",
+    //   render: (v: any) => `${v.dropOffAddress.address}`,
+    // },
+    // {
+    //   id: "dropOffAddress",
+    //   label: "Dropoff Province",
+    //   width: "200px",
+    //   render: (v: any) => `${v.dropOffAddress.province}`,
+    // },
+    // {
+    //   id: "pickupDate",
+    //   label: "Time",
+    //   width: "200px",
+    //   render: (v: any) => (
+    //     <div className=" text-nowrap">
+    //       {v.pickupDate && format(v.pickupDate, "hh a")}
+    //     </div>
+    //   ),
+    // },
     {
       id: "date",
       label: "Date",
       width: "200px",
-      render: (v: any) => format(v.pickupDate, "dd/MM/YYY"),
+      render: (v: any) => (
+        <span className=" text-nowrap">
+          {" "}
+          {format(v.pickupDate, "dd MMMM YYY")}
+        </span>
+      ),
     },
-    {
-      id: "pickupDate",
-      label: "Distance (KM)",
-      width: "200px",
-      render: (v: any) => v.distance,
-    },
+    // {
+    //   id: "",
+    //   label: "Distance (KM)",
+    //   width: "200px",
+    //   render: (v: any) => v.distance,
+    // },
     {
       id: "totalPrice",
       label: "Total Price ($)",
@@ -175,7 +155,11 @@ export default function OrderList() {
       className: "text-center",
       render: (item: any) => (
         <div className="flex justify-center">
-          {getStatusAction(item.status, item._id)}
+          {/* {getStatusAction(item.status, item._id)} */}
+          <MoreHorizontal
+            style={{ cursor: "pointer" }}
+            onClick={() => setMoreOpen(item)}
+          />
         </div>
       ),
     },
@@ -278,184 +262,9 @@ export default function OrderList() {
           />
         </div>
       </div>
+      {moreOpen != null && (
+        <OrderDialogue order={moreOpen} onCancel={() => setMoreOpen(null)} />
+      )}
     </Layout>
   );
 }
-
-const MarkComplete = ({ id }: any) => {
-  const [open, setOpen] = useState(false);
-  const { isPending, mutateAsync } = useMutation({
-    mutationFn: () => updateOrderStatus({ id, order: { status: "COMPLETED" } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
-      toast.success("Order status changed");
-    },
-    onError: (e: AxiosError) => {
-      toast.error(parseError(e));
-    },
-  });
-
-  const onProceed = () => {
-    setOpen(false);
-    mutateAsync();
-  };
-
-  return (
-    <>
-      <Button
-        loading={isPending}
-        text={
-          !isPending && (
-            <>
-              Mark Completed <CheckIcon size={20} />
-            </>
-          )
-        }
-        className={"text-sm h-7 rounded-[0.25rem] text-nowrap w-40 "}
-        onClick={() => setOpen(true)}
-      />
-      {open && (
-        <ConfirmDialouge
-          message="Are you sure you want to mark this order as completed?"
-          onProceed={onProceed}
-          onCancel={() => setOpen(false)}
-          setOpen={setOpen}
-        />
-      )}
-    </>
-  );
-};
-
-const MarkDelivered = ({ id }: any) => {
-  const [open, setOpen] = useState(false);
-  const { isPending, mutateAsync } = useMutation({
-    mutationFn: () =>
-      updateDriverOrderStatus({ id, order: { status: "DELIVERED" } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
-      toast.success("Order status changed");
-    },
-    onError: (e: AxiosError) => {
-      toast.error(parseError(e));
-    },
-  });
-
-  const onProceed = () => {
-    setOpen(false);
-    mutateAsync();
-  };
-
-  return (
-    <>
-      <Button
-        loading={isPending}
-        text={
-          !isPending && (
-            <>
-              Mark Delivered <CheckIcon size={20} />
-            </>
-          )
-        }
-        className={"text-sm h-7 rounded-[0.25rem] text-nowrap w-40 "}
-        onClick={() => setOpen(true)}
-      />
-      {open && (
-        <ConfirmDialouge
-          message="Are you sure you want to mark this order as delivered?"
-          onProceed={onProceed}
-          onCancel={() => setOpen(false)}
-          setOpen={setOpen}
-        />
-      )}
-    </>
-  );
-};
-
-const AcceptRequest = ({ id }: any) => {
-  const [open, setOpen] = useState(false);
-  const { isPending, mutateAsync } = useMutation({
-    mutationFn: () => decideOrderAssignment({ id, data: { action: "ACCEPT" } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
-      toast.success("Order status changed");
-    },
-    onError: (e: AxiosError) => {
-      toast.error(parseError(e));
-    },
-  });
-
-  const onProceed = () => {
-    setOpen(false);
-    mutateAsync();
-  };
-
-  return (
-    <>
-      <Button
-        loading={isPending}
-        text={
-          !isPending && (
-            <>
-              Accept <CheckIcon size={20} />
-            </>
-          )
-        }
-        className={"text-sm h-7 rounded-[0.25rem] text-nowrap w-40 "}
-        onClick={() => setOpen(true)}
-      />
-      {open && (
-        <ConfirmDialouge
-          message="Are you sure you want to accept this order assignment?"
-          onProceed={onProceed}
-          onCancel={() => setOpen(false)}
-          setOpen={setOpen}
-        />
-      )}
-    </>
-  );
-};
-
-const RejectRequest = ({ id }: any) => {
-  const [open, setOpen] = useState(false);
-  const { isPending, mutateAsync } = useMutation({
-    mutationFn: () =>
-      decideOrderAssignment({ id, data: { action: "DECLINE" } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
-      toast.success("Order status changed");
-    },
-    onError: (e: AxiosError) => {
-      toast.error(parseError(e));
-    },
-  });
-
-  const onProceed = () => {
-    setOpen(false);
-    mutateAsync();
-  };
-
-  return (
-    <>
-      <Button
-        loading={isPending}
-        text={
-          !isPending && (
-            <>
-              Reject <X size={20} />
-            </>
-          )
-        }
-        className={"text-sm h-7 rounded-[0.25rem] text-nowrap w-40 bg-red-300 "}
-        onClick={() => setOpen(true)}
-      />
-      {open && (
-        <ConfirmDialouge
-          message="Are you sure you want to reject this order assignment?"
-          onProceed={onProceed}
-          onCancel={() => setOpen(false)}
-          setOpen={setOpen}
-        />
-      )}
-    </>
-  );
-};

@@ -21,13 +21,13 @@ export default function NewOrderList() {
   const [open, setOpen] = useState();
   const columns = [
     {
-      id: "_id",
-      label: "Package ID",
+      id: "orderNo",
+      label: "Order ",
       width: "200px",
     },
     {
       id: "senderName",
-      label: "Name",
+      label: "Customer’s Name",
       width: "200px",
     },
     {
@@ -36,35 +36,40 @@ export default function NewOrderList() {
       width: "200px",
       render: (v: any) => `${v.pickupAddress.address}`,
     },
-    {
-      id: "pickupAddress",
-      label: "Pickup Province",
-      width: "200px",
-      render: (v: any) => `${v.pickupAddress.province}`,
-    },
+    // {
+    //   id: "pickupAddress",
+    //   label: "Pickup Province",
+    //   width: "200px",
+    //   render: (v: any) => `${v.pickupAddress.province}`,
+    // },
     {
       id: "dropOffAddress",
       label: "Dropoff Location",
       width: "200px",
       render: (v: any) => `${v.dropOffAddress.address}`,
     },
-    {
-      id: "dropOffAddress",
-      label: "Dropoff Province",
-      width: "200px",
-      render: (v: any) => `${v.dropOffAddress.province}`,
-    },
-    {
-      id: "pickupDate",
-      label: "Time",
-      width: "200px",
-      render: (v: any) => format(v.pickupDate, "hh a"),
-    },
+    // {
+    //   id: "dropOffAddress",
+    //   label: "Dropoff Province",
+    //   width: "200px",
+    //   render: (v: any) => `${v.dropOffAddress.province}`,
+    // },
+    // {
+    //   id: "pickupDate",
+    //   label: "Time",
+    //   width: "200px",
+    //   render: (v: any) => format(v.pickupDate, "hh a"),
+    // },
     {
       id: "date",
       label: "Date",
       width: "200px",
-      render: (v: any) => format(v.pickupDate, "dd/MM/YYY"),
+      render: (v: any) => (
+        <span className=" text-nowrap">
+          {" "}
+          {format(v.pickupDate, "dd MMMM YYY")}
+        </span>
+      ),
     },
     {
       id: "pickupDate",
@@ -72,12 +77,7 @@ export default function NewOrderList() {
       width: "200px",
       render: (v: any) => v.distance,
     },
-    {
-      id: "pickupDate",
-      label: "Distance (KM)",
-      width: "200px",
-      render: (v: any) => v.distance,
-    },
+
     {
       id: "totalPrice",
       label: "Total Price ($)",

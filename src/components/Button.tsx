@@ -5,11 +5,12 @@ export default function Button({
   className,
   onClick,
   loading,
+  type,
   disabled = false,
 }: any) {
   return (
     <button
-      type="button"
+      type={type ?? "submit"}
       className={twMerge(
         "h-12 bg-primary w-full opacity-90 rounded-[0.5rem] text-white text-xl  text-center flex items-center justify-center font-bold",
         className,
