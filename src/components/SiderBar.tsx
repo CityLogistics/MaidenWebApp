@@ -45,7 +45,7 @@ export default function SiderBar() {
   };
 
   return (
-    <div className="w-[6.1rem] h-svh bg-white flex flex-col justify-center py-6">
+    <div className="w-[3.5rem] md:w-[6.1rem] h-svh bg-white flex flex-col justify-center py-6">
       <img src={CityLogo} alt="City Logo" className="w-[6.0rem] h-[3.5rem]" />
       <div className="pt-6">
         {role == "SUPER_ADMIN" && (

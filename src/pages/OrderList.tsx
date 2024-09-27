@@ -156,10 +156,12 @@ export default function OrderList() {
       render: (item: any) => (
         <div className="flex justify-center">
           {/* {getStatusAction(item.status, item._id)} */}
-          <MoreHorizontal
-            style={{ cursor: "pointer" }}
-            onClick={() => setMoreOpen(item)}
-          />
+          {item.status !== "PENDING_PAYMENT" && (
+            <MoreHorizontal
+              style={{ cursor: "pointer" }}
+              onClick={() => setMoreOpen(item)}
+            />
+          )}
         </div>
       ),
     },

@@ -10,7 +10,7 @@ export default function DashBoard() {
   return (
     <Layout>
       <DashBoardSummary />
-      <div className="bg-[#F5F6FA] p-[1rem] sm:p-[2.5rem] w-full rounded-2xl flex  items-center ">
+      <div className="bg-[#F5F6FA] p-[1rem] sm:p-[2.5rem] w-full rounded-2xl flex  items-center mt-2 sm:mt-0 ">
         <div className="flex flex-col lg:flex-row w-full  lg:h-[36.25rem] overflow-x-clip">
           <div className=" flex w-full flex-col h-full ">
             <div className="w-full  mr-4 h-1/2 mb-2 ">

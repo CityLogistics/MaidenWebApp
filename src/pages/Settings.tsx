@@ -68,7 +68,7 @@ export default function Settings() {
   return (
     <Layout>
       <NavbarAlt />
-      <div className="p-[2.5rem]">
+      <div className=" p-[1rem] sm:p-[2.5rem]">
         <div className="flex justify-between items-center">
           <div className=" text-primary font-bold text-[2.5rem]">Settings</div>
           <div className="w-50">

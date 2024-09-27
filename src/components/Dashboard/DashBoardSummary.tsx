@@ -53,10 +53,10 @@ export default function DashBoardSummary() {
         </div>
 
         <div className="md:pl-[2.5rem] py-[0.9rem] w-full md:w-[45%] mb-12 md:mb-0">
-          <div className="flex w-full justify-between">
+          <div className="flex  w-full justify-between">
             <div
               className={twMerge(
-                " bg-[#FFFFFF] w-[47.5%]  rounded-l-[3rem] rounded-tr-[3rem] rounded-br-[1rem] p-[0.5rem] pr-6 flex items-center  overflow-clip",
+                " bg-[#FFFFFF] w-[47.5%]  rounded-l-[3rem] rounded-tr-[3rem] rounded-br-[1rem] p-[0.5rem] pr-6 flex flex-col sm:flex-row items-center   overflow-clip",
                 isPending && "animate-pulse"
               )}
             >
@@ -70,7 +70,7 @@ export default function DashBoardSummary() {
                     <ShoppingCart size="30" variant="Bold" />
                   </div>
                   <div className="text-black ml-4 flex-1 ">
-                    <div className="text-base font-semibold ml-1  ">
+                    <div className="text-sm sm:text-base text-nowrap font-semibold ml-1  ">
                       Total Orders
                     </div>
                     <div className="text-2xl font-semibold ml-1  ">
@@ -82,7 +82,7 @@ export default function DashBoardSummary() {
             </div>
             <div
               className={twMerge(
-                " bg-[#FFFFFF] w-[47.5%]  rounded-r-[3rem] rounded-tl-[3rem] rounded-bl-[1rem] p-[0.5rem] pr-6 flex items-center  overflow-clip",
+                " bg-[#FFFFFF] w-[47.5%]  rounded-r-[3rem] rounded-tl-[3rem] rounded-bl-[1rem] p-[0.5rem] pr-6 flex flex-col sm:flex-row items-center  overflow-clip",
                 isPending && "animate-pulse"
               )}
             >
@@ -96,7 +96,7 @@ export default function DashBoardSummary() {
                     <Profile2User size="30" variant="Bold" />
                   </div>
                   <div className="text-black ml-4 flex-1">
-                    <div className="text-base font-semibold ml-1  ">
+                    <div className="text-sm sm:text-base text-nowrap font-semibold ml-1  ">
                       Total Drivers
                     </div>
                     <div className="text-2xl font-semibold ml-1  ">
@@ -110,7 +110,7 @@ export default function DashBoardSummary() {
           <div className="flex w-full justify-between ">
             <div
               className={twMerge(
-                "bg-[#FFFFFF] w-[47.5%] rounded-l-[3rem] rounded-br-[3rem] rounded-tr-[1rem] p-[0.5rem] pr-6 flex items-center  overflow-clip mt-4",
+                "bg-[#FFFFFF] w-[47.5%] rounded-l-[3rem] rounded-br-[3rem] rounded-tr-[1rem] p-[0.5rem] pr-6 flex flex-col sm:flex-row items-center  overflow-clip mt-4",
                 isPending && "animate-pulse"
               )}
             >
@@ -124,7 +124,7 @@ export default function DashBoardSummary() {
                     <SmartCar size="30" variant="Bold" />
                   </div>
                   <div className="text-black ml-4 flex-1">
-                    <div className="text-base font-semibold ml-1 ">
+                    <div className="text-sm sm:text-base text-nowrap font-semibold ml-1 ">
                       Active Orders
                     </div>
                     <div className="text-2xl font-semibold ml-1  ">
@@ -136,7 +136,7 @@ export default function DashBoardSummary() {
             </div>
             <div
               className={twMerge(
-                "bg-[#FFFFFF] w-[47.5%]  rounded-r-[3rem] rounded-bl-[3rem] rounded-tl-[1rem] p-[0.5rem] pr-6 flex items-center mt-4 overflow-clip",
+                "bg-[#FFFFFF] w-[47.5%]  rounded-r-[3rem] rounded-bl-[3rem] rounded-tl-[1rem] p-[0.5rem] pr-6 flex flex-col sm:flex-row items-center mt-4 overflow-clip",
                 isPending && "animate-pulse"
               )}
             >
@@ -150,7 +150,7 @@ export default function DashBoardSummary() {
                     <BagTimer size="30" variant="Bold" />
                   </div>
                   <div className="text-black ml-4 flex-1 ">
-                    <div className="text-base font-semibold ml-1  ">
+                    <div className=" text-sm sm:text-base text-nowrap font-semibold ml-1  ">
                       Pending Orders
                     </div>
                     <div className="text-2xl font-semibold ml-1  ">
