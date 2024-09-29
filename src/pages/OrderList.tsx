@@ -11,12 +11,17 @@ import { useQuery } from "@tanstack/react-query";
 import { getOrders } from "@/apis/orders";
 import { format } from "date-fns";
 import { limit, orderStatus, orderTpes } from "@/lib/Constants";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { newOrdersRoute } from "@/router";
 import { useNavigate } from "@tanstack/react-router";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Search } from "lucide-react";
 import { useUserStore } from "@/store/user";
+import { exportToExcel } from "react-json-to-excel";
+
 import OrderDialogue from "@/components/OrderDialogue";
+import { toast } from "sonner";
+import { getVehicleLabel, parseError } from "@/lib/utils";
+import { ExportCurve } from "iconsax-react";
 
 export default function OrderList() {
   const role = useUserStore((state) => state.user.role);
@@ -173,6 +178,7 @@ export default function OrderList() {
     orderTypes: [],
     orderStatus: [],
     dates: [],
+    search: "",
   };
   const [query, setQuery] = useState(initialQuery);
 
@@ -194,6 +200,55 @@ export default function OrderList() {
 
   const navigate = useNavigate();
 
+  const [csvLoading, setCsvLoading] = useState(false);
+  const exportDataToCsv = async () => {
+    try {
+      setCsvLoading(true);
+      const { data } = await getOrders({ ...query, limit: total + 1, page: 0 });
+      setCsvLoading(false);
+      if (data) {
+        const csvDataToExport = data.data?.map((item: any) => ({
+          Order: item.orderNo,
+          "Customer’s Name": item.senderName,
+          "Customer’s Email": item.email,
+          "Recipient's Name": item.recipientName,
+          "Transaction Date": item.createdAt,
+          "Pickup Date":
+            item.pickupDate && format(item.pickupDate, "dd MMMM YYY"),
+          "Pickup Time": item.pickuptime,
+          "Distance (KM)": item.distance,
+          "Base Price ($)": item.basePrice / 100,
+          "Total Price ($)": item.totalPrice / 100,
+          "Assigned Driver": `${item?.driver?.firstName} ${item?.driver?.lastName}`,
+          "Vehicle Type": getVehicleLabel(item?.vehicleType),
+          Status: getStatusLabel(item?.status),
+          "Pickup Phone": item.pickupPhoneNumber,
+          "Dropoff Phone": item.dropOffPhoneNumber,
+          "Pickup Province": item.pickupAddress.province,
+          "Dropoff Province": item.dropOffAddress.province,
+          "Pickup Location": item.pickupAddress.pickupAddress,
+          "Dropoff Location": item.dropOffAddress.address,
+          "Transaction Reference": item.tranasctionReference,
+        }));
+        exportToExcel(csvDataToExport, "Orders");
+      } else toast.error("An error occured");
+    } catch (error) {
+      console.info({ error });
+      setCsvLoading(false);
+      toast.error(parseError(error));
+    }
+  };
+
+  const [searchText, setSearchText] = useState("");
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setQuery({ ...query, search: searchText });
+    }, 5000);
+
+    return () => clearTimeout(t);
+  }, [searchText]);
+
   return (
     <Layout>
       <NavbarAlt />
@@ -213,7 +268,7 @@ export default function OrderList() {
           )}
         </div>
 
-        <div className="flex h-[3.5rem] w-fit bg-white rounded-xl items-center child:border-r-[0.1px] child:h-full child:px-6 child:flex child:text-sm child:font-bold child:items-center child:text-black border border-[#D5D5D5] mt-8 max-w-full overflow-auto text-nowrap">
+        <div className="flex h-[3.5rem] w-fit bg-white rounded-xl items-center child:border-r-[0.1px] child:h-full child:px-6 child:flex child:text-sm child:font-bold child:items-center child:text-black border border-[#D5D5D5]  max-w-full overflow-auto text-nowrap">
           <div className="flex">
             <img src={filtericon} alt="filter icon" />
           </div>
@@ -251,6 +306,37 @@ export default function OrderList() {
               </span>
             </div>
           </div>
+        </div>
+        <div className="flex flex-col md:flex-row md:justify-between w-full items-end md:items-center mt-8  ">
+          <div className="relative md:max-w-[400px] w-full md:w-[95%]">
+            <div className="absolute h-full flex items-center px-2">
+              <Search className=" text-gray-400" />
+            </div>
+            <input
+              type={"text"}
+              className="block  w-full rounded-xl  h-12  bg-[#F1F4F9] border-0  pl-10 pr-20 text-black disabled:text-gray-400 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black text-base sm:text-sm sm:leading-6 base-input"
+              style={{ backgroundColor: "#F1F4F9" }}
+              placeholder="search"
+              onChange={(e) => setSearchText(e.target.value)}
+              onBlur={(e) => {
+                setSearchText(e.target.value);
+                setQuery({ ...query, search: e.target.value });
+              }}
+              value={searchText}
+            />
+          </div>
+          <Button
+            loading={csvLoading}
+            text={
+              <div className="flex items-center  ">
+                Export <ExportCurve size={15} className="ml-2" />{" "}
+              </div>
+            }
+            onClick={exportDataToCsv}
+            className={
+              "text-sm h-10 rounded-[0.25rem] text-nowrap w-[9.375rem] mt-4 md:mt-0"
+            }
+          />
         </div>
 
         <div className=" mt-8 pagination">

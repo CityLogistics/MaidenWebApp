@@ -106,8 +106,8 @@ function DriverCard({ data, refetch, last }: any) {
       )}
     >
       <div className=" ">
-        <div className="text-[#202224] font-bold  text-xs">
-          Mr {`${firstName} ${lastName}`}
+        <div className="text-[#202224] font-bold  text-xs capitalize">
+          {`${firstName} ${lastName}`}
         </div>
         <div className=" text-[#828282] text-[0.625rem]">
           {" "}

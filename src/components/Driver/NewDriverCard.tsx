@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import Button from "../Button";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import { parseError } from "@/lib/utils";
+import { getVehicleLabel, parseError } from "@/lib/utils";
 import { changeDriverStatus } from "@/apis/admin";
 import { useState } from "react";
 import { DriverStatus } from "@/lib/Constants";
@@ -65,11 +65,11 @@ export default function NewDriverCard({ data, refetch }: any) {
   return (
     <div className=" w-[100%] bg-white my-3 rounded-xl overflow-clip flex flex-col lg:flex-row">
       <div
-        className=" h-[12rem] w-[250px] mx-auto mt-6 lg:mt-0 lg:w-[20%] bg-slate-50  bg-cover rounded-xl "
+        className=" h-full w-[250px] mx-auto mt-6 lg:mt-0 lg:w-[20%] bg-slate-50  bg-cover rounded-xl "
         style={{ backgroundImage: `url(${image})` }}
       ></div>
       <div className="p-4 flex  justify-between  flex-1 py-6 ml-6 text-[#202224] ">
-        <div className="flex-1 justify-between font-bold">
+        <div className="flex-1 justify-between font-bold capitalize">
           <div className=" ">{`${firstName} ${lastName}`}</div>
           <div className=" opacity-60 font-normal mt-4">{email}</div>
           <div className="flex   opacity-60 text-sm mt-2">
@@ -88,7 +88,7 @@ export default function NewDriverCard({ data, refetch }: any) {
 
         <div className="flex-1 justify-between  text-[#202224] ">
           <div className=" capitalize font-bold">
-            {vehicleType?.toLowerCase()}
+            {getVehicleLabel(vehicleType)}
           </div>
           <div className="opacity-60   mt-4 text-sm ">{phoneNumber}</div>
           <div className="opacity-60   mt-2 text-sm ">

@@ -20,7 +20,7 @@ export default function AddUser() {
     lastName: yup.string().required("this field is required"),
     email: yup.string().email().required("this field is required"),
     phoneNumber: yup.string().required("this field is required"),
-    dateOfBirth: yup.string().required("this field is required"),
+    // dateOfBirth: yup.string().required("this field is required"),
     gender: yup.string().required("this field is required"),
     province: yup.string().required("this field is required"),
     city: yup.string().required("this field is required"),
@@ -37,7 +37,7 @@ export default function AddUser() {
     setFieldValue,
   } = useFormik({
     initialValues: {
-      image: "dd",
+      image: "",
       firstName: "",
       lastName: "",
       email: "",

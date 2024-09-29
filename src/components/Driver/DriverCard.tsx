@@ -20,7 +20,7 @@ export default function DriverCard({ data }: any) {
       ></div>
       <div className="p-4 flex flex-col justify-between  ">
         <div className="flex justify-between font-bold">
-          <div className=" text-[#202224]">{`${firstName} ${lastName}`}</div>
+          <div className=" text-[#202224] capitalize">{`${firstName} ${lastName}`}</div>
           <div className=" text-[#2F80ED] capitalize">
             {carTypes.find((v: any) => v.value == vehicleType)?.label}
           </div>

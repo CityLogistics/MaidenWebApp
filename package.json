@@ -28,6 +28,7 @@
     "react-cloudinary-upload-widget": "^2.0.0",
     "react-day-picker": "8.10.1",
     "react-dom": "^18.3.1",
+    "react-json-to-excel": "^1.0.8",
     "react-multi-date-picker": "^4.5.2",
     "react-paginate": "^8.2.0",
     "recharts": "^2.12.7",
