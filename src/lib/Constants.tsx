@@ -8,8 +8,12 @@ export const routes = {
   SETTINGS: "/settings",
   PASSWORD: "/settings/password",
   TRANSACTIONS: "/transactions",
+
   ADD_USER: "/users/add-user",
   USERS: "/users",
+
+  CITIES: "/cities",
+  ADD_CITY: "/cities/add-city",
 };
 
 export const orderTpes = [
@@ -84,6 +88,63 @@ export enum ROLE {
   SUPER_ADMIN = "SUPER_ADMIN",
   ADMIN = "ADMIN",
 }
+
+export const regions = [
+  {
+    label: "Alberta",
+    value: "ALBERTA",
+  },
+  {
+    label: "British Columbia",
+    value: "BRITISH_COLUMBIA",
+  },
+  {
+    label: "Manitoba",
+    value: "MANITOBA",
+  },
+  {
+    label: "Newfound and Labrador",
+    value: "NEWFOUNDLAND_AND_LABRADOR",
+  },
+  {
+    label: "new Brunswick",
+    value: "NEW_BRUNSWICK",
+  },
+  {
+    label: "Northwest Territories",
+    value: "NORTHWEST_TERRITORIES",
+  },
+
+  {
+    label: "Nova Scotia",
+    value: "NOVA_SCOTIA",
+  },
+
+  {
+    label: "Nunavut",
+    value: "NUNAVUT",
+  },
+  {
+    label: "Ontario",
+    value: "ONTARIO",
+  },
+  {
+    label: "Prince Edward Island",
+    value: "PRINCE_EDWARD_ISLAND",
+  },
+  {
+    label: "Qubec",
+    value: "QUEBEC",
+  },
+  {
+    label: "Saskatchewan",
+    value: "SASKATCHEWAN",
+  },
+  {
+    label: "Yukon",
+    value: "YUKON",
+  },
+];
 
 const { ORDERS, NEW_ORDERS, SETTINGS, DRIVERS, PASSWORD } = routes;
 export const allowedPaths = {

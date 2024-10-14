@@ -15,3 +15,7 @@ export const deleteUser = async (id: any) => {
 export const updateUser = async (data: any) => {
   return await instance.patch("users", data);
 };
+
+export const updateUserCities = async ({ id, data }: any) => {
+  return await instance.patch(`users/${id}/update-cities`, data);
+};

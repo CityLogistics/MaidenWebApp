@@ -6,15 +6,15 @@ import Layout from "@/components/Layout";
 import NavbarAlt from "@/components/NavbarAlt";
 import SelectField from "@/components/SelectField";
 import TextField from "@/components/TextField";
-import { GENDER, ROLE } from "@/lib/Constants";
+import { GENDER, regions, ROLE } from "@/lib/Constants";
 import { formatPhoneNumber, parseError } from "@/lib/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import { toast } from "sonner";
 import * as yup from "yup";
 import MultiSelectField from "@/components/MultiSelectField";
-import { getCities } from "@/apis/cities";
+import { getCitiesByProvince } from "@/apis/cities";
 
 export default function AddUser() {
   const validationSchema = yup.object().shape({
@@ -71,7 +71,7 @@ export default function AddUser() {
     queryFn: () =>
       values.province == ""
         ? null
-        : getCities({
+        : getCitiesByProvince({
             province: values.province,
             page: 0,
             limit: 50,
@@ -79,8 +79,6 @@ export default function AddUser() {
   });
 
   const cities = citiesData?.data.data ?? [];
-
-  console.info({ cities });
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: addUser,
@@ -104,63 +102,6 @@ export default function AddUser() {
     },
   ];
 
-  const regions = [
-    {
-      label: "Alberta",
-      value: "ALBERTA",
-    },
-    {
-      label: "British Columbia",
-      value: "BRITISH_COLUMBIA",
-    },
-    {
-      label: "Manitoba",
-      value: "MANITOBA",
-    },
-    {
-      label: "Newfound and Labrador",
-      value: "NEWFOUNDLAND_AND_LABRADOR",
-    },
-    {
-      label: "new Brunswick",
-      value: "NEW_BRUNSWICK",
-    },
-    {
-      label: "Northwest Territories",
-      value: "NORTHWEST_TERRITORIES",
-    },
-
-    {
-      label: "Nova Scotia",
-      value: "NOVA_SCOTIA",
-    },
-
-    {
-      label: "Nunavut",
-      value: "NUNAVUT",
-    },
-    {
-      label: "Ontario",
-      value: "ONTARIO",
-    },
-    {
-      label: "Prince Edward Island",
-      value: "PRINCE_EDWARD_ISLAND",
-    },
-    {
-      label: "Qubec",
-      value: "QUEBEC",
-    },
-    {
-      label: "Saskatchewan",
-      value: "SASKATCHEWAN",
-    },
-    {
-      label: "Yukon",
-      value: "YUKON",
-    },
-  ];
-
   const roles = [
     {
       label: "Super Admin",
@@ -172,12 +113,7 @@ export default function AddUser() {
     },
   ];
 
-  const options2 = [
-    { name: "Option 1️⃣", id: 1 },
-    { name: "Option 2️⃣", id: 2 },
-    { name: "Optio 2️⃣", id: 3 },
-    { name: "Opto 2️⃣", id: 4 },
-  ];
+  const options2 = cities.map((v: any) => ({ name: v.name, id: v._id }));
 
   const handleProvinceChange = (province: string) => {
     setFieldValue("cities", []), setFieldValue("province", province);
@@ -284,7 +220,7 @@ export default function AddUser() {
                 label="Province"
                 id="province"
                 name="province"
-                onChange={(e) => handleProvinceChange(e.target.value)}
+                onChange={(e: any) => handleProvinceChange(e.target.value)}
                 value={values.province}
                 error={touched.province && Boolean(errors.province)}
                 helperText={touched.province && errors.province}

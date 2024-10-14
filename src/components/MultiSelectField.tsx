@@ -57,7 +57,7 @@ export default function MultiSelectField({
         onRemove={handleChange} // Function will trigger on remove event
         keepSearchTerm
         showCheckbox
-        loading
+        loading={loading}
         displayValue="name" // Property name to display in the dropdown options
         style={{
           multiselectContainer: {

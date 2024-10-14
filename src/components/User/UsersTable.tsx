@@ -20,6 +20,9 @@ import ConfirmDialouge from "../ConfirmDialouge";
 import { useUserStore } from "@/store/user";
 import { Trash } from "iconsax-react";
 import DeadState from "../DeadState";
+import CustomMenu from "../CustomMenu";
+import EditUserCities from "./EditUserCities";
+import { Pen } from "lucide-react";
 export default function UsersTable({ data = [], loading }: any) {
   const role = useUserStore((state) => state.user.role);
 
@@ -85,7 +88,12 @@ export default function UsersTable({ data = [], loading }: any) {
       label: "Action",
       width: "200px",
       className: "text-center",
-      render: (v: any) => <DeleteUser id={v._id} />,
+      render: (v: any) => (
+        <CustomMenu className="min-h-fit">
+          <DeleteUser id={v._id} />
+          {v.role == ROLE.ADMIN && <EditUserCity user={v} />}
+        </CustomMenu>
+      ),
     });
 
   return (
@@ -168,7 +176,9 @@ const DeleteUser = ({ id }: any) => {
             </>
           )
         }
-        className={"text-sm h-7 rounded-[0.25rem] text-nowrap w-40 bg-red-600 "}
+        className={
+          "text-sm h-9 rounded-[0.25rem] text-nowrap w-full bg-red-600 "
+        }
         onClick={() => setOpen(true)}
       />
       {open && (
@@ -179,6 +189,39 @@ const DeleteUser = ({ id }: any) => {
           setOpen={setOpen}
         />
       )}
+    </>
+  );
+};
+
+const EditUserCity = ({ user }: any) => {
+  const { id } = user;
+  const [open, setOpen] = useState(false);
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: () => deleteUser(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userlists"] });
+      toast.success("User deleted");
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
+    },
+  });
+
+  return (
+    <>
+      <Button
+        loading={isPending}
+        text={
+          !isPending && (
+            <>
+              Edit <Pen size={20} />
+            </>
+          )
+        }
+        className="text-sm text-[#F68716] bg-white hover:border-[#F68716] rounded-[0.2rem] w-full h-9 mt-2"
+        onClick={() => setOpen(true)}
+      />
+      {open && <EditUserCities user={user} onCancel={() => setOpen(false)} />}
     </>
   );
 };
