@@ -5,7 +5,7 @@ import {
   DialogContent,
   //   DialogTrigger,
 } from "../ui/dialog";
-import { parseError } from "@/lib/utils";
+import { parseError, queryClient } from "@/lib/utils";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { useIsMutating, useMutation, useQuery } from "@tanstack/react-query";
@@ -24,8 +24,9 @@ export default function EditUserCities({ setOpen, onCancel, user = {} }: any) {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: updateUserCities,
     onSuccess: (_) => {
-      resetForm();
+      queryClient.invalidateQueries({ queryKey: ["userlists"] });
       toast.success("Cities saved successfully");
+      onCancel();
     },
     onError: (e: AxiosError) => {
       toast.error(parseError(e));

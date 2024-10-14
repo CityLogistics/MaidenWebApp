@@ -74,6 +74,10 @@ export default function MultiSelectField({
             paddingRight: "5rem",
             // backgroundColor: "#F1F4F9",
           },
+          option: {
+            // To change css for dropdown options
+            color: "#000",
+          },
         }}
       />
       {helperText && (

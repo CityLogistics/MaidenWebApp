@@ -5,8 +5,8 @@ import NavbarAlt from "@/components/NavbarAlt";
 import SelectField from "@/components/SelectField";
 import TextField from "@/components/TextField";
 import { regions } from "@/lib/Constants";
-import { parseError } from "@/lib/utils";
-import { useMutation } from "@tanstack/react-query";
+import { getCitiesInProvince, parseError } from "@/lib/utils";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useFormik } from "formik";
 import { toast } from "sonner";
@@ -36,6 +36,16 @@ export default function AddCity() {
       mutateAsync(data);
     },
   });
+
+  const { isPending: citiesPending, data: citiesData } = useQuery({
+    queryKey: ["cities", values.province],
+    queryFn: () =>
+      values.province == "" ? null : getCitiesInProvince(values.province),
+  });
+
+  const cities = citiesData ?? [];
+
+  console.info({ cities });
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: addCity,
