@@ -8,7 +8,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { limit, regions } from "@/lib/Constants";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { addCitiesRoute, addUserRoute } from "@/router";
+import { addCitiesRoute } from "@/router";
 import { useUserStore } from "@/store/user";
 import { getCities, updateCityStatus } from "@/apis/cities";
 import { format } from "date-fns";

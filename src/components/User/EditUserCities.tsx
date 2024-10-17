@@ -41,16 +41,15 @@ export default function EditUserCities({ setOpen, onCancel, user = {} }: any) {
       .required("this field is required"),
   });
 
-  const { handleSubmit, values, errors, touched, resetForm, setFieldValue } =
-    useFormik({
-      initialValues: {
-        cities,
-      },
-      validationSchema,
-      onSubmit: (data) => {
-        mutateAsync({ data, id: _id });
-      },
-    });
+  const { handleSubmit, values, errors, touched, setFieldValue } = useFormik({
+    initialValues: {
+      cities,
+    },
+    validationSchema,
+    onSubmit: (data) => {
+      mutateAsync({ data, id: _id });
+    },
+  });
 
   const { isPending: citiesPending, data: citiesData } = useQuery({
     queryKey: ["cities", province],

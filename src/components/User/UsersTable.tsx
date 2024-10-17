@@ -194,29 +194,15 @@ const DeleteUser = ({ id }: any) => {
 };
 
 const EditUserCity = ({ user }: any) => {
-  const { id } = user;
   const [open, setOpen] = useState(false);
-  const { isPending, mutateAsync } = useMutation({
-    mutationFn: () => deleteUser(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userlists"] });
-      toast.success("User deleted");
-    },
-    onError: (e: AxiosError) => {
-      toast.error(parseError(e));
-    },
-  });
 
   return (
     <>
       <Button
-        loading={isPending}
         text={
-          !isPending && (
-            <>
-              Edit <Pen size={20} />
-            </>
-          )
+          <>
+            Edit <Pen size={20} />
+          </>
         }
         className="text-sm text-[#F68716] bg-white hover:border-[#F68716] rounded-[0.2rem] w-full h-9 mt-2"
         onClick={() => setOpen(true)}

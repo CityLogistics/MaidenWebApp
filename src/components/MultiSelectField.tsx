@@ -36,7 +36,7 @@ export default function MultiSelectField({
 
   const selectedValues = options.filter((v) => valuesRef[v.id]);
 
-  const handleChange = (selectedList: any, selectedItem: any) => {
+  const handleChange = (selectedList: any, _: any) => {
     onChange(selectedList.map((v: any) => v.id));
   };
 

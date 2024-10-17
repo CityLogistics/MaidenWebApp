@@ -152,7 +152,7 @@ export const allowedPaths = {
   DRIVER: [ORDERS, SETTINGS, PASSWORD],
 };
 
-const allProvinceCities = {
+export const allProvinceCities = {
   NOVA_SCOTIA: [
     "New Glasgow",
     "Chester",
