@@ -18,7 +18,7 @@ import Button from "@/components/Button";
 import ConfirmDialouge from "@/components/ConfirmDialouge";
 
 export default function NewOrderList() {
-  const [open, setOpen] = useState();
+  const [open, setOpen] = useState<any>();
   const columns = [
     {
       id: "orderNo",
@@ -92,7 +92,7 @@ export default function NewOrderList() {
       render: (item: any) => (
         <div className=" flex flex-col items-center">
           <div
-            onClick={() => setOpen(item._id)}
+            onClick={() => setOpen(item)}
             className="text-[#358C9D] font-semibold text-sm flex items-center bg-white cursor-pointer text-nowrap"
           >
             Assign to Driver
@@ -185,9 +185,10 @@ export default function NewOrderList() {
       {open && (
         <AsignToDriver
           open={open}
-          orderId={open}
+          orderId={open._id}
           setOpen={setOpen}
           refetch={refetch}
+          orderCityId={open.assignedCityId}
         />
       )}
     </Layout>

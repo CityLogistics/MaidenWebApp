@@ -18,18 +18,20 @@ import SelectField2 from "../SelectField2";
 
 export default function AsignToDriver({
   orderId,
+  orderCityId,
   open,
   setOpen,
   refetch,
 }: any) {
   const [selectedDriver, setSelectedDriver] = useState();
   const { isPending, data } = useQuery({
-    queryKey: ["newDrivers"],
+    queryKey: ["driverList"],
     queryFn: () =>
       getDrivers({
         status: "ACCEPTED",
         page: 0,
         limit: 100,
+        orderCityId,
       }),
   });
 

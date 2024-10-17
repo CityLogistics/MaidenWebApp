@@ -3,6 +3,9 @@ import { type ClassValue, clsx } from "clsx";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { carTypes } from "./Constants";
+import axios from "axios";
+
+const apiKey = import.meta.env.VITE_GOOGLE_MAPS_ACCESS_KEY;
 
 declare const window: any;
 
@@ -175,3 +178,46 @@ export const useCloudinary = (setFile: any) => {
 
 export const getVehicleLabel = (vehicleType: any) =>
   carTypes.find((v: any) => v.value == vehicleType)?.label;
+
+export async function getCitiesInProvince(province: string) {
+  const query = `cities in ${province}`;
+  let url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&key=${apiKey}`;
+
+  const allCities = [];
+
+  try {
+    let moreResults = true;
+    while (moreResults) {
+      const response = await axios.get(url);
+      const data = await response.data;
+
+      if (data.status === "OK") {
+        const cities = data.results.map((place: any) => place.name);
+        allCities.push(...cities);
+
+        // Check for next page
+        if (data.next_page_token) {
+          // Wait a short time before requesting the next page
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          url = `https://maps.googleapis.com/maps/api/place/textsearch/json?pagetoken=${data.next_page_token}&key=${apiKey}`;
+        } else {
+          moreResults = false; // No more results
+        }
+      } else {
+        console.error("Error fetching data:", data.status);
+        moreResults = false; // Stop on error
+      }
+    }
+
+    return allCities;
+  } catch (error) {
+    console.error("Error:", error);
+    return [];
+  }
+}
+
+// Example usage
+const province = "Alberta"; // Specify the province
+getCitiesInProvince(province).then((cities) => {
+  console.log("Cities in " + province + ":", cities);
+});

@@ -6,13 +6,15 @@ import Layout from "@/components/Layout";
 import NavbarAlt from "@/components/NavbarAlt";
 import SelectField from "@/components/SelectField";
 import TextField from "@/components/TextField";
-import { GENDER, ROLE } from "@/lib/Constants";
+import { GENDER, regions, ROLE } from "@/lib/Constants";
 import { formatPhoneNumber, parseError } from "@/lib/utils";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useFormik } from "formik";
 import { toast } from "sonner";
 import * as yup from "yup";
+import MultiSelectField from "@/components/MultiSelectField";
+import { getCitiesByProvince } from "@/apis/cities";
 
 export default function AddUser() {
   const validationSchema = yup.object().shape({
@@ -23,7 +25,11 @@ export default function AddUser() {
     // dateOfBirth: yup.string().required("this field is required"),
     gender: yup.string().required("this field is required"),
     province: yup.string().required("this field is required"),
-    city: yup.string().required("this field is required"),
+    cities: yup
+      .array()
+      .of(yup.string().required("this field is required"))
+      .min(1, "this field is required")
+      .required("this field is required"),
     role: yup.string().required("this field is required"),
   });
 
@@ -46,7 +52,7 @@ export default function AddUser() {
       gender: "",
       password: "",
       province: "",
-      city: "",
+      cities: [],
       role: "",
     },
     validationSchema,
@@ -59,6 +65,20 @@ export default function AddUser() {
       });
     },
   });
+
+  const { isPending: citiesPending, data: citiesData } = useQuery({
+    queryKey: ["cities", values.province],
+    queryFn: () =>
+      values.province == ""
+        ? null
+        : getCitiesByProvince({
+            province: values.province,
+            page: 0,
+            limit: 50,
+          }),
+  });
+
+  const cities = citiesData?.data.data ?? [];
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: addUser,
@@ -82,63 +102,6 @@ export default function AddUser() {
     },
   ];
 
-  const regions = [
-    {
-      label: "Alberta",
-      value: "ALBERTA",
-    },
-    {
-      label: "British Columbia",
-      value: "BRITISH_COLUMBIA",
-    },
-    {
-      label: "Manitoba",
-      value: "MANITOBA",
-    },
-    {
-      label: "Newfound and Labrador",
-      value: "NEWFOUNDLAND_AND_LABRADOR",
-    },
-    {
-      label: "new Brunswick",
-      value: "NEW_BRUNSWICK",
-    },
-    {
-      label: "Northwest Territories",
-      value: "NORTHWEST_TERRITORIES",
-    },
-
-    {
-      label: "Nova Scotia",
-      value: "NOVA_SCOTIA",
-    },
-
-    {
-      label: "Nunavut",
-      value: "NUNAVUT",
-    },
-    {
-      label: "Ontario",
-      value: "ONTARIO",
-    },
-    {
-      label: "Prince Edward Island",
-      value: "PRINCE_EDWARD_ISLAND",
-    },
-    {
-      label: "Qubec",
-      value: "QUEBEC",
-    },
-    {
-      label: "Saskatchewan",
-      value: "SASKATCHEWAN",
-    },
-    {
-      label: "Yukon",
-      value: "YUKON",
-    },
-  ];
-
   const roles = [
     {
       label: "Super Admin",
@@ -149,6 +112,12 @@ export default function AddUser() {
       value: ROLE.ADMIN,
     },
   ];
+
+  const options2 = cities.map((v: any) => ({ name: v.name, id: v._id }));
+
+  const handleProvinceChange = (province: string) => {
+    setFieldValue("cities", []), setFieldValue("province", province);
+  };
 
   return (
     <Layout>
@@ -251,7 +220,7 @@ export default function AddUser() {
                 label="Province"
                 id="province"
                 name="province"
-                onChange={handleChange}
+                onChange={(e: any) => handleProvinceChange(e.target.value)}
                 value={values.province}
                 error={touched.province && Boolean(errors.province)}
                 helperText={touched.province && errors.province}
@@ -259,14 +228,14 @@ export default function AddUser() {
               />
             </div>
             <div className="-mt-9">
-              <TextField
-                label="City"
-                id="city"
-                name="city"
-                onChange={handleChange}
-                value={values.city}
-                error={touched.city && Boolean(errors.city)}
-                helperText={touched.city && errors.city}
+              <MultiSelectField
+                label="Cities"
+                options={options2}
+                onChange={(v: string) => setFieldValue("cities", v)}
+                values={values.cities}
+                error={touched.cities && Boolean(errors.cities)}
+                helperText={touched.cities && errors.cities}
+                loading={citiesPending}
               />
             </div>
           </div>

@@ -55,7 +55,7 @@ export default function NewOrders() {
 }
 
 function OrderCard({ data, last, refetch }: any) {
-  const { _id, pickupAddress, updatedAt } = data;
+  const { _id, pickupAddress, updatedAt, assignedCityId } = data;
   const [open, setOpen] = useState(false);
 
   return (
@@ -68,6 +68,7 @@ function OrderCard({ data, last, refetch }: any) {
             setOpen={setOpen}
             orderId={_id}
             refetch={refetch}
+            orderCityId={assignedCityId}
           />
         )}
         <div

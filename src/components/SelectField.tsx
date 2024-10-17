@@ -45,9 +45,9 @@ export default function SelectField({
         onChange={onChange}
         value={value}
       >
-        <option selected disabled>
+        <option selected hidden>
           {" "}
-          Select Driver
+          Select
         </option>
         {options.map((v) => (
           <option key={v.value} value={v.value}>
