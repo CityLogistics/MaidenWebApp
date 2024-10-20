@@ -1,10 +1,11 @@
 import { addCity } from "@/apis/cities";
+import Autocomplete from "@/components/Autocomplete";
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
 import NavbarAlt from "@/components/NavbarAlt";
 import SelectField from "@/components/SelectField";
-import TextField from "@/components/TextField";
-import { regions } from "@/lib/Constants";
+// import TextField from "@/components/TextField";
+import { allProvinceCities, regions } from "@/lib/Constants";
 import { parseError } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -13,14 +14,21 @@ import { toast } from "sonner";
 import * as yup from "yup";
 
 export default function AddCity() {
+  const allCities: string[] = [];
+
+  Object.values(allProvinceCities).forEach((v) => allCities.push(...v));
+
   const validationSchema = yup.object().shape({
     province: yup.string().required("this field is required"),
-    name: yup.string().required("this field is required"),
+    name: yup
+      .string()
+      .required("this field is required")
+      .oneOf(allCities, "invalid value"),
   });
 
   const {
     handleSubmit,
-    handleChange,
+    // handleChange,
     values,
     errors,
     touched,
@@ -60,6 +68,15 @@ export default function AddCity() {
     setFieldValue("name", ""), setFieldValue("province", province);
   };
 
+  const items = (
+    allProvinceCities[values.province as keyof typeof allProvinceCities] ?? []
+  ).map((v) => ({
+    id: v,
+    name: v,
+  }));
+
+  console.info({ name: values.name });
+
   return (
     <Layout>
       <NavbarAlt />
@@ -84,7 +101,7 @@ export default function AddCity() {
                 />
               </div>
               <div className="">
-                <TextField
+                {/* <TextField
                   label="City Name"
                   id="name"
                   name="name"
@@ -92,7 +109,20 @@ export default function AddCity() {
                   value={values.name}
                   error={touched.name && Boolean(errors.name)}
                   helperText={touched.name && errors.name}
+                /> */}
+
+                <Autocomplete
+                  label="City Name"
+                  id="name"
+                  name="name"
+                  onChange={(v: string) => setFieldValue("name", v)}
+                  value={values.name}
+                  error={touched.name && Boolean(errors.name)}
+                  helperText={touched.name && errors.name}
+                  items={items}
                 />
+
+                {/* <Autocomplete /> */}
               </div>
             </div>
             <Button
