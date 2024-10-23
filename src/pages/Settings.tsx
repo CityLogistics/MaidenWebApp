@@ -3,7 +3,6 @@ import Button from "@/components/Button";
 import DateField from "@/components/DateField";
 import ImageComponent from "@/components/ImageComponent";
 import Layout from "@/components/Layout";
-import MultiSelectField from "@/components/MultiSelectField";
 import NavbarAlt from "@/components/NavbarAlt";
 import SelectField from "@/components/SelectField";
 import TextField from "@/components/TextField";

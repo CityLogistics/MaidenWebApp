@@ -76,6 +76,30 @@ export default function DriversTable({ data = [], loading }: any) {
       ),
     },
     {
+      id: "date",
+      label: "Provinces",
+      width: "200px",
+      render: (v: any) => (
+        <div className=" capitalize ">
+          {v.provinces.map((v: any, i: any) => (
+            <div key={i}> {v}</div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      id: "date",
+      label: "Cities",
+      width: "200px",
+      render: (v: any) => (
+        <div className=" capitalize ">
+          {v.cities.map((v: any, i: any) => (
+            <div key={i}> {v.name}</div>
+          ))}
+        </div>
+      ),
+    },
+    {
       id: "",
       label: "Car Type",
       width: "200px",
