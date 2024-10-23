@@ -18,7 +18,7 @@ import { parseError, queryClient } from "@/lib/utils";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 import ConfirmDialouge from "@/components/ConfirmDialouge";
-import { DeleteIcon, Trash2Icon } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
 
 export default function CityList() {
   const role = useUserStore((state) => state.user.role);
