@@ -70,10 +70,22 @@ export default function UsersTable({ data = [], loading }: any) {
       label: "Province",
       width: "200px",
       className: "text-center",
+      render: (v: any) => (
+        <span className=" whitespace-nowrap">{`${v.province?.replace("_", " ")}`}</span>
+      ),
+    },
+    {
+      id: "province",
+      label: "Cities",
+      width: "200px",
+      className: "text-center",
+      render: (v: any) => (
+        <div className="w-[250px]">{`${v.cities?.map((v: any) => v.name).join(" / ")}`}</div>
+      ),
     },
     {
       id: "role",
-      label: "Province",
+      label: "Role",
       width: "200px",
       className: "text-center",
       render: (v: any) => (

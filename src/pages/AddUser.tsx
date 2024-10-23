@@ -15,14 +15,23 @@ import { toast } from "sonner";
 import * as yup from "yup";
 import MultiSelectField from "@/components/MultiSelectField";
 import { getCitiesByProvince } from "@/apis/cities";
+import PhoneField from "@/components/PhoneField";
 
 export default function AddUser() {
   const validationSchema = yup.object().shape({
     firstName: yup.string().required("this field is required"),
     lastName: yup.string().required("this field is required"),
     email: yup.string().email().required("this field is required"),
-    phoneNumber: yup.string().required("this field is required"),
-    // dateOfBirth: yup.string().required("this field is required"),
+    phoneNumber: yup
+      .string()
+      .matches(/^[0-9]+$/, "invalid phone number") // Ensure it's digits only
+      .length(10, "invalid phone number")
+      .required("this field is required"),
+
+    dateOfBirth: yup
+      .date()
+      .max(new Date(), "Invalid date")
+      .typeError("Invalid date format"),
     gender: yup.string().required("this field is required"),
     province: yup.string().required("this field is required"),
     cities: yup
@@ -169,7 +178,7 @@ export default function AddUser() {
               />
             </div>
             <div className="-mt-9">
-              <TextField
+              <PhoneField
                 label="Phone Number"
                 id="phoneNumber"
                 name="phoneNumber"

@@ -49,7 +49,7 @@ export default function Login() {
     onSubmit: (data) => {
       console.info({ data });
 
-      mutateAsync(data);
+      mutateAsync({ ...data, email: data.email.toLowerCase() });
     },
   });
 

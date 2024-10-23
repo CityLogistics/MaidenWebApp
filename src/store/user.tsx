@@ -9,6 +9,8 @@ const user = {
   phoneNumber: "",
   dateOfBirth: "",
   gender: "",
+  cities: [],
+  province: "",
 };
 
 type User = typeof user;

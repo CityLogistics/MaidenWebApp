@@ -92,6 +92,7 @@ export default function CityList() {
 
   const handleParamChange = (field: any, val: any) => {
     if (field == "provinces") setQuery((v) => ({ ...v, provinces: val }));
+    if (field == "page") setQuery((v) => ({ ...v, page: val }));
   };
 
   const navigate = useNavigate();

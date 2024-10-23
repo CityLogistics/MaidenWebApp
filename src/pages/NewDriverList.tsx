@@ -14,7 +14,7 @@ import { NewDriverCardLoading } from "@/components/Driver/NewDriverCardLoading";
 export default function NewDriverList() {
   const limit = 3;
   const initialQuery = {
-    status: "PENDING",
+    status: ["PENDING"],
     page: 0,
     limit,
     carTypes: [],

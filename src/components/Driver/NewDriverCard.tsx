@@ -19,7 +19,8 @@ export default function NewDriverCard({ data, refetch }: any) {
     availabiltyTime,
     image,
     hasValidVehicleInsurance,
-
+    provinces,
+    cities,
     _id,
   } = data;
 
@@ -91,10 +92,20 @@ export default function NewDriverCard({ data, refetch }: any) {
             {getVehicleLabel(vehicleType)}
           </div>
           <div className="opacity-60   mt-4 text-sm ">{phoneNumber}</div>
-          <div className="opacity-60   mt-2 text-sm ">
-            Preferred Zone: West Side
-          </div>
           <div className="opacity-60   mt-2 text-sm ">{`Valid SGI Vehicle Insurance: ${hasValidVehicleInsurance ? "Yes" : "No"}`}</div>
+          <div className="flex opacity-60 text-sm mt-2">
+            <div className=" font-semibold mr-1 ">Provinces: </div>
+            <div className=" font-normal capitalize ">
+              {provinces.map((v: any) => v.toLowerCase()).join(" / ")}
+            </div>
+          </div>
+
+          <div className="flex opacity-60 text-sm mt-2">
+            <div className=" font-semibold mr-1 ">Cities: </div>
+            <div className=" font-normal capitalize ">
+              {cities.map((v: any) => v.name.toLowerCase()).join(" / ")}
+            </div>
+          </div>
         </div>
       </div>
       <div className="p-6 ">
