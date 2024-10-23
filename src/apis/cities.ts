@@ -20,6 +20,6 @@ export const updateCityStatus = async ({ id, data }: any) => {
   return await instance.patch(`cities/${id}/update-status`, data);
 };
 
-export const rejectOrder = async ({ id }: any) => {
-  return await instance.post(`orders/reject/${id}`);
+export const deleteCity = async ({ id }: any) => {
+  return await instance.delete(`cities/${id}`);
 };
