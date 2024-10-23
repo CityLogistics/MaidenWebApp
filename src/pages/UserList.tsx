@@ -37,6 +37,7 @@ export default function UserList() {
 
   const handleParamChange = (field: any, val: any) => {
     if (field == "roles") setQuery((v) => ({ ...v, roles: val }));
+    if (field == "page") setQuery((v) => ({ ...v, page: val }));
   };
 
   const navigate = useNavigate();

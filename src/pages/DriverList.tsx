@@ -27,7 +27,7 @@ export default function DriverList() {
     carTypes: [],
     availabiltys: [],
     days: [],
-    status: "ACCEPTED",
+    status: ["ACCEPTED", "DECLINED"],
   };
   const [query, setQuery] = useState(initialQuery);
 

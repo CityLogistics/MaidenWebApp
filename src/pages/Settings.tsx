@@ -3,10 +3,11 @@ import Button from "@/components/Button";
 import DateField from "@/components/DateField";
 import ImageComponent from "@/components/ImageComponent";
 import Layout from "@/components/Layout";
+import MultiSelectField from "@/components/MultiSelectField";
 import NavbarAlt from "@/components/NavbarAlt";
 import SelectField from "@/components/SelectField";
 import TextField from "@/components/TextField";
-import { GENDER } from "@/lib/Constants";
+import { GENDER, regions, ROLE } from "@/lib/Constants";
 import { parseError } from "@/lib/utils";
 import { passwordRoute } from "@/router";
 import { useUserStore } from "@/store/user";
@@ -21,6 +22,7 @@ export default function Settings() {
   const { user: initialValues, updateUser: updateUserData } = useUserStore(
     (state) => state
   );
+  const role = useUserStore((state) => state.user.role);
 
   const navigate = useNavigate();
 
@@ -64,6 +66,8 @@ export default function Settings() {
       value: GENDER.FEMALE,
     },
   ];
+
+  console.info({ e: values.cities });
 
   return (
     <Layout>
@@ -157,6 +161,34 @@ export default function Settings() {
                 options={options}
               />
             </div>
+            {role != ROLE.SUPER_ADMIN && (
+              <>
+                <div className="-mt-9">
+                  <SelectField
+                    label="Province"
+                    id="province"
+                    name="province"
+                    // onChange={(e: any) => handleProvinceChange(e.target.value)}
+                    value={values.province}
+                    options={regions}
+                    disabled
+                  />
+                </div>
+
+                <div className="-mt-1">
+                  <div className="opacity-80 text-[#202224] text-lg font-semibold font-['Nunito Sans'] flex justify-between">
+                    Cities
+                  </div>
+                  <div className="flex flex-wrap w-full bg-[#F1F4F9] mt-2 min-h-12 rounded-md ring-1 ring-inset ring-gray-300 p-1">
+                    {values.cities.map((v: any) => (
+                      <div className="px-2 py-0.5 rounded-xl bg-blue-400 text-white h-fit m-1">
+                        {v.name}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <div className="w-8/12 sm:w-[25rem]  mt-[4.875rem] mx-auto">
             <Button
