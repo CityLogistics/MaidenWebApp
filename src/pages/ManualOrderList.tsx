@@ -12,8 +12,7 @@ import { getManualOrders } from "@/apis/orders";
 import { format } from "date-fns";
 import { limit, orderStatus, orderTpes } from "@/lib/Constants";
 import { useEffect, useState } from "react";
-import { MoreHorizontal, Search } from "lucide-react";
-import { useUserStore } from "@/store/user";
+import { Search } from "lucide-react";
 import { exportToExcel } from "react-json-to-excel";
 
 import OrderDialogue from "@/components/OrderDialogue";
