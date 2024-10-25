@@ -6,6 +6,12 @@ export const getOrders = async (query: any) => {
   });
 };
 
+export const getManualOrders = async (query: any) => {
+  return await instance.get("manual-orders", {
+    params: query,
+  });
+};
+
 export const getNewOrders = async (query: any) => {
   return await instance.get("orders/new", {
     params: query,

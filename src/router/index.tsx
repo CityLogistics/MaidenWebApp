@@ -20,6 +20,7 @@ import ChangePassword from "@/pages/ChangePassword";
 import React from "react";
 import AddCity from "@/pages/AddCity";
 import CityList from "@/pages/CityList";
+import ManualOrderList from "@/pages/ManualOrderList";
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
@@ -147,6 +148,14 @@ export const citiesRoute = createRoute({
   },
 });
 
+export const manualOrdersRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes.MANUAL_ORDERS,
+  component: function Index() {
+    return <ManualOrderList />;
+  },
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   dashboardRoute,
@@ -161,6 +170,7 @@ const routeTree = rootRoute.addChildren([
   usersRoute,
   addCitiesRoute,
   citiesRoute,
+  manualOrdersRoute,
 ]);
 
 export const router = createRouter({ routeTree });

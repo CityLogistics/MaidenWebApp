@@ -14,6 +14,8 @@ export const routes = {
 
   CITIES: "/cities",
   ADD_CITY: "/cities/add-city",
+
+  MANUAL_ORDERS: "/manual-orders",
 };
 
 export const orderTpes = [

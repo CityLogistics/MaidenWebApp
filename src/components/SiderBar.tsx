@@ -9,6 +9,7 @@ import {
   People,
   UserCirlceAdd,
   Map,
+  ShoppingBag,
 } from "iconsax-react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { twMerge } from "tailwind-merge";
@@ -22,6 +23,7 @@ import {
   transactionsRoute,
   usersRoute,
   citiesRoute,
+  manualOrdersRoute,
 } from "@/router";
 import { useUserStore } from "@/store/user";
 
@@ -58,6 +60,10 @@ export default function SiderBar() {
             <Link {...pathProps(ordersRoute.to)}>
               <ShoppingCart variant="Bold" />
             </Link>
+            <Link {...pathProps(manualOrdersRoute.to)}>
+              <ShoppingBag variant="Bold" />
+            </Link>
+
             <Link {...pathProps(driversRoute.to)}>
               <Profile2User variant="Bold" />
             </Link>
