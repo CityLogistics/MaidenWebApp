@@ -1,16 +1,19 @@
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
 import NavbarAlt from "@/components/NavbarAlt";
-import filtericon from "@/assets/images/filtericon.png";
-import ReplayIcon from "@/assets/images/ic-replay-24px.png";
+// import filtericon from "@/assets/images/filtericon.png";
+// import ReplayIcon from "@/assets/images/ic-replay-24px.png";
 import CustomTable from "@/components/CustomTable";
 import { twMerge } from "tailwind-merge";
-import { CustomDatePicker } from "@/components/CustomDatePicker";
-import CustomSelect from "@/components/CustomSelect";
+// import { CustomDatePicker } from "@/components/CustomDatePicker";
+// import CustomSelect from "@/components/CustomSelect";
 import { useQuery } from "@tanstack/react-query";
 import { getManualOrders } from "@/apis/orders";
 import { format } from "date-fns";
-import { limit, orderStatus, orderTpes } from "@/lib/Constants";
+import {
+  limit,
+  // orderStatus, orderTpes
+} from "@/lib/Constants";
 import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { exportToExcel } from "react-json-to-excel";
@@ -270,7 +273,7 @@ export default function ManualOrderList() {
           </div>
         </div>
 
-        <div className="flex h-[3.5rem] w-fit bg-white rounded-xl items-center child:border-r-[0.1px] child:h-full child:px-6 child:flex child:text-sm child:font-bold child:items-center child:text-black border border-[#D5D5D5]  max-w-full overflow-auto text-nowrap">
+        {/* <div className="flex h-[3.5rem] w-fit bg-white rounded-xl items-center child:border-r-[0.1px] child:h-full child:px-6 child:flex child:text-sm child:font-bold child:items-center child:text-black border border-[#D5D5D5]  max-w-full overflow-auto text-nowrap">
           <div className="flex">
             <img src={filtericon} alt="filter icon" />
           </div>
@@ -281,22 +284,7 @@ export default function ManualOrderList() {
               values={query.dates}
             />{" "}
           </div>
-          <div className="">
-            <CustomSelect
-              label=" Order Type"
-              items={orderTpes}
-              onChange={(v: any) => handleParamChange("orderTypes", v)}
-              values={query.orderTypes}
-            />
-          </div>
-          <div className="">
-            <CustomSelect
-              label=" Order Status"
-              items={orderStatus}
-              onChange={(v: any) => handleParamChange("orderStatus", v)}
-              values={query.orderStatus}
-            />
-          </div>
+
           <div>
             <div
               className=" flex cursor-pointer"
@@ -308,7 +296,7 @@ export default function ManualOrderList() {
               </span>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="flex flex-col md:flex-row md:justify-between w-full items-end md:items-center mt-8  ">
           <div className="relative md:max-w-[400px] w-full md:w-[95%]">
             <div className="absolute h-full flex items-center px-2">
