@@ -66,8 +66,6 @@ export default function Settings() {
     },
   ];
 
-  console.info({ e: values.cities });
-
   return (
     <Layout>
       <NavbarAlt />

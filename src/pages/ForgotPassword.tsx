@@ -38,8 +38,6 @@ export default function ForgotPassword() {
     initialValues,
     validationSchema,
     onSubmit: (data) => {
-      console.info({ data });
-
       mutateAsync({ email: data.email.toLowerCase() });
     },
   });

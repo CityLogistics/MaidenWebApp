@@ -121,8 +121,6 @@ export default function NewOrderList() {
   const total = data?.data?.count ?? [];
 
   const handleParamChange = (field: any, val: any) => {
-    console.info({ val });
-
     if (field == "orderStatus") setQuery((v) => ({ ...v, orderStatus: val }));
     if (field == "orderTypes") setQuery((v) => ({ ...v, orderTypes: val }));
     if (field == "dates") setQuery((v) => ({ ...v, dates: val }));

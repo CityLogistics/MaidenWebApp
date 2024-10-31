@@ -64,7 +64,6 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
   };
 
   const isFetching = useIsMutating();
-  console.info({ isFetching });
 
   const {
     _id,
