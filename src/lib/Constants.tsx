@@ -1,5 +1,8 @@
 export const routes = {
   HOME: "/",
+  FORGOT_PASSWORD: "/forgot-password",
+  RESET_PASSWORD: "/reset-password",
+  RESET_PASSWORD_LINK_SENT: "/reset-password-link-set",
   DASHBOARD: "/dashboard",
   ORDERS: "/orders",
   NEW_ORDERS: "/orders/new",
