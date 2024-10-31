@@ -1,32 +1,31 @@
 import PasswordField from "../components/PasswordField";
-import TextField from "../components/TextField";
 import LoginImg from "../assets/images/login_bg.png";
 import Logo from "../assets/images/city_logistics.png";
 import Button from "@/components/Button";
 import { useMutation } from "@tanstack/react-query";
-import { login } from "@/apis/auth";
+import { resetPassword } from "@/apis/auth";
 import { useFormik } from "formik";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { dashboardRoute, forgotPasswordRoute, ordersRoute } from "@/router";
+import { useNavigate } from "@tanstack/react-router";
+import { dashboardRoute, indexRoute, resetPasswordRoute } from "@/router";
 import * as yup from "yup";
-import { useUserStore } from "@/store/user";
 import { toast, Toaster } from "sonner";
 import { AxiosError } from "axios";
 import { parseError, validateAuth } from "@/lib/utils";
 import { useEffect } from "react";
 
-export default function Login() {
+export default function ResetPassword() {
   const navigate = useNavigate();
 
-  const { setUser } = useUserStore((state) => state);
+  const { token }: any = resetPasswordRoute.useSearch();
+
+  console.info({ token });
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: login,
-    onSuccess: (data) => {
-      const { user } = data.data;
-      setUser(user);
-      if (user.role == "SUPER_ADMIN") navigate({ to: dashboardRoute.to });
-      else navigate({ to: ordersRoute.to });
+    mutationFn: resetPassword,
+    onSuccess: (_) => {
+      setTimeout(() => {
+        navigate({ to: indexRoute.to });
+      }, 3000);
     },
     onError: (e: AxiosError) => {
       toast.error(parseError(e));
@@ -34,22 +33,18 @@ export default function Login() {
   });
 
   const validationSchema = yup.object().shape({
-    email: yup.string().email().required("this field is required"),
-    password: yup.string().required("this field is required"),
+    newPassword: yup.string().required("this field is required"),
   });
 
   const initialValues = {
-    email: "",
-    password: "",
+    newPassword: "",
   };
 
   const { handleSubmit, handleChange, values, errors, touched } = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (data) => {
-      console.info({ data });
-
-      mutateAsync({ ...data, email: data.email.toLowerCase() });
+      mutateAsync({ token, data });
     },
   });
 
@@ -77,30 +72,20 @@ export default function Login() {
           <div className="opacity-80 text-[#202224] text-lg font-semibold font-['Nunito Sans']">
             Please enter your email and password to continue
           </div>
-          <TextField
-            label="Email address:"
-            id="email"
-            name="email"
-            onChange={handleChange}
-            value={values.email}
-            error={touched.email && Boolean(errors.email)}
-            helperText={touched.email && errors.email}
-          />
+
           <PasswordField
             label="Password"
-            id="password"
-            name="password"
+            id="newPassword"
+            name="newPassword"
             onChange={handleChange}
-            value={values.password}
-            error={touched.password && Boolean(errors.password)}
-            helperText={touched.password && errors.password}
-            itemRight={
-              <Link to={forgotPasswordRoute.to}>
-                <span className="text-[#202224] text-lg opacity-60">
-                  Forgot Password?
-                </span>
-              </Link>
-            }
+            value={values.newPassword}
+            error={touched.newPassword && Boolean(errors.newPassword)}
+            helperText={touched.newPassword && errors.newPassword}
+            // itemRight={
+            //   <span className="text-[#202224] text-lg opacity-60">
+            //     Forgot Password?
+            //   </span>
+            // }
           />
           {/* <span className=" text-[#202224] text-lg opacity-60 mt-6 text-left w-full">
           Remember Password

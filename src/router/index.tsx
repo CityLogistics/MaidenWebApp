@@ -21,6 +21,9 @@ import React from "react";
 import AddCity from "@/pages/AddCity";
 import CityList from "@/pages/CityList";
 import ManualOrderList from "@/pages/ManualOrderList";
+import ForgotPassword from "@/pages/ForgotPassword";
+import ResetPassword from "@/pages/ResetPassword";
+import ResetPasswordLinkSent from "@/pages/ResetPasswordLinkSent";
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
@@ -48,6 +51,30 @@ export const indexRoute = createRoute({
   path: routes.HOME,
   component: function Index() {
     return <Login />;
+  },
+});
+
+export const forgotPasswordRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes.FORGOT_PASSWORD,
+  component: function Index() {
+    return <ForgotPassword />;
+  },
+});
+
+export const resetPasswordLinkSentRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes.RESET_PASSWORD_LINK_SENT,
+  component: function Index() {
+    return <ResetPasswordLinkSent />;
+  },
+});
+
+export const resetPasswordRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: routes.RESET_PASSWORD,
+  component: function Index() {
+    return <ResetPassword />;
   },
 });
 
@@ -171,6 +198,9 @@ const routeTree = rootRoute.addChildren([
   addCitiesRoute,
   citiesRoute,
   manualOrdersRoute,
+  forgotPasswordRoute,
+  resetPasswordRoute,
+  resetPasswordLinkSentRoute,
 ]);
 
 export const router = createRouter({ routeTree });
