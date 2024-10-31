@@ -47,8 +47,6 @@ export default function Login() {
     initialValues,
     validationSchema,
     onSubmit: (data) => {
-      console.info({ data });
-
       mutateAsync({ ...data, email: data.email.toLowerCase() });
     },
   });

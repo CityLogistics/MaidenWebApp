@@ -237,7 +237,6 @@ export default function OrderList() {
         exportToExcel(csvDataToExport, "Orders");
       } else toast.error("An error occured");
     } catch (error) {
-      console.info({ error });
       setCsvLoading(false);
       toast.error(parseError(error));
     }

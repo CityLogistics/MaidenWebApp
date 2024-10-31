@@ -18,11 +18,10 @@ export default function ResetPassword() {
 
   const { token }: any = resetPasswordRoute.useSearch();
 
-  console.info({ token });
-
   const { mutateAsync, isPending } = useMutation({
     mutationFn: resetPassword,
     onSuccess: (_) => {
+      toast.success("Password reset successfully");
       setTimeout(() => {
         navigate({ to: indexRoute.to });
       }, 3000);
@@ -67,10 +66,10 @@ export default function ResetPassword() {
             className="w-[7.5rem] h-[3.75rem] bg-cover"
           />
           <div className="text-[#202224] text-[2rem] font-bold font-['Nunito Sans']">
-            Login to Account
+            Reset Password
           </div>
           <div className="opacity-80 text-[#202224] text-lg font-semibold font-['Nunito Sans']">
-            Please enter your email and password to continue
+            Please enter your new password to continue
           </div>
 
           <PasswordField
@@ -95,7 +94,7 @@ export default function ResetPassword() {
             <Button
               type="submit"
               loading={isPending}
-              text="Sign In"
+              text="Reset Password"
               onClick={handleSubmit}
             />
           </div>

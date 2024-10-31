@@ -43,7 +43,6 @@ export const useManageSession = () => {
   if (!validateAuth()) navigate({ to: indexRoute.to });
   useEffect(() => {
     const interval = setInterval(() => {
-      console.info(validateAuth());
       if (!validateAuth()) navigate({ to: indexRoute.to });
     }, 10000);
 
@@ -58,8 +57,6 @@ export const useManageRole = () => {
   const { role } = user;
   const currentPath = useLocation().pathname;
   const navigate = useNavigate();
-
-  console.info({ role });
 
   useEffect(() => {
     if (!role) {

@@ -73,8 +73,6 @@ export default function AddCity() {
     name: v,
   }));
 
-  console.info({ name: values.name });
-
   return (
     <Layout>
       <NavbarAlt />
