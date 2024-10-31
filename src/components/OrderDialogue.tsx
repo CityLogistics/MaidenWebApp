@@ -49,14 +49,14 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
 
       case "PENDING_PAYMENT":
         return (
-          <div className={twMerge(classNames, "bg-[#fcbe2d] text-[#fcbe2d] ")}>
+          <div className={twMerge(classNames, "bg-[#f8f8f6] text-[#fcbe2d] ")}>
             Pending Payment
           </div>
         );
 
       default:
         return (
-          <div className={twMerge(classNames, "bg-[#fcbe2d] text-[#fcbe2d] ")}>
+          <div className={twMerge(classNames, "bg-[#f8f8f6] text-[#fcbe2d] ")}>
             {status}
           </div>
         );
@@ -90,7 +90,7 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
     tranasctionReference,
     vehicleType,
   } = order;
- 
+
   const items = [
     {
       label: "Order",
@@ -139,10 +139,14 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
       label: "Total Price ($)",
       value: totalPrice / 100,
     },
-    {
-      label: "Assigned Driver",
-      value: `${driver.firstName} ${driver.lastName}`,
-    },
+    ...(driver
+      ? [
+          {
+            label: "Assigned Driver",
+            value: `${driver.firstName} ${driver.lastName}`,
+          },
+        ]
+      : []),
     {
       label: "Vehicle Type",
       value: getVehicleLabel(vehicleType),
@@ -177,6 +181,14 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
     {
       label: "Dropoff Location",
       value: dropOffAddress.address,
+    },
+    {
+      label: "Pickup City",
+      value: pickupAddress.city,
+    },
+    {
+      label: "Dropoff City",
+      value: dropOffAddress.city,
     },
     {
       label: "Transaction Reference",

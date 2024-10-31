@@ -20,10 +20,8 @@ export default function AddCity() {
 
   const validationSchema = yup.object().shape({
     province: yup.string().required("this field is required"),
-    name: yup
-      .string()
-      .required("this field is required")
-      .oneOf(allCities, "invalid value"),
+    name: yup.string().required("this field is required"),
+    // .oneOf(allCities, "invalid value"),
   });
 
   const {
