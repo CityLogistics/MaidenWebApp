@@ -15,7 +15,7 @@ import {
   // orderStatus, orderTpes
 } from "@/lib/Constants";
 import { useEffect, useState } from "react";
-import { Search } from "lucide-react";
+import { MoreHorizontal, Search } from "lucide-react";
 import { exportToExcel } from "react-json-to-excel";
 
 import OrderDialogue from "@/components/OrderDialogue";
@@ -91,36 +91,36 @@ export default function ManualOrderList() {
       width: "200px",
       render: (v: any) => `${v.pickupAddress.address}`,
     },
-    {
-      id: "pickupAddress",
-      label: "Pickup Province",
-      width: "200px",
-      render: (v: any) => `${v.pickupAddress.province}`,
-    },
-    {
-      id: "pickupAddress",
-      label: "Pickup City",
-      width: "200px",
-      render: (v: any) => `${v.pickupAddress.city}`,
-    },
+    // {
+    //   id: "pickupAddress",
+    //   label: "Pickup Province",
+    //   width: "200px",
+    //   render: (v: any) => `${v.pickupAddress.province}`,
+    // },
+    // {
+    //   id: "pickupAddress",
+    //   label: "Pickup City",
+    //   width: "200px",
+    //   render: (v: any) => `${v.pickupAddress.city}`,
+    // },
     {
       id: "dropOffAddress",
       label: "Dropoff Location",
       width: "200px",
       render: (v: any) => `${v.dropOffAddress.address}`,
     },
-    {
-      id: "dropOffAddress",
-      label: "Dropoff Province",
-      width: "200px",
-      render: (v: any) => `${v.dropOffAddress.province}`,
-    },
-    {
-      id: "dropOffAddress",
-      label: "Dropoff City",
-      width: "200px",
-      render: (v: any) => `${v.dropOffAddress.city}`,
-    },
+    // {
+    //   id: "dropOffAddress",
+    //   label: "Dropoff Province",
+    //   width: "200px",
+    //   render: (v: any) => `${v.dropOffAddress.province}`,
+    // },
+    // {
+    //   id: "dropOffAddress",
+    //   label: "Dropoff City",
+    //   width: "200px",
+    //   render: (v: any) => `${v.dropOffAddress.city}`,
+    // },
     {
       id: "pickupDate",
       label: "Time",
@@ -163,23 +163,27 @@ export default function ManualOrderList() {
     //     <div className="flex justify-center">{getStatusLabel(item.status)}</div>
     //   ),
     // },
-    // {
-    //   id: "",
-    //   label: "Action",
-    //   width: "200px",
-    //   className: "text-center",
-    //   render: (item: any) => (
-    //     <div className="flex justify-center">
-    //       {/* {getStatusAction(item.status, item._id)} */}
-    //       {item.status !== "PENDING_PAYMENT" && (
-    //         <MoreHorizontal
-    //           style={{ cursor: "pointer" }}
-    //           onClick={() => setMoreOpen(item)}
-    //         />
-    //       )}
-    //     </div>
-    //   ),
-    // },
+    {
+      id: "",
+      label: "Action",
+      width: "200px",
+      className: "text-center",
+      render: (item: any) => (
+        <div className="flex justify-center">
+          {/* {getStatusAction(item.status, item._id)} */}
+          {/* {item.status !== "PENDING_PAYMENT" && (
+            <MoreHorizontal
+              style={{ cursor: "pointer" }}
+              onClick={() => setMoreOpen(item)}
+            />
+          )} */}
+          <MoreHorizontal
+            style={{ cursor: "pointer" }}
+            onClick={() => setMoreOpen(item)}
+          />
+        </div>
+      ),
+    },
   ];
 
   const initialQuery = {
