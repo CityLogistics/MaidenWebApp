@@ -37,7 +37,7 @@ export default function SiderBar() {
   const role = useUserStore((state) => state.user.role);
 
   const className =
-    "w-full py-2 flex justify-center  my-4 hover:border-primary  hover:border-l-4 text-[#EEEEEE] hover:text-primary text-[1.875rem] ";
+    "w-full py-2 flex justify-center  my-3 hover:border-primary  hover:border-l-4 text-[#EEEEEE] hover:text-primary text-[1.875rem] ";
   const path = useLocation().pathname;
 
   const pathProps = (to: any) => ({
