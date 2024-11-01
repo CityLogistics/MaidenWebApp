@@ -28,7 +28,7 @@ export default function AsignToDriver({
     queryKey: ["driverList"],
     queryFn: () =>
       getDrivers({
-        status: "ACCEPTED",
+        status: ["ACCEPTED"],
         page: 0,
         limit: 100,
         orderCityId,

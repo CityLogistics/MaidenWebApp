@@ -5,20 +5,23 @@ import filtericon from "@/assets/images/filtericon.png";
 import ReplayIcon from "@/assets/images/ic-replay-24px.png";
 import Layout from "@/components/Layout";
 import NavbarAlt from "@/components/NavbarAlt";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { getNewOrders, rejectOrder } from "@/apis/orders";
+import { useQuery } from "@tanstack/react-query";
+import { getNewOrders } from "@/apis/orders";
 import { format } from "date-fns";
-import AsignToDriver from "@/components/Order/AsignToDriver";
+// import AsignToDriver from "@/components/Order/AsignToDriver";
 import { useState } from "react";
 import { limit, orderTpes } from "@/lib/Constants";
-import { parseError, queryClient } from "@/lib/utils";
-import { toast } from "sonner";
-import { AxiosError } from "axios";
-import Button from "@/components/Button";
-import ConfirmDialouge from "@/components/ConfirmDialouge";
+// import { parseError, queryClient } from "@/lib/utils";
+// import { toast } from "sonner";
+// import { AxiosError } from "axios";
+// import Button from "@/components/Button";
+// import ConfirmDialouge from "@/components/ConfirmDialouge";
+import OrderDialogue from "@/components/OrderDialogue";
+import { MoreHorizontal } from "lucide-react";
 
 export default function NewOrderList() {
-  const [open, setOpen] = useState<any>();
+  const [moreOpen, setMoreOpen] = useState<any>();
+
   const columns = [
     {
       id: "orderNo",
@@ -91,13 +94,16 @@ export default function NewOrderList() {
       className: "text-center",
       render: (item: any) => (
         <div className=" flex flex-col items-center">
-          <div
-            onClick={() => setOpen(item)}
+          {/* <div
+            onClick={() => setMoreOpen(item)}
             className="text-[#358C9D] font-semibold text-sm flex items-center bg-white cursor-pointer text-nowrap"
           >
             Assign to Driver
-          </div>
-          <RejectOrder id={item._id} />
+          </div> */}
+          <MoreHorizontal
+            style={{ cursor: "pointer" }}
+            onClick={() => setMoreOpen(item)}
+          />
         </div>
       ),
     },
@@ -180,55 +186,63 @@ export default function NewOrderList() {
           />
         </div>
       </div>
-      {open && (
-        <AsignToDriver
-          open={open}
-          orderId={open._id}
-          setOpen={setOpen}
-          refetch={refetch}
-          orderCityId={open.assignedCityId}
-        />
+      {moreOpen != null && (
+        <OrderDialogue order={moreOpen} onCancel={() => setMoreOpen(null)} />
       )}
     </Layout>
   );
 }
 
-const RejectOrder = ({ id }: any) => {
-  const [open, setOpen] = useState(false);
-  const { isPending, mutateAsync } = useMutation({
-    mutationFn: () => rejectOrder({ id }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
-      toast.success("Order status changed");
-    },
-    onError: (e: AxiosError) => {
-      toast.error(parseError(e));
-    },
-  });
+// {open && (
+//   <AsignToDriver
+//     open={open}
+//     orderId={open._id}
+//     setOpen={setOpen}
+//     refetch={refetch}
+//     orderCityId={open.assignedCityId}
+//   />
+// )}
 
-  const onProceed = () => {
-    setOpen(false);
-    mutateAsync();
-  };
+{
+  /* <RejectOrder id={item._id} /> */
+}
 
-  return (
-    <>
-      <Button
-        loading={isPending}
-        text={!isPending && <>Reject Order Request</>}
-        className={
-          "text-sm h-7 rounded-[0.25rem] text-nowrap   bg-transparent text-[#F68716]"
-        }
-        onClick={() => setOpen(true)}
-      />
-      {open && (
-        <ConfirmDialouge
-          message="Are you sure you want to reject this order request and issue a refund?"
-          onProceed={onProceed}
-          onCancel={() => setOpen(false)}
-          setOpen={setOpen}
-        />
-      )}
-    </>
-  );
-};
+// const RejectOrder = ({ id }: any) => {
+//   const [open, setOpen] = useState(false);
+//   const { isPending, mutateAsync } = useMutation({
+//     mutationFn: () => rejectOrder({ id }),
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({ queryKey: ["orders"] });
+//       toast.success("Order status changed");
+//     },
+//     onError: (e: AxiosError) => {
+//       toast.error(parseError(e));
+//     },
+//   });
+
+//   const onProceed = () => {
+//     setOpen(false);
+//     mutateAsync();
+//   };
+
+//   return (
+//     <>
+//       <Button
+//         loading={isPending}
+//         text={!isPending && <>Reject Order Request</>}
+//         className={
+//           "text-sm h-7 rounded-[0.25rem] text-nowrap   bg-transparent text-[#F68716]"
+//         }
+//         onClick={() => setOpen(true)}
+//       />
+//       {open && (
+//         <ConfirmDialouge
+//           message="Are you sure you want to reject this order request and issue a refund?"
+//           onProceed={onProceed}
+//           onCancel={() => setOpen(false)}
+//           setOpen={setOpen}
+//         />
+//       )}
+//     </>
+//   );
+// };

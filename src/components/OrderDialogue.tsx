@@ -11,15 +11,18 @@ import { getVehicleLabel, parseError, queryClient } from "@/lib/utils";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { useIsMutating, useMutation } from "@tanstack/react-query";
-import { updateOrderStatus } from "@/apis/orders";
+import { rejectOrder, updateOrderStatus } from "@/apis/orders";
 import { ROLE } from "@/lib/Constants";
 import { useState } from "react";
 import { CheckIcon, X } from "lucide-react";
 import { decideOrderAssignment, updateDriverOrderStatus } from "@/apis/drivers";
 import ConfirmDialouge from "./ConfirmDialouge";
 import { twMerge } from "tailwind-merge";
+import AsignToDriver from "./Order/AsignToDriver";
 
 export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
+  const [assignOpen, setAssignOpen] = useState(false);
+
   const getStatusLabel = (data: any) => {
     const status = data.toLowerCase();
     const classNames = "";
@@ -51,6 +54,13 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
         return (
           <div className={twMerge(classNames, "bg-[#f8f8f6] text-[#fcbe2d] ")}>
             Pending Payment
+          </div>
+        );
+
+      case "PENDING_ASSIGNMENT":
+        return (
+          <div className={twMerge(classNames, "bg-[#f8f8f6] text-[#fcbe2d] ")}>
+            Pending Assignment
           </div>
         );
 
@@ -88,6 +98,7 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
     totalPrice,
     tranasctionReference,
     vehicleType,
+    assignedCityId,
   } = order;
 
   const items = [
@@ -207,6 +218,30 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
 
   const getStatusAction = (status: any, id: any) => {
     if (
+      status == "PENDING_ASSIGNMENT" &&
+      (role == ROLE.ADMIN || role == ROLE.SUPER_ADMIN)
+    )
+      return (
+        <div className="flex w-full justify-center ">
+          {/* <div
+            onClick={() => setAssignOpen(true)}
+            className="text-[#358C9D] font-semibold text-sm flex items-center bg-white cursor-pointer text-nowrap"
+          >
+            Assign to Driver
+          </div> */}
+
+          <Button
+            // loading={isPending}
+            text={"Assign to Driver"}
+            className={"text-sm h-10 rounded-[0.25rem] text-nowrap w-40 "}
+            onClick={() => setAssignOpen(true)}
+          />
+          <div className="w-1" />
+          <RejectOrder id={id} />
+        </div>
+      );
+
+    if (
       status == "DELIVERED" &&
       (role == ROLE.ADMIN || role == ROLE.SUPER_ADMIN)
     )
@@ -226,6 +261,22 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
 
     return "";
   };
+
+  const driverAssigned = () => {
+    queryClient.invalidateQueries({ queryKey: ["orders"] });
+    onCancel();
+  };
+
+  if (assignOpen)
+    return (
+      <AsignToDriver
+        open={assignOpen}
+        orderId={_id}
+        setOpen={setAssignOpen}
+        refetch={driverAssigned}
+        orderCityId={assignedCityId}
+      />
+    );
 
   return (
     <Dialog open onOpenChange={setOpen}>
@@ -437,6 +488,46 @@ const RejectRequest = ({ id }: any) => {
       {open && (
         <ConfirmDialouge
           message="Are you sure you want to reject this order assignment?"
+          onProceed={onProceed}
+          onCancel={() => setOpen(false)}
+          setOpen={setOpen}
+        />
+      )}
+    </>
+  );
+};
+
+const RejectOrder = ({ id }: any) => {
+  const [open, setOpen] = useState(false);
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: () => rejectOrder({ id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      toast.success("Order status changed");
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
+    },
+  });
+
+  const onProceed = () => {
+    setOpen(false);
+    mutateAsync();
+  };
+
+  return (
+    <>
+      <Button
+        loading={isPending}
+        text={!isPending && <>Reject Order Request</>}
+        className={
+          "text-sm h-10 rounded-[0.25rem] text-nowrap w-40 bg-red-600 "
+        }
+        onClick={() => setOpen(true)}
+      />
+      {open && (
+        <ConfirmDialouge
+          message="Are you sure you want to reject this order request and issue a refund?"
           onProceed={onProceed}
           onCancel={() => setOpen(false)}
           setOpen={setOpen}
