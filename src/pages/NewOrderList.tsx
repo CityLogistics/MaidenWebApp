@@ -118,7 +118,7 @@ export default function NewOrderList() {
 
   const [query, setQuery] = useState(initialQuery);
 
-  const { isPending, data, refetch } = useQuery({
+  const { isPending, data } = useQuery({
     queryKey: ["newOrders", query],
     queryFn: () => getNewOrders(query),
   });

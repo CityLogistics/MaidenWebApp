@@ -263,7 +263,7 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
   };
 
   const driverAssigned = () => {
-    queryClient.invalidateQueries({ queryKey: ["orders"] });
+    queryClient.invalidateQueries({ queryKey: ["newOrders"] });
     onCancel();
   };
 
