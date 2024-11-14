@@ -178,27 +178,27 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
     },
     {
       label: "Pickup Province",
-      value: pickupAddress.province,
+      value: pickupAddress?.province?.replace("_", " ") ?? "N/A",
     },
     {
       label: "Dropoff Province",
-      value: dropOffAddress.province,
+      value: dropOffAddress?.province?.replace("_", " ") ?? "N/A",
     },
     {
       label: "Pickup Location",
-      value: pickupAddress.address,
+      value: pickupAddress?.address,
     },
     {
       label: "Dropoff Location",
-      value: dropOffAddress.address,
+      value: dropOffAddress?.address,
     },
     {
       label: "Pickup City",
-      value: pickupAddress.city,
+      value: pickupAddress?.city,
     },
     {
       label: "Dropoff City",
-      value: dropOffAddress.city,
+      value: dropOffAddress?.city,
     },
     {
       label: "Transaction Reference",
@@ -300,7 +300,9 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
               <div className="text-bold text-black font-medium text-nowrap mr-10">
                 {v.label}
               </div>
-              <div className=" text-black opacity-70 text-right">{v.value}</div>
+              <div className=" text-black opacity-70 text-right">
+                {v.value ?? "N/A"}
+              </div>
             </div>
           ))}
         </div>

@@ -18,6 +18,11 @@ import { limit, orderTpes } from "@/lib/Constants";
 // import ConfirmDialouge from "@/components/ConfirmDialouge";
 import OrderDialogue from "@/components/OrderDialogue";
 import { MoreHorizontal } from "lucide-react";
+import { getVehicleLabel, parseError } from "@/lib/utils";
+import { toast } from "sonner";
+import { exportToExcel } from "react-json-to-excel";
+import Button from "@/components/Button";
+import { ExportCurve } from "iconsax-react";
 
 export default function NewOrderList() {
   const [moreOpen, setMoreOpen] = useState<any>();
@@ -133,6 +138,47 @@ export default function NewOrderList() {
     if (field == "page") setQuery((v) => ({ ...v, page: val }));
   };
 
+  const [csvLoading, setCsvLoading] = useState(false);
+  const exportDataToCsv = async () => {
+    try {
+      setCsvLoading(true);
+      const { data } = await getNewOrders({
+        ...query,
+        limit: total + 1,
+        page: 0,
+      });
+      setCsvLoading(false);
+      if (data) {
+        const csvDataToExport = data.data?.map((item: any) => ({
+          Order: item.orderNo,
+          "Customer’s Name": item.senderName,
+          "Customer’s Email": item.email,
+          "Recipient's Name": item.recipientName,
+          "Transaction Date": item.createdAt,
+          "Pickup Date":
+            item.pickupDate && format(item.pickupDate, "dd MMMM YYY"),
+          "Pickup Time": item.pickuptime,
+          "Distance (KM)": item.distance,
+          "Base Price ($)": item.basePrice / 100,
+          "Total Price ($)": item.totalPrice / 100,
+          "Assigned Driver": `${item?.driver?.firstName} ${item?.driver?.lastName}`,
+          "Vehicle Type": getVehicleLabel(item?.vehicleType),
+          "Pickup Phone": item.pickupPhoneNumber,
+          "Dropoff Phone": item.dropOffPhoneNumber,
+          "Pickup Province": item.pickupAddress.province,
+          "Dropoff Province": item.dropOffAddress.province,
+          "Pickup Location": item.pickupAddress.pickupAddress,
+          "Dropoff Location": item.dropOffAddress.address,
+          "Transaction Reference": item.tranasctionReference,
+        }));
+        exportToExcel(csvDataToExport, "Orders");
+      } else toast.error("An error occured");
+    } catch (error) {
+      setCsvLoading(false);
+      toast.error(parseError(error));
+    }
+  };
+
   return (
     <Layout>
       <NavbarAlt />
@@ -173,6 +219,21 @@ export default function NewOrderList() {
               Reset Filter
             </span>
           </div>
+        </div>
+
+        <div className="flex  w-full justify-end mt-8  ">
+          <Button
+            loading={csvLoading}
+            text={
+              <div className="flex items-center  ">
+                Export <ExportCurve size={15} className="ml-2" />{" "}
+              </div>
+            }
+            onClick={exportDataToCsv}
+            className={
+              "text-sm h-10 rounded-[0.25rem] text-nowrap w-[9.375rem] mt-4 md:mt-0"
+            }
+          />
         </div>
 
         <div className=" mt-8">

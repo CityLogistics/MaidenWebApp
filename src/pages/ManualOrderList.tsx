@@ -89,7 +89,7 @@ export default function ManualOrderList() {
       id: "pickupAddress",
       label: "Pickup Location",
       width: "200px",
-      render: (v: any) => `${v.pickupAddress.address}`,
+      render: (v: any) => `${v.pickupAddress?.address ?? "N/A"}`,
     },
     // {
     //   id: "pickupAddress",
@@ -107,7 +107,7 @@ export default function ManualOrderList() {
       id: "dropOffAddress",
       label: "Dropoff Location",
       width: "200px",
-      render: (v: any) => `${v.dropOffAddress.address}`,
+      render: (v: any) => `${v.dropOffAddress?.address ?? "N/A"}`,
     },
     // {
     //   id: "dropOffAddress",

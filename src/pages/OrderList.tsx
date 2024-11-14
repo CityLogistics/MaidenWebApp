@@ -91,7 +91,7 @@ export default function OrderList() {
       id: "pickupAddress",
       label: "Pickup Location",
       width: "200px",
-      render: (v: any) => `${v.pickupAddress.address}`,
+      render: (v: any) => `${v.pickupAddress?.address ?? "N/A"}`,
     },
     // {
     //   id: "pickupAddress",
