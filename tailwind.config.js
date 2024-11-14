@@ -1,5 +1,7 @@
+/*eslint-env node*/
+import tailwindcssAnimate from "tailwindcss-animate";
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
@@ -74,8 +76,7 @@ module.exports = {
     },
   },
   plugins: [
-    require("tailwindcss-animate"),
-
+    tailwindcssAnimate,
     function ({ addVariant }) {
       addVariant("child", "& > *");
       addVariant("child-hover", "& > *:hover");

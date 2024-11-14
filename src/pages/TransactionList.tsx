@@ -10,8 +10,12 @@ import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { limit, transactionStatus, transactionTypes } from "@/lib/Constants";
 import { useState } from "react";
-import { formatCurrencyvalue } from "@/lib/utils";
+import { formatCurrencyvalue, parseError } from "@/lib/utils";
 import { getTransactions } from "@/apis/transactions";
+import Button from "@/components/Button";
+import { ExportCurve } from "iconsax-react";
+import { toast } from "sonner";
+import { exportToExcel } from "react-json-to-excel";
 
 export default function TransactionList() {
   const getStatusLabel = (data: any) => {
@@ -132,6 +136,33 @@ export default function TransactionList() {
     if (field == "page") setQuery((v) => ({ ...v, page: val }));
   };
 
+  const [csvLoading, setCsvLoading] = useState(false);
+  const exportDataToCsv = async () => {
+    try {
+      setCsvLoading(true);
+      const { data } = await getTransactions({
+        ...query,
+        limit: total + 1,
+        page: 0,
+      });
+      setCsvLoading(false);
+      if (data) {
+        const csvDataToExport = data.data?.map((item: any) => ({
+          Reference: item.refrence,
+          "Order ID": item.orderId,
+          Amount: item.amount,
+          "Transaction Type": item.transactionType,
+          Date: item.createdAt,
+          Status: item.status,
+        }));
+        exportToExcel(csvDataToExport, "Transactions");
+      } else toast.error("An error occured");
+    } catch (error) {
+      setCsvLoading(false);
+      toast.error(parseError(error));
+    }
+  };
+
   return (
     <Layout>
       <NavbarAlt />
@@ -180,6 +211,20 @@ export default function TransactionList() {
               </span>
             </div>
           </div>
+        </div>
+        <div className="flex justify-end mt-8">
+          <Button
+            loading={csvLoading}
+            text={
+              <div className="flex items-center  ">
+                Export <ExportCurve size={15} className="ml-2" />{" "}
+              </div>
+            }
+            onClick={exportDataToCsv}
+            className={
+              "ml-2 text-sm h-10 rounded-[0.25rem] text-nowrap w-[9.375rem] mt-4 md:mt-0"
+            }
+          />
         </div>
 
         <div className=" mt-8 pagination">

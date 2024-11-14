@@ -17,6 +17,10 @@ import { GridIcon, ListIcon } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import DriversTable from "@/components/Driver/DriversTable";
 import { useUserStore } from "@/store/user";
+import { toast } from "sonner";
+import { parseError } from "@/lib/utils";
+import { ExportCurve } from "iconsax-react";
+import { exportToExcel } from "react-json-to-excel";
 
 export default function DriverList() {
   const role = useUserStore((state) => state.user.role);
@@ -45,6 +49,45 @@ export default function DriverList() {
     if (field == "carTypes") setQuery((v) => ({ ...v, carTypes: val }));
     if (field == "days") setQuery((v) => ({ ...v, days: val }));
     if (field == "page") setQuery((v) => ({ ...v, page: val }));
+  };
+
+  const [csvLoading, setCsvLoading] = useState(false);
+  const exportDataToCsv = async () => {
+    try {
+      setCsvLoading(true);
+      const { data } = await getDrivers({
+        ...query,
+        limit: total + 1,
+        page: 0,
+      });
+      setCsvLoading(false);
+      if (data) {
+        const csvDataToExport = data.data?.map((v: any) => ({
+          Picture: v.image,
+          "Full Name": `${v.firstName} ${v.lastName}`,
+          Email: v.email,
+          "Phone Number": v.phoneNumber,
+          Days: v.availabiltyDays.map((v: any, i: any) => (
+            <div key={i}> {v.toLowerCase()}</div>
+          )),
+          Availability: v.availabiltyTime
+            .map(
+              (time: any) =>
+                availabiltys.find((val: any) => val.value == time)?.label
+            )
+            .join(","),
+          Provinces: v.provinces?.join(","),
+          Cities: v.cities.map((v: any) => v.name).join(","),
+          "Car Type": carTypes.find((val: any) => val.value == v.vehicleType)
+            ?.label,
+        }));
+        exportToExcel(csvDataToExport, "Drivers");
+      } else toast.error("An error occured");
+    } catch (error) {
+      // console.info({ error });
+      setCsvLoading(false);
+      toast.error(parseError(error));
+    }
   };
 
   const navigate = useNavigate();
@@ -113,7 +156,7 @@ export default function DriverList() {
             </div>
           </div>
         </div>
-        <div className="flex w-full justify-end text-black">
+        <div className="flex w-full items-center justify-end text-black mt-8">
           <div
             className={twMerge(
               "w-7 h-7 cursor-pointer  rounded flex justify-center items-center",
@@ -132,6 +175,18 @@ export default function DriverList() {
           >
             <GridIcon />
           </div>
+          <Button
+            loading={csvLoading}
+            text={
+              <div className="flex items-center  ">
+                Export <ExportCurve size={15} className="ml-2" />{" "}
+              </div>
+            }
+            onClick={exportDataToCsv}
+            className={
+              "ml-2 text-sm h-10 rounded-[0.25rem] text-nowrap w-[9.375rem] mt-4 md:mt-0"
+            }
+          />
         </div>
 
         <>
