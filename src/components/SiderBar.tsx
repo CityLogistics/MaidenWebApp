@@ -161,6 +161,16 @@ export default function SiderBar() {
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger className=" bg-transparent border-none p-0 w-full">
+                  <Link {...pathProps(manualOrdersRoute.to)}>
+                    <ShoppingBag variant="Bold" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent className="bg-white text-primary">
+                  <p>Manual Order List</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger className=" bg-transparent border-none p-0 w-full">
                   <Link {...pathProps(driversRoute.to)}>
                     <Profile2User variant="Bold" />
                   </Link>
