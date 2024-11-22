@@ -2,9 +2,10 @@ import DashBoardSummary from "@/components/Dashboard/DashBoardSummary";
 import Satisfactionchart from "../components/Satisfactionchart";
 import NewOrders from "@/components/Dashboard/NewOrders";
 import NewDrivers from "@/components/Dashboard/NewDrivers";
-import Deliveries from "@/components/Dashboard/Deliveries";
+// import Deliveries from "@/components/Dashboard/Deliveries";
 import RecentOrdersTable from "@/components/Dashboard/RecentOrdersTable";
 import Layout from "@/components/Layout";
+import ManualOrders from "@/components/Dashboard/ManualOrders";
 
 export default function DashBoard() {
   return (
@@ -21,7 +22,7 @@ export default function DashBoard() {
                 <NewDrivers />
               </div>
               <div className="flex-1 md:ml-2 mt-4 md:m-0">
-                <Deliveries />
+                <ManualOrders />
               </div>
             </div>
           </div>

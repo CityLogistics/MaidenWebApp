@@ -47,6 +47,12 @@ export default function RecentOrdersTable() {
           </div>
         );
 
+      case "QUOTE_REQUEST":
+        return (
+          <div className={twMerge(classNames, "bg-[#fcbe2d]  ")}>
+            Quote Requested
+          </div>
+        );
       default:
         return (
           <div className={twMerge("bg-[#fcbe2d]", classNames)}>{status}</div>

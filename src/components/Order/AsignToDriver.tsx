@@ -22,6 +22,7 @@ export default function AsignToDriver({
   open,
   setOpen,
   refetch,
+  setModalOpen,
 }: any) {
   const [selectedDriver, setSelectedDriver] = useState();
   const { isPending, data } = useQuery({
@@ -41,8 +42,11 @@ export default function AsignToDriver({
     mutationFn: () => asignOrderToDriver(orderId, selectedDriver),
     onSuccess: () => {
       if (refetch) refetch();
-      queryClient.invalidateQueries({ queryKey: ["stats"] });
+      queryClient.invalidateQueries({ queryKey: ["stats", "newOrders"] });
       setOpen(false);
+      setTimeout(() => {
+        setModalOpen?.(null);
+      }, 1000);
       toast.success("Order assigned to driver successfully");
     },
     onError: (e: AxiosError) => {

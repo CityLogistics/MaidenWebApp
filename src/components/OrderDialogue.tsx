@@ -11,7 +11,11 @@ import { getVehicleLabel, parseError, queryClient } from "@/lib/utils";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { useIsMutating, useMutation } from "@tanstack/react-query";
-import { rejectOrder, updateOrderStatus } from "@/apis/orders";
+import {
+  rejectOrder,
+  rejectQuoteRequest,
+  updateOrderStatus,
+} from "@/apis/orders";
 import { ROLE } from "@/lib/Constants";
 import { useState } from "react";
 import { CheckIcon, X } from "lucide-react";
@@ -19,12 +23,14 @@ import { decideOrderAssignment, updateDriverOrderStatus } from "@/apis/drivers";
 import ConfirmDialouge from "./ConfirmDialouge";
 import { twMerge } from "tailwind-merge";
 import AsignToDriver from "./Order/AsignToDriver";
+import SetPrice from "./Order/SetPrice";
 
 export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
   const [assignOpen, setAssignOpen] = useState(false);
+  const [priceOpen, setPriceOpen] = useState(false);
 
   const getStatusLabel = (data: any) => {
-    const status = data.toLowerCase();
+    const status = data?.toLowerCase();
     const classNames = "";
 
     switch (data) {
@@ -61,6 +67,13 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
         return (
           <div className={twMerge(classNames, "bg-[#f8f8f6] text-[#fcbe2d] ")}>
             Pending Assignment
+          </div>
+        );
+
+      case "QUOTE_REQUEST":
+        return (
+          <div className={twMerge(classNames, "bg-[#f8f8f6] text-[#fcbe2d] ")}>
+            Quote Requested
           </div>
         );
 
@@ -237,7 +250,33 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
             onClick={() => setAssignOpen(true)}
           />
           <div className="w-1" />
-          <RejectOrder id={id} />
+          <RejectOrder id={id} setModalOpen={setOpen} />
+        </div>
+      );
+
+    if (
+      status == "QUOTE_REQUEST" &&
+      (role == ROLE.ADMIN || role == ROLE.SUPER_ADMIN)
+    )
+      return (
+        <div className="flex w-full justify-center ">
+          {/* <div
+              onClick={() => setAssignOpen(true)}
+              className="text-[#358C9D] font-semibold text-sm flex items-center bg-white cursor-pointer text-nowrap"
+            >
+              Assign to Driver
+            </div> */}
+
+          {role == ROLE.SUPER_ADMIN && (
+            <Button
+              // loading={isPending}
+              text={"Send Quote"}
+              className={"text-sm h-10 rounded-[0.25rem] text-nowrap w-40 "}
+              onClick={() => setPriceOpen(true)}
+            />
+          )}
+          <div className="w-1" />
+          <RejectQuoteRequest id={id} setModalOpen={setOpen} />
         </div>
       );
 
@@ -275,11 +314,22 @@ export default function OrderDialogue({ setOpen, onCancel, order = {} }: any) {
         setOpen={setAssignOpen}
         refetch={driverAssigned}
         orderCityId={assignedCityId}
+        setModalOpen={setOpen}
+      />
+    );
+
+  if (priceOpen)
+    return (
+      <SetPrice
+        open={priceOpen}
+        orderId={_id}
+        setOpen={setPriceOpen}
+        setModalOpen={setOpen}
       />
     );
 
   return (
-    <Dialog open onOpenChange={setOpen}>
+    <Dialog open onOpenChange={onCancel}>
       {/* <DialogTrigger className=" bg-white">{label}</DialogTrigger> */}
       <DialogContent className=" bg-white rounded-2xl w-[100%] sm:w-[32.6rem] min-h-48 py-10 px-0 ">
         <div className="text-[#202224] text-[2rem] font-bold font-['Nunito Sans'] text-center relative">
@@ -499,13 +549,16 @@ const RejectRequest = ({ id }: any) => {
   );
 };
 
-const RejectOrder = ({ id }: any) => {
+const RejectOrder = ({ id, setModalOpen }: any) => {
   const [open, setOpen] = useState(false);
   const { isPending, mutateAsync } = useMutation({
     mutationFn: () => rejectOrder({ id }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["newOrders"] });
       toast.success("Order status changed");
+      setTimeout(() => {
+        setModalOpen?.(null);
+      }, 1000);
     },
     onError: (e: AxiosError) => {
       toast.error(parseError(e));
@@ -530,6 +583,49 @@ const RejectOrder = ({ id }: any) => {
       {open && (
         <ConfirmDialouge
           message="Are you sure you want to reject this order request and issue a refund?"
+          onProceed={onProceed}
+          onCancel={() => setOpen(false)}
+          setOpen={setOpen}
+        />
+      )}
+    </>
+  );
+};
+
+const RejectQuoteRequest = ({ id, setModalOpen }: any) => {
+  const [open, setOpen] = useState(false);
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: () => rejectQuoteRequest({ id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["manualOrders"] });
+      toast.success("Order status changed");
+      setTimeout(() => {
+        setModalOpen?.(null);
+      }, 1000);
+    },
+    onError: (e: AxiosError) => {
+      toast.error(parseError(e));
+    },
+  });
+
+  const onProceed = () => {
+    setOpen(false);
+    mutateAsync();
+  };
+
+  return (
+    <>
+      <Button
+        loading={isPending}
+        text={!isPending && <>Reject Quote Request</>}
+        className={
+          "text-sm h-10 rounded-[0.25rem] text-nowrap w-40 bg-red-600 "
+        }
+        onClick={() => setOpen(true)}
+      />
+      {open && (
+        <ConfirmDialouge
+          message="Are you sure you want to reject this order quote request?"
           onProceed={onProceed}
           onCancel={() => setOpen(false)}
           setOpen={setOpen}

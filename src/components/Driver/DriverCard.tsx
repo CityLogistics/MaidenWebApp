@@ -1,4 +1,5 @@
 import { carTypes } from "@/lib/Constants";
+import DeleteDriver from "./DeleteDriver";
 
 export default function DriverCard({ data }: any) {
   const {
@@ -10,6 +11,7 @@ export default function DriverCard({ data }: any) {
     availabiltyDays,
     availabiltyTime,
     image,
+    _id,
   } = data;
 
   return (
@@ -42,6 +44,9 @@ export default function DriverCard({ data }: any) {
             {availabiltyTime.map((v: any) => v.toLowerCase()).join(", ")}
           </div>
         </div>
+      </div>
+      <div className="flex p-4  justify-end">
+        <DeleteDriver id={_id} />
       </div>
     </div>
   );
