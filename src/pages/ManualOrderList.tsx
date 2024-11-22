@@ -197,7 +197,7 @@ export default function ManualOrderList() {
   const [query, setQuery] = useState(initialQuery);
 
   const { isPending, data } = useQuery({
-    queryKey: ["orders", query],
+    queryKey: ["manualOrders", query],
     queryFn: () => getManualOrders(query),
   });
 
@@ -344,7 +344,11 @@ export default function ManualOrderList() {
         </div>
       </div>
       {moreOpen != null && (
-        <OrderDialogue order={moreOpen} onCancel={() => setMoreOpen(null)} />
+        <OrderDialogue
+          order={moreOpen}
+          onCancel={() => setMoreOpen(null)}
+          setOpen={setMoreOpen}
+        />
       )}
     </Layout>
   );

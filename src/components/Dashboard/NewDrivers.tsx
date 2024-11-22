@@ -16,7 +16,7 @@ import DeadState from "../DeadState";
 
 export default function NewDrivers() {
   const query = {
-    status: "PENDING",
+    status: ["PENDING"],
     page: 0,
     limit: 2,
   };

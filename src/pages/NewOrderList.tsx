@@ -83,7 +83,7 @@ export default function NewOrderList() {
       id: "pickupDate",
       label: "Distance (KM)",
       width: "200px",
-      render: (v: any) => v.distance,
+      render: (v: any) => v.distance ?? "N/A",
     },
 
     {
@@ -248,7 +248,11 @@ export default function NewOrderList() {
         </div>
       </div>
       {moreOpen != null && (
-        <OrderDialogue order={moreOpen} onCancel={() => setMoreOpen(null)} />
+        <OrderDialogue
+          order={moreOpen}
+          onCancel={() => setMoreOpen(null)}
+          setOpen={setMoreOpen}
+        />
       )}
     </Layout>
   );

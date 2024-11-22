@@ -10,6 +10,8 @@ import {
 import Loader from "../Loader";
 import { availabiltys, carTypes } from "@/lib/Constants";
 import DeadState from "../DeadState";
+import DeleteDriver from "./DeleteDriver";
+
 export default function DriversTable({ data = [], loading }: any) {
   type ColumnType = {
     id: string;
@@ -107,6 +109,18 @@ export default function DriversTable({ data = [], loading }: any) {
       render: (val: any) => (
         <div className="flex justify-center capitalize text-nowrap">
           {carTypes.find((v: any) => v.value == val.vehicleType)?.label}
+        </div>
+      ),
+    },
+
+    {
+      id: "",
+      label: "Action",
+      width: "200px",
+      className: "text-center",
+      render: (val: any) => (
+        <div className="flex justify-center capitalize text-nowrap">
+          <DeleteDriver id={val._id} />
         </div>
       ),
     },
