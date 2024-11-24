@@ -38,6 +38,7 @@ export default function DriverList() {
   const { isPending, data } = useQuery({
     queryKey: ["drivers", query],
     queryFn: () => getDrivers(query),
+    refetchOnWindowFocus: true,
   });
 
   const values = data?.data.data ?? [];

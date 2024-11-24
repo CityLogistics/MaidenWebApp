@@ -28,11 +28,11 @@ export default function Pagination({
           <ChevronLeft />
         </button>
         <button
-          disabled={(page + 1) * limit > total}
+          disabled={(page + 1) * limit >= total}
           onClick={() => handlePageChange(page + 1)}
           className={twMerge(
             "px-4 py-2 bg-white rounded-l-[0px] rounded-r-[12px]  border border-[#D5D5D5] border-l-[0.1px] hover:border-primary text-[#202224]",
-            (page + 1) * limit > total &&
+            (page + 1) * limit >= total &&
               "hover:border-[#D5D5D5] text-[#9499a0]"
           )}
         >
