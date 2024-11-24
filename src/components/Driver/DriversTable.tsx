@@ -21,6 +21,35 @@ export default function DriversTable({ data = [], loading }: any) {
     className?: ClassNameValue;
   };
 
+  const getStatusLabel = (data: any) => {
+    const status = data.toLowerCase();
+    const classNames =
+      "w-[150px] h-[27px] rounded-[5px] flex justify-center items-center text-white text-sm font-bold bg-opacity-20 capitalize";
+
+    switch (data) {
+      case "ACCEPTED":
+        return (
+          <div className={twMerge(classNames, "bg-[#00b69b]  text-[#00b69b]")}>
+            {status}
+          </div>
+        );
+
+      case "DECLINED":
+        return (
+          <div className={twMerge(classNames, "bg-[#fd5454] text-[#fd5454]")}>
+            {status}
+          </div>
+        );
+
+      default:
+        return (
+          <div className={twMerge(classNames, "bg-[#fcbe2d] text-[#fcbe2d] ")}>
+            {status}
+          </div>
+        );
+    }
+  };
+
   const columns: ColumnType[] = [
     {
       id: "_id",
@@ -110,6 +139,16 @@ export default function DriversTable({ data = [], loading }: any) {
         <div className="flex justify-center capitalize text-nowrap">
           {carTypes.find((v: any) => v.value == val.vehicleType)?.label}
         </div>
+      ),
+    },
+
+    {
+      id: "status",
+      label: "Status",
+      width: "200px",
+      className: "text-center",
+      render: (val: any) => (
+        <div className="flex justify-center">{getStatusLabel(val.status)}</div>
       ),
     },
 
